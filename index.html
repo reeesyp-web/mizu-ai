@@ -211,6 +211,7 @@ textarea.field{resize:vertical;min-height:70px}
 .msg .bubble{font-size:var(--fs,18px);line-height:1.65}.bubble pre{font-size:.85em}
 .fsb{padding:6px 10px;font-weight:700}
 .tag{display:block;font-size:11.5px;font-weight:500;color:var(--muted);line-height:1.25;margin-top:1px}
+.legal{margin-top:3px}.legal a{color:var(--muted);text-decoration:underline}
 </style>
 </head>
 <body>
@@ -240,8 +241,8 @@ textarea.field{resize:vertical;min-height:70px}
     <dialog id="termsDlg" style="max-width:480px;border:1px solid var(--line);border-radius:16px;background:var(--white);color:var(--ink);padding:20px">
       <label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer"><input type="checkbox" id="termsChk" style="margin-top:4px;width:18px;height:18px;flex:none"><span id="termsTxt"></span></label>
       <div style="margin-top:14px;display:flex;gap:8px"><button class="btn small" id="termsGo" type="button" disabled data-i18n="termsGo"></button><button class="btn ghost small" id="termsNo" type="button">✕</button></div></dialog>
-    <a class="btn ghost small" id="privLink" href="privacidad.html" target="_blank" rel="noopener" data-i18n="privacy" style="text-align:left;text-decoration:none"></a>
-    <a class="btn ghost small" id="termsLink" href="terminos.html" target="_blank" rel="noopener" data-i18n="terms" style="text-align:left;text-decoration:none"></a>
+    <a class="btn ghost small legalA" id="privLink" data-p="privacidad.html" href="privacidad.html" target="_blank" rel="noopener" data-i18n="privacy" style="text-align:left;text-decoration:none"></a>
+    <a class="btn ghost small legalA" id="termsLink" data-p="terminos.html" href="terminos.html" target="_blank" rel="noopener" data-i18n="terms" style="text-align:left;text-decoration:none"></a>
     <div class="side-foot">
       <button class="btn ghost small" id="openSettings" style="flex:1" data-i18n="settingsBtn"></button>
       <button class="btn ghost small" id="exportBtn" data-i18n-title="exportT">⬇️</button>
@@ -277,6 +278,7 @@ textarea.field{resize:vertical;min-height:70px}
           <button class="send ai" id="sendAI"></button>
         </div>
         <div class="hint"><span id="hint"></span> · <label style="cursor:pointer"><input type="checkbox" id="auto"> <span data-i18n="auto"></span></label></div>
+        <div class="hint legal"><a class="legalA" data-p="privacidad.html" href="privacidad.html" target="_blank" rel="noopener" data-i18n="privacy"></a> · <a class="legalA" data-p="terminos.html" href="terminos.html" target="_blank" rel="noopener" data-i18n="terms"></a></div>
       </div>
     </section>
 
@@ -1394,12 +1396,17 @@ async function gdLogin(auto){
     gdLS('gdOn','1');gdLS('gdEmail',u.email||'');gdUI();await gdSync();
   }catch(e){gdTok=null;gdUI();if(!auto)toast(t('gdFail'))}
 }
+const LEGAL=/^https?:$/.test(location.protocol)?'':'https://reeesyp-web.github.io/mizu-ai/';
+const legalUrl=p=>LEGAL+p+'#'+LANG;
+document.querySelectorAll('.legalA').forEach(a=>{a.href=LEGAL+a.dataset.p;a.addEventListener('click',()=>{a.href=legalUrl(a.dataset.p)})});
 $('#aboutBtn').onclick=()=>{$('#aboutBody').innerHTML='<h3 style="margin:0 0 8px">'+esc(t('tagline'))+'</h3><p>'+esc(t('aboutTxt'))+'</p><p>'+esc(t('aboutLogo'))+' <a href="https://picrew.me/en/image_maker/3157" target="_blank" rel="noopener">ぷにぷにほっぺメーカー</a> (Picrew)</p><p><b>'+esc(t('aboutContact'))+':</b> <a href="mailto:mizuaisupport@gmail.com">mizuaisupport@gmail.com</a></p>';$('#aboutDlg').showModal()};
 $('#aboutClose').onclick=()=>$('#aboutDlg').close();
 $('#gdBtn').onclick=()=>{if(gdTok){if(confirm(t('gdOut'))){gdTok=null;gdNote='';gdDropTok();gdLS('gdOn',null);gdLS('gdEmail',null);gdUI()}}else gdConsent()};
-function gdConsent(){ // casilla sin marcar antes de iniciar sesión con Google (clickwrap)
-  if(gdLS('gdTerms')){gdLogin(false);return}
-  const a=(u,x)=>'<a href="'+u+'" target="_blank" rel="noopener">'+esc(x)+'</a>';
+function gdConsent(){ // casilla SIEMPRE visible y sin marcar en cada inicio de sesión con Google (clickwrap)
+  if(typeof $('#termsDlg').showModal!=='function'){ // navegadores sin <dialog>
+    if(confirm(t('termsAcc').replace('{t}',t('terms')).replace('{p}',t('privacy')))){gdLS('gdTerms',new Date().toISOString());gdLogin(false)}
+    return}
+  const a=(u,x)=>'<a href="'+legalUrl(u)+'" target="_blank" rel="noopener">'+esc(x)+'</a>';
   $('#termsTxt').innerHTML=t('termsAcc').replace('{t}',a('terminos.html',t('terms'))).replace('{p}',a('privacidad.html',t('privacy')));
   $('#termsChk').checked=false;$('#termsGo').disabled=true;$('#termsDlg').showModal();
 }
