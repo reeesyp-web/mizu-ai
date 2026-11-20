@@ -1,0 +1,1213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<title>Mizu.AI · Chat y Personajes</title>
+<style>
+:root{
+  --h:207; --sm:1; --wall:rgba(255,255,255,.3);
+  --blue-50:hsl(var(--h) calc(85% * var(--sm)) 97%); --blue-100:hsl(var(--h) calc(80% * var(--sm)) 94%); --blue-200:hsl(var(--h) calc(80% * var(--sm)) 90%); --blue-300:hsl(var(--h) calc(75% * var(--sm)) 85%); --blue-400:hsl(var(--h) calc(65% * var(--sm)) 75%); --blue-600:hsl(var(--h) calc(52% * var(--sm)) 54%); --blue-700:hsl(var(--h) calc(50% * var(--sm)) 40%);
+  --yellow-100:#fff8dc; --yellow-200:#fff0b3; --yellow-300:#fbe38a; --yellow-500:#e8c24a;
+  --ink:#2a3a4b; --muted:#74879a; --line:hsl(var(--h) calc(60% * var(--sm)) 91%); --white:#fff; --danger:#e07a7a;
+  --radius:16px; --shadow:0 6px 24px rgba(74,144,201,.14);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--blue-50);font-size:15px;line-height:1.5}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.app{display:flex;height:100vh;height:100dvh}
+
+/* Sidebar */
+aside{width:292px;background:var(--blue-100);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:14px;gap:10px;flex-shrink:0;transition:transform .25s}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;padding:4px 6px}
+.logo{width:34px;height:34px;border-radius:11px;background:var(--white);border:1.5px solid var(--blue-300);display:grid;place-items:center;font-size:18px;overflow:hidden}
+.logo img{width:100%;height:100%;object-fit:contain;display:block}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--white);border-radius:12px;padding:4px;gap:4px}
+.tab{padding:8px;border-radius:9px;font-weight:600;color:var(--muted);font-size:14px}
+.tab.on{background:var(--yellow-200);color:var(--ink)}
+.btn{padding:10px 14px;border-radius:12px;font-weight:600;transition:.15s}
+.btn.primary{background:var(--blue-300);color:var(--blue-700)}
+.btn.primary:hover{background:var(--blue-400);color:#fff}
+.btn.yellow{background:var(--yellow-300);color:#6b5510}
+.btn.yellow:hover{background:var(--yellow-500);color:#fff}
+.btn.ghost{background:var(--white);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--blue-50)}
+.btn.small{padding:6px 10px;font-size:13px;border-radius:9px}
+.search{width:100%;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--white);outline:none}
+.search:focus,.field:focus{border-color:var(--blue-400);box-shadow:0 0 0 3px rgba(141,194,236,.3)}
+.list-head{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:4px 6px;display:flex;justify-content:space-between}
+.chats{flex:1;overflow:auto;display:flex;flex-direction:column;gap:3px;margin:0 -4px;padding:0 4px}
+.chat-item{display:flex;align-items:center;gap:8px;padding:8px 8px;border-radius:12px;cursor:pointer;position:relative}
+.chat-item:hover{background:rgba(255,255,255,.6)}
+.chat-item.on{background:var(--white);box-shadow:0 1px 4px rgba(74,144,201,.15)}
+.num{font-size:11px;font-weight:700;color:var(--blue-600);background:var(--blue-200);min-width:22px;height:22px;border-radius:7px;display:grid;place-items:center}
+.chat-item.on .num{background:var(--yellow-200);color:#7a6210}
+.ci-title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
+.ci-title small{display:block;color:var(--muted);font-size:11px}
+.ci-actions{display:none;gap:2px}
+.chat-item:hover .ci-actions,.chat-item.on .ci-actions{display:flex}
+.icon-btn{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;color:var(--muted);font-size:13px}
+.icon-btn:hover{background:var(--blue-100);color:var(--blue-700)}
+.icon-btn.del:hover{background:#fde5e5;color:var(--danger)}
+.side-foot{display:flex;gap:8px}
+
+/* Main */
+main{flex:1;min-width:0;display:flex;flex-direction:column;background:linear-gradient(180deg,var(--white),var(--blue-50))}
+.topbar{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.85);backdrop-filter:blur(8px)}
+.menu-btn{display:none;font-size:20px;width:36px;height:36px;border-radius:10px;background:var(--blue-100)}
+.title-input{flex:1;min-width:0;font-weight:700;font-size:17px;border:1px solid transparent;border-radius:10px;padding:6px 10px;background:transparent;outline:none}
+.title-input:hover{background:var(--blue-50)}
+.title-input:focus{background:var(--white);border-color:var(--blue-300)}
+.badge{display:inline-flex;align-items:center;gap:6px;background:var(--yellow-100);border:1px solid var(--yellow-200);padding:4px 10px;border-radius:99px;font-size:13px;white-space:nowrap}
+.view{display:none;flex:1;min-height:0;flex-direction:column}
+.view.on{display:flex}
+.messages{flex:1;overflow:auto;padding:22px 0}
+.wrap{max-width:820px;margin:0 auto;padding:0 18px}
+.empty{text-align:center;color:var(--muted);margin:12vh auto 0;max-width:420px}
+.messages[style*="background-image"] .empty{background:rgba(255,255,255,.85);border-radius:20px;padding:18px}
+.empty .big{font-size:52px}
+.empty h2{color:var(--ink);margin:.4em 0 .2em}
+.msg{display:flex;gap:12px;margin-bottom:20px}
+.msg.user{flex-direction:row-reverse}
+.av{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;flex-shrink:0;font-size:18px;background:var(--blue-200)}
+.msg.user .av{background:var(--yellow-200)}
+.body{max-width:calc(100% - 52px);min-width:0}
+.bubble{padding:11px 15px;border-radius:var(--radius);background:var(--white);border:1px solid var(--line);box-shadow:0 1px 3px rgba(74,144,201,.08);word-wrap:break-word;overflow-wrap:anywhere}
+.msg.user .bubble{background:var(--yellow-100);border-color:var(--yellow-200)}
+.msg.err .bubble{background:#fff0f0;border-color:#f3c7c7}
+.bubble p{margin:0 0 .6em}.bubble p:last-child{margin:0}
+.bubble pre{background:var(--blue-50);border:1px solid var(--line);border-radius:10px;padding:10px;overflow:auto;font-size:13px}
+.bubble code{background:var(--blue-100);padding:1px 5px;border-radius:5px;font-size:.9em}
+.bubble pre code{background:none;padding:0}
+.bubble em{color:var(--blue-700)}
+.actions{display:flex;flex-wrap:wrap;gap:2px;margin-top:6px;padding:3px;width:fit-content;max-width:100%;background:var(--white);border:1px solid var(--line);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);opacity:0;transition:.15s}
+.msg:hover .actions,.msg:focus-within .actions{opacity:1}
+.msg.user .actions{justify-content:flex-end;margin-left:auto}
+.act{font-size:12px;color:var(--muted);padding:3px 8px;border-radius:8px}
+.act:hover{background:var(--blue-100);color:var(--blue-700)}
+.act.del:hover{background:#fde5e5;color:var(--danger)}
+.editor{background:var(--white);border:2px solid var(--blue-300);border-radius:var(--radius);padding:10px;width:min(620px,78vw)}
+.editor textarea{width:100%;min-height:90px;border:0;outline:none;resize:vertical;background:transparent}
+.editor .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.editor select{border:1px solid var(--line);border-radius:8px;padding:4px 6px;background:var(--blue-50)}
+.typing span{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--blue-400);margin:0 2px;animation:b 1s infinite}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.composer{padding:10px 18px 18px}
+.box{max-width:820px;margin:0 auto;background:var(--white);border:1.5px solid var(--blue-200);border-radius:20px;padding:10px 12px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:flex-end}
+.box:focus-within{border-color:var(--blue-400)}
+.box textarea{flex:1;border:0;outline:none;resize:none;max-height:180px;min-height:26px;background:transparent;padding:4px}
+.role-sel{border:1px solid var(--line);background:var(--blue-100);border-radius:12px;padding:8px 8px;font-weight:600;font-size:13px;outline:none;cursor:pointer;height:40px;flex-shrink:0}
+.role-sel.ai{background:var(--yellow-200);border-color:var(--yellow-300)}
+.send{height:40px;padding:0 13px;border-radius:13px;font-size:14px;font-weight:700;flex-shrink:0;white-space:nowrap}
+.send.user{background:var(--blue-200);color:var(--blue-700)}
+.send.user:hover{background:var(--blue-400);color:#fff}
+.send.ai{background:var(--yellow-300);color:#6b5510}
+.send.ai:hover{background:var(--yellow-500);color:#fff}
+.send.stop{background:var(--blue-300);color:var(--blue-700)}
+@media(max-width:560px){.box{flex-wrap:wrap}.box textarea{flex-basis:100%}.send{flex:1}}
+.hint{text-align:center;font-size:12px;color:var(--muted);margin-top:8px}
+
+/* Characters */
+.chars-wrap{flex:1;overflow:auto;padding:24px 18px}
+.chars-in{max-width:1000px;margin:0 auto}
+.chars-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.chars-head h1{margin:0;font-size:24px}
+.chars-head p{margin:2px 0 0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 2px 10px rgba(74,144,201,.07);transition:.15s}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.card-top{display:flex;gap:12px;align-items:center}
+.cav{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-size:30px;flex-shrink:0}
+.card h3{margin:0;font-size:16px}
+.card .tag{color:var(--muted);font-size:13px}
+.card .desc{font-size:13.5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.chip{font-size:11.5px;padding:2px 8px;border-radius:99px;background:var(--blue-100);color:var(--blue-700)}
+.card-foot{display:flex;gap:6px}
+.card-foot .btn{flex:1}
+.new-card{border:2px dashed var(--yellow-300);background:var(--yellow-100);align-items:center;justify-content:center;text-align:center;min-height:190px;cursor:pointer;color:#7a6210;font-weight:600}
+.new-card .plus{font-size:40px;line-height:1}
+
+/* Modals */
+.modal-bg{position:fixed;inset:0;background:rgba(42,58,75,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal-bg.on{display:flex}
+.modal{background:var(--white);border-radius:22px;width:min(560px,100%);max-height:92vh;overflow:auto;padding:22px;box-shadow:0 20px 60px rgba(42,58,75,.25)}
+.modal h2{margin:0 0 14px}
+.f{margin-bottom:12px}
+.f label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+.f small{color:var(--muted);font-weight:400}
+.field{width:100%;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--blue-50);outline:none}
+textarea.field{resize:vertical;min-height:70px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.emojis,.colors{display:flex;gap:6px;flex-wrap:wrap}
+.em{width:38px;height:38px;border-radius:11px;font-size:20px;background:var(--blue-50);border:2px solid transparent}
+.em.on{border-color:var(--blue-400);background:var(--blue-100)}
+.co{width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px var(--line)}
+.co.on{box-shadow:0 0 0 2.5px var(--blue-600)}
+.modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--ink);color:#fff;padding:9px 16px;border-radius:12px;opacity:0;transition:.25s;pointer-events:none;z-index:99;font-size:14px}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.scrim{display:none}
+
+/* Imágenes / avatares */
+.av,.cav{overflow:hidden}
+.av img,.cav img,.img-prev img,.mini img{width:100%;height:100%;object-fit:cover;display:block}
+.img-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.img-prev{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-size:30px;overflow:hidden;background:var(--blue-100);flex-shrink:0}
+.mini{display:inline-grid;width:20px;height:20px;border-radius:7px;overflow:hidden;place-items:center;vertical-align:middle;font-size:14px}
+
+@media(max-width:800px){
+  aside{position:fixed;inset:0 auto 0 0;z-index:40;transform:translateX(-100%);width:84%;max-width:310px;box-shadow:var(--shadow)}
+  aside.open{transform:none}
+  .scrim.on{display:block;position:fixed;inset:0;background:rgba(42,58,75,.3);z-index:30}
+  .menu-btn{display:block}
+  .actions{opacity:1}
+  .two{grid-template-columns:1fr}
+}
+/* Mensaje vacío legible sobre el fondo */
+.has-bg .empty{max-width:420px;margin:10vh auto 0;padding:22px;background:var(--white);border:1px solid var(--line);border-radius:20px}
+
+/* Temas intensos (colores oscuros) en modo claro */
+:root[data-tone="deep"]{
+  --blue-50:hsl(var(--h) calc(28% * var(--sm)) 95%); --blue-100:hsl(var(--h) calc(28% * var(--sm)) 91%); --blue-200:hsl(var(--h) calc(30% * var(--sm)) 85%);
+  --blue-300:hsl(var(--h) calc(42% * var(--sm)) 36%); --blue-400:hsl(var(--h) calc(44% * var(--sm)) 30%); --blue-600:hsl(var(--h) calc(46% * var(--sm)) 30%); --blue-700:hsl(var(--h) calc(42% * var(--sm)) 22%);
+  --line:hsl(var(--h) calc(25% * var(--sm)) 84%);
+}
+:root[data-tone="deep"]:not([data-mode="dark"]) .btn.primary,:root[data-tone="deep"]:not([data-mode="dark"]) .send.user,:root[data-tone="deep"]:not([data-mode="dark"]) .send.stop{color:#fff}
+
+/* Modo oscuro */
+:root[data-mode="dark"]{
+  color-scheme:dark; --wall:rgba(0,0,0,.4);
+  --blue-50:#151517; --blue-100:#1c1c1f; --blue-200:#28282d; --blue-300:hsl(var(--h) calc(33% * var(--sm)) 29%); --blue-400:hsl(var(--h) calc(38% * var(--sm)) 42%); --blue-600:hsl(var(--h) calc(65% * var(--sm)) 70%); --blue-700:hsl(var(--h) calc(70% * var(--sm)) 82%);
+  --yellow-100:#3a3320; --yellow-200:#4d4326; --yellow-300:#6b5a22; --yellow-500:#c9a63a;
+  --ink:#ececf0; --muted:#9a9aa3; --line:#37373d; --white:#212125; --danger:#e88a8a;
+  --shadow:0 6px 24px rgba(0,0,0,.35);
+}
+:root[data-mode="dark"] .btn.yellow,:root[data-mode="dark"] .send.ai{color:#fff3c4}
+:root[data-mode="dark"] .chat-item.on .num,:root[data-mode="dark"] .new-card{color:#f3dd8a}
+:root[data-mode="dark"] .topbar{background:rgba(21,21,23,.88)}
+:root[data-mode="dark"] .chat-item:hover{background:rgba(255,255,255,.06)}
+:root[data-mode="dark"] .msg.err .bubble{background:#3a2226;border-color:#6b3a3f}
+:root[data-mode="dark"] .icon-btn.del:hover,:root[data-mode="dark"] .act.del:hover{background:#3a2226}
+:root[data-mode="dark"] .toast{color:#16202c}
+:root[data-mode="dark"] .actions{box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.tools{max-width:820px;margin:0 auto 6px;display:flex;gap:6px;flex-wrap:wrap}
+.tg{border:1.5px solid var(--blue-200);background:var(--white);border-radius:999px;padding:4px 11px;font-size:13px;font-weight:600;color:var(--muted)}
+.tg.on{background:var(--yellow-200);border-color:var(--yellow-300);color:var(--ink)}
+.chips{max-width:820px;margin:0 auto;display:flex;flex-wrap:wrap}
+.fchip{display:inline-flex;align-items:center;gap:6px;background:var(--blue-100);border:1px solid var(--line);border-radius:10px;padding:3px 8px;font-size:12.5px;margin:0 6px 6px 0}
+.fchip img{width:22px;height:22px;border-radius:5px;object-fit:cover}
+.fchip button{color:var(--muted);font-size:15px;line-height:1}
+.att{max-width:220px;max-height:180px;border-radius:10px;display:block;margin-bottom:8px}
+.think{margin-bottom:8px;font-size:13px;color:var(--muted)}.think summary{cursor:pointer;font-weight:600}
+.think div{white-space:pre-wrap;margin-top:6px;padding-left:10px;border-left:3px solid var(--blue-200)}
+.sec{font-weight:700;margin:14px 0 2px;padding-top:10px;border-top:1px solid var(--line)}.sec+small{display:block;color:var(--muted);margin-bottom:6px;font-size:12.5px}
+.srcs{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.srcs a{color:var(--blue-700);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.msg .bubble{font-size:var(--fs,18px);line-height:1.65}.bubble pre{font-size:.85em}
+.fsb{padding:6px 10px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside id="side">
+    <div class="brand"><div class="logo"><img src="data:image/png;base64,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" alt="Mizu.AI"></div> Mizu.AI</div>
+    <div class="tabs">
+      <button class="tab on" data-view="chat" data-i18n="tabChat"></button>
+      <button class="tab" data-view="chars" data-i18n="tabChars"></button>
+    </div>
+    <button class="btn primary" id="newChat" data-i18n="newChat"></button>
+    <input class="search" id="search" data-i18n-ph="searchPh">
+    <div class="list-head"><span data-i18n="convs"></span><span id="count"></span></div>
+    <div class="chats" id="chatList"></div>
+    <select class="search" id="langSel" aria-label="Language">
+      <option value="es">🌐 Español</option>
+      <option value="en">🌐 English</option>
+      <option value="pt">🌐 Português</option>
+      <option value="ru">🌐 Русский</option>
+      <option value="fr">🌐 Français</option>
+    </select>
+    <button class="btn ghost small" id="openProfile" style="text-align:left"></button>
+    <div class="side-foot">
+      <button class="btn ghost small" id="openSettings" style="flex:1" data-i18n="settingsBtn"></button>
+      <button class="btn ghost small" id="exportBtn" data-i18n-title="exportT">⬇️</button>
+      <button class="btn ghost small" id="importBtn" data-i18n-title="importT">⬆️</button>
+      <input type="file" id="importFile" accept=".json" hidden>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <main>
+    <!-- CHAT -->
+    <section class="view on" id="view-chat">
+      <div class="topbar">
+        <button class="menu-btn" data-menu>☰</button>
+        <input class="title-input" id="titleInput" data-i18n-ph="titlePh">
+        <span class="badge" id="charBadge" style="display:none"></span>
+        <button class="btn ghost small fsb" id="fsDown" title="A−">A−</button>
+        <button class="btn ghost small fsb" id="fsUp" title="A+">A+</button>
+        <button class="btn ghost small" id="clearChat" data-i18n="clear" data-i18n-title="clearT"></button>
+      </div>
+      <div class="messages" id="messages"><div class="wrap" id="msgWrap"></div></div>
+      <div class="composer">
+        <div class="tools">
+          <button type="button" class="tg" id="tgSearch">🌐 <span data-i18n="tSearch"></span></button>
+          <button type="button" class="tg" id="tgThink">🧠 <span data-i18n="tThink"></span></button>
+          <button type="button" class="tg" id="attBtn">📎 <span data-i18n="tAttach"></span></button>
+          <input type="file" id="fileIn" multiple hidden accept="image/*,.docx,.txt,.md,.csv,.json,.html,.xml,.js,.py,.log">
+        </div>
+        <div class="chips" id="chips"></div>
+        <div class="box">
+          <textarea id="input" rows="1" data-i18n-ph="inputPh"></textarea>
+          <button class="send user" id="sendUser" data-i18n="sendUser" data-i18n-title="sendUserT"></button>
+          <button class="send ai" id="sendAI"></button>
+        </div>
+        <div class="hint"><span id="hint"></span> · <label style="cursor:pointer"><input type="checkbox" id="auto"> <span data-i18n="auto"></span></label></div>
+      </div>
+    </section>
+
+    <!-- PERSONAJES -->
+    <section class="view" id="view-chars">
+      <div class="topbar">
+        <button class="menu-btn" data-menu>☰</button>
+        <strong style="font-size:17px;flex:1" data-i18n="charsNav"></strong>
+      </div>
+      <div class="chars-wrap"><div class="chars-in">
+        <div class="chars-head">
+          <div><h1 data-i18n="charsH"></h1><p data-i18n="charsSub"></p></div>
+          <button class="btn yellow" id="createChar" data-i18n="createChar"></button>
+        </div>
+        <div class="grid" id="charGrid"></div>
+      </div></div>
+    </section>
+  </main>
+</div>
+
+<!-- Modal personaje -->
+<div class="modal-bg" id="charModal"><div class="modal">
+  <h2 id="charModalTitle"></h2>
+  <div class="two">
+    <div class="f"><label data-i18n="fName"></label><input class="field" id="cName" maxlength="40" data-i18n-ph="phName"></div>
+    <div class="f"><label data-i18n="fTag"></label><input class="field" id="cTag" maxlength="70" data-i18n-ph="phTag"></div>
+  </div>
+  <div class="f"><label data-i18n="fImg"></label>
+    <div class="img-row"><div class="img-prev" id="cImgPrev"></div>
+      <button type="button" class="btn ghost small" id="cImgBtn" data-i18n="upImg"></button>
+      <button type="button" class="btn ghost small" id="cImgDel" data-i18n="rmImg"></button>
+      <input type="file" id="cImgFile" accept="image/*" hidden></div></div>
+  <div class="f"><label data-i18n="fAvatar"></label><div class="emojis" id="cEmojis"></div></div>
+  <div class="f"><label data-i18n="fColor"></label><div class="colors" id="cColors"></div></div>
+  <div class="f"><label><span data-i18n="fDesc"></span> <small data-i18n="fDescS"></small></label>
+    <textarea class="field" id="cDesc" rows="4" data-i18n-ph="phDesc"></textarea></div>
+  <div class="f"><label><span data-i18n="fGreet"></span> <small data-i18n="fGreetS"></small></label>
+    <textarea class="field" id="cGreet" rows="2" data-i18n-ph="phGreet"></textarea></div>
+  <div class="f"><label><span data-i18n="fScene"></span> <small data-i18n="fOpt"></small></label>
+    <input class="field" id="cScene" data-i18n-ph="phScene"></div>
+  <div class="f"><label><span data-i18n="fEx"></span> <small data-i18n="fOpt"></small></label>
+    <textarea class="field" id="cExample" rows="3" data-i18n-ph="phEx"></textarea></div>
+  <div class="f"><label><span data-i18n="fTags"></span> <small data-i18n="fTagsS"></small></label>
+    <input class="field" id="cTags" data-i18n-ph="phTags"></div>
+  <div class="modal-foot">
+    <button class="btn ghost" data-close data-i18n="cancel"></button>
+    <button class="btn primary" id="saveChar" data-i18n="saveChar"></button>
+  </div>
+</div></div>
+
+<!-- Modal perfil -->
+<div class="modal-bg" id="profModal"><div class="modal">
+  <h2 data-i18n="profTitle"></h2>
+  <div class="f"><label data-i18n="sPhoto"></label>
+    <div class="img-row"><div class="img-prev" id="pImgPrev"></div>
+      <button type="button" class="btn ghost small" id="pImgBtn" data-i18n="upImg"></button>
+      <button type="button" class="btn ghost small" id="pImgDel" data-i18n="rmImg"></button>
+      <input type="file" id="pImgFile" accept="image/*" hidden></div></div>
+  <div class="f"><label data-i18n="profName"></label><input class="field" id="pName" maxlength="40" data-i18n-ph="profNamePh"></div>
+  <div class="f"><label><span data-i18n="profBio"></span> <small data-i18n="profBioS"></small></label>
+    <textarea class="field" id="pBio" rows="4" maxlength="500" data-i18n-ph="profBioPh"></textarea></div>
+  <div class="modal-foot">
+    <button class="btn ghost" data-close data-i18n="close"></button>
+    <button class="btn primary" id="saveProf" data-i18n="save"></button>
+  </div>
+</div></div>
+
+<!-- Modal ajustes -->
+<div class="modal-bg" id="setModal"><div class="modal">
+  <h2 data-i18n="sTitle"></h2>
+  <p style="margin-top:-6px;color:var(--muted);font-size:13.5px" data-i18n-html="sIntro"></p>
+  <div class="f"><label data-i18n="sBg"></label>
+    <div class="img-row"><div class="img-prev" id="bgPrev" style="width:96px;border-radius:14px;background-size:cover;background-position:center"></div>
+      <button type="button" class="btn ghost small" id="bgBtn" data-i18n="upImg"></button>
+      <button type="button" class="btn ghost small" id="bgDel" data-i18n="rmImg"></button>
+      <input type="file" id="bgFile" accept="image/*" hidden></div></div>
+  <div class="f"><label data-i18n="sTheme"></label><div class="colors" id="themeSw"></div></div>
+  <div class="f"><label data-i18n="sMode"></label>
+    <select class="field" id="modeSel">
+      <option value="light" data-i18n="mLight"></option>
+      <option value="dark" data-i18n="mDark"></option>
+      <option value="auto" data-i18n="mAuto"></option>
+    </select></div>
+  <div class="f"><label data-i18n="sUrl"></label><input class="field" id="sUrl" placeholder="https://api.deepseek.com/v1"></div>
+  <div class="two">
+    <div class="f"><label data-i18n="sModel"></label><input class="field" id="sModel" placeholder="deepseek-chat"></div>
+    <div class="f"><label><span data-i18n="sTemp"></span> <small id="tVal"></small></label><input type="range" id="sTemp" min="0" max="1.5" step="0.1" style="width:100%"></div>
+  </div>
+  <div class="f"><label data-i18n="sKey"></label><input class="field" id="sKey" type="password" placeholder="sk-…"></div>
+  <div class="sec">🌐 <span data-i18n="sSecSearch"></span></div><small data-i18n="sSecSearchH"></small>
+  <div class="f"><label data-i18n="sSUrl"></label><input class="field" id="sSUrl" placeholder="https://api.tavily.com/search"></div>
+  <div class="f"><label data-i18n="sSKey"></label><input class="field" id="sSKey" type="password" placeholder="tvly-…"></div>
+  <div class="f"><label data-i18n="sSHead"></label><input class="field" id="sSHead" placeholder="Authorization: Bearer {key}"></div>
+  <div class="f"><label data-i18n="sSBody"></label><input class="field" id="sSBody" placeholder='{"query":"{q}","max_results":5}'></div>
+  <div class="sec">🧠 <span data-i18n="sSecThink"></span></div><small data-i18n="sSecThinkH"></small>
+  <div class="f"><label data-i18n="sTUrl"></label><input class="field" id="sTUrl" placeholder="https://api.deepseek.com/v1"></div>
+  <div class="two">
+    <div class="f"><label data-i18n="sThink"></label><input class="field" id="sThink" placeholder="deepseek-reasoner"></div>
+    <div class="f"><label data-i18n="sTKey"></label><input class="field" id="sTKey" type="password" placeholder="sk-…"></div>
+  </div>
+  <div class="sec">🖼️ <span data-i18n="sVision"></span></div>
+  <div class="f"><input class="field" id="sVision" placeholder="gpt-4o-mini"></div>
+  <div class="f"><label><span data-i18n="sSys"></span> <small data-i18n="sSysS"></small></label>
+    <textarea class="field" id="sSys" rows="3"></textarea></div>
+  <div class="modal-foot">
+    <button class="btn ghost" data-close data-i18n="close"></button>
+    <button class="btn primary" id="saveSet" data-i18n="save"></button>
+  </div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
+const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeImg=s=>typeof s==='string'&&s.startsWith('data:image/')&&!/["'<>\s]/.test(s)?s:'';
+const avInner=(img,fb)=>safeImg(img)?`<img src="${img}" alt="">`:esc(fb);
+// Lee una imagen, la recorta a cuadrado y la reduce (para que quepa en el almacenamiento del navegador)
+function readImg(file,size,keep){return new Promise((res,rej)=>{
+  if(!file||!file.type.startsWith('image/'))return rej();
+  const r=new FileReader();r.onerror=rej;
+  r.onload=()=>{const im=new Image();im.onerror=rej;im.onload=()=>{
+    if(keep){ // fondo: conserva proporciones, lado mayor = size
+      const k=Math.min(1,size/Math.max(im.width,im.height)),c=document.createElement('canvas');
+      c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+      const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);
+      return res(c.toDataURL('image/jpeg',.8));
+    }
+    const side=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=size;
+    const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,size,size);
+    x.drawImage(im,(im.width-side)/2,(im.height-side)/2,side,side,0,0,size,size);
+    res(c.toDataURL('image/jpeg',.85));
+  };im.src=r.result};
+  r.readAsDataURL(file);
+})}
+const KEY='nube_state_v1';
+const EMOJIS=['🧙','🏴‍☠️','📚','🤖','🐉','🦊','👑','🕵️','🧛','🧚','🚀','🐱','🎸','🌙','🔮','⚔️','🍵','🌸'];
+const COLORS=['#cfe6f9','#fff0b3','#d8f3e4','#fbd9e4','#e6dcf7','#ffe0c7','#d4f1f4','#e9eef2'];
+
+/* ---------- Idiomas / Languages / Idiomas ---------- */
+const T={
+es:{
+ tabChat:'💬 Chat',tabChars:'🎭 Personajes',newChat:'＋ Nuevo chat',searchPh:'Buscar conversaciones…',convs:'Conversaciones',
+ settingsBtn:'⚙️ Ajustes / API',exportT:'Exportar todo',importT:'Importar',titlePh:'Título del chat',clear:'🧹 Vaciar',clearT:'Vaciar mensajes',
+ inputPh:'Escribe un mensaje…  (Enter = enviar como Usuario · Shift+Enter salto de línea)',
+ sendUser:'🙂 Usuario',sendUserT:'Añade tu mensaje. La IA NO responde (puedes mandar varios seguidos)',
+ sendAI:'🤖 IA',sendAIT:'Vacío: la IA responde. Con texto: lo añade como mensaje de la IA',stop:'■ Detener',
+ auto:'La IA responde sola al enviar como Usuario',
+ charsNav:'Personajes',charsH:'Crea tu personaje 🎭',charsSub:'Diseña personajes de IA para hacer roleplay y chatea con ellos.',createChar:'✨ Crear personaje',
+ mCreate:'Crear personaje',mEdit:'Editar personaje',fName:'Nombre',fTag:'Frase corta',fAvatar:'Avatar',fColor:'Color',
+ fDesc:'Descripción y personalidad',fDescS:'(cómo es, cómo habla, su historia)',fGreet:'Saludo inicial',fGreetS:'(primer mensaje del personaje)',
+ fScene:'Escenario',fOpt:'(opcional)',fEx:'Ejemplo de diálogo',fTags:'Etiquetas',fTagsS:'(separadas por comas)',
+ phName:'Ej. Capitán Marea',phTag:'Ej. Pirata amable y bromista',phDesc:'Es un capitán de barco veterano, valiente, cariñoso con su tripulación…',
+ phGreet:'*Se acomoda el sombrero* ¡Bienvenido a bordo, grumete!',phScene:'Un barco en medio de una tormenta',
+ phEx:'Usuario: ¿Adónde vamos?\nPersonaje: *señala el horizonte* ¡Hacia lo desconocido!',phTags:'aventura, humor, fantasía',
+ cancel:'Cancelar',saveChar:'Guardar personaje',sTitle:'⚙️ Ajustes de IA / API',
+ sIntro:'Compatible con cualquier API estilo OpenAI (DeepSeek, OpenAI, OpenRouter, Ollama, Gemini…). Sin clave funciona en <b>modo demo</b>. La clave se guarda solo en tu navegador.',
+ sUrl:'URL base',sModel:'Modelo',sTemp:'Temperatura',sKey:'API key',sSys:'Instrucción de sistema global',sSysS:'(se usa en chats sin personaje)',close:'Cerrar',save:'Guardar',
+ chatsCount:'{n} chats',msgs:'{n} mensajes',now:'ahora',up:'Subir',down:'Bajar',ren:'Renombrar',del:'Eliminar',
+ renPrompt:'Nuevo nombre del chat:',delChat:'¿Eliminar este chat?',newChatTitle:'Nuevo chat',chatWith:'Chat con ',untitled:'Sin título',
+ emptyH:'¿En qué te ayudo hoy?',emptyP:'Escribe abajo para empezar. Puedes editar cualquier mensaje, también los de la IA.',
+ connected:'Conectado a {m}',demoHint:'Modo demo (sin API key) · añade tu clave en Ajustes',
+ roleUser:'Rol: Usuario',roleAI:'Rol: IA',resend:'Guardar y reenviar',edit:'✎ Editar',swapAI:'⇄ Marcar como IA',swapUser:'⇄ Marcar como Usuario',
+ swapT:'Cambiar quién lo dijo',copy:'⧉ Copiar',regen:'↻ Regenerar',delMsg:'✕ Borrar',
+ emptyMsg:'El mensaje está vacío',edited:'Mensaje editado',copied:'Copiado',copyFail:'No se pudo copiar',emptyResp:'(respuesta vacía)',
+ chatBtn:'💬 Chatear',newCard:'Crear personaje',delChar:'¿Eliminar a {n}? Sus chats seguirán existiendo.',
+ nameReq:'Ponle un nombre al personaje',descReq:'Describe su personalidad',charSaved:'Personaje guardado',setSaved:'Ajustes guardados',
+ exported:'Respaldo descargado (sin API key)',imported:'Importado',invalid:'Archivo no válido',clearConfirm:'¿Vaciar todos los mensajes de este chat?',
+ demoInitCh:'*{n} toma la iniciativa y te observa con una sonrisa* Bueno, parece que hoy hablo yo primero… ¿qué te trae por aquí?\n\n_(Modo demo)_',
+ demoInit:'¡Hola! Tomé la iniciativa aunque no escribiste nada. Estoy en **modo demo**; añade tu API key en Ajustes para respuestas reales.',
+ demoCh:'*{n} te mira con atención y sonríe* Interesante… dijiste: «{u}». Cuéntame más, quiero saber adónde nos lleva esto.\n\n_(Modo demo: añade tu API key en Ajustes para que {n} responda de verdad.)_',
+ demoGen:'¡Hola! Estoy en **modo demo**, así que solo puedo repetirte lo que dijiste: «{u}».\n\nPara usar una IA real, abre **Ajustes / API** y pega tu clave. Mientras tanto, prueba a **editar** cualquier mensaje con el botón ✎ — también los míos.',
+ sysDefault:'Eres un asistente útil y amable. Responde en español con claridad.',
+ rpHead:'Eres {n}{tag}. Estás en un roleplay con el usuario.\n',rpPers:'Personalidad y trasfondo: {d}\n',rpScene:'Escenario: {s}\n',rpEx:'Ejemplo de cómo hablas:\n{e}\n',
+ rpRules:'Reglas: mantente siempre en el personaje, nunca digas que eres una IA, describe acciones entre *asteriscos*, responde en español y avanza la historia con iniciativa.',
+ fImg:'Imagen del personaje',upImg:'📷 Subir imagen',rmImg:'Quitar',imgFail:'No se pudo leer la imagen',sPhoto:'Tu foto de perfil',sBg:'Fondo de pantalla del chat (para todos los chats)',sTheme:'Color del chat',sMode:'Modo',mLight:'☀️ Claro',mDark:'🌙 Oscuro',mAuto:'🔄 Automático (según tu dispositivo)',
+ profBtn:'Mi perfil',profTitle:'👤 Mi perfil',profName:'Nombre',profNamePh:'Cómo quieres que te llame la IA',profBio:'Sobre mí',profBioS:'(la IA lo tendrá en cuenta)',profBioPh:'Ej. Me gustan las historias de aventuras y los finales felices…',
+ rpUserName:'El nombre del usuario es {n}.\n',rpUserBio:'Sobre el usuario: {b}\n'
+},
+en:{
+ tabChat:'💬 Chat',tabChars:'🎭 Characters',newChat:'＋ New chat',searchPh:'Search conversations…',convs:'Conversations',
+ settingsBtn:'⚙️ Settings / API',exportT:'Export all',importT:'Import',titlePh:'Chat title',clear:'🧹 Clear',clearT:'Clear messages',
+ inputPh:'Type a message…  (Enter = send as User · Shift+Enter new line)',
+ sendUser:'🙂 User',sendUserT:'Adds your message. The AI does NOT reply (you can send several in a row)',
+ sendAI:'🤖 AI',sendAIT:'Empty: the AI replies. With text: adds it as an AI message',stop:'■ Stop',
+ auto:'AI replies automatically when sending as User',
+ charsNav:'Characters',charsH:'Create your character 🎭',charsSub:'Design AI characters for roleplay and chat with them.',createChar:'✨ Create character',
+ mCreate:'Create character',mEdit:'Edit character',fName:'Name',fTag:'Short tagline',fAvatar:'Avatar',fColor:'Color',
+ fDesc:'Description and personality',fDescS:'(who they are, how they talk, their story)',fGreet:'Opening greeting',fGreetS:'(the character’s first message)',
+ fScene:'Scenario',fOpt:'(optional)',fEx:'Example dialogue',fTags:'Tags',fTagsS:'(comma separated)',
+ phName:'E.g. Captain Tide',phTag:'E.g. Friendly, joking pirate',phDesc:'A veteran ship captain, brave and caring toward the crew…',
+ phGreet:'*Tips his hat* Welcome aboard, sailor!',phScene:'A ship in the middle of a storm',
+ phEx:'User: Where are we headed?\nCharacter: *points at the horizon* Into the unknown!',phTags:'adventure, humor, fantasy',
+ cancel:'Cancel',saveChar:'Save character',sTitle:'⚙️ AI / API settings',
+ sIntro:'Works with any OpenAI-style API (DeepSeek, OpenAI, OpenRouter, Ollama, Gemini…). Without a key it runs in <b>demo mode</b>. Your key is stored only in your browser.',
+ sUrl:'Base URL',sModel:'Model',sTemp:'Temperature',sKey:'API key',sSys:'Global system instruction',sSysS:'(used in chats without a character)',close:'Close',save:'Save',
+ chatsCount:'{n} chats',msgs:'{n} messages',now:'now',up:'Move up',down:'Move down',ren:'Rename',del:'Delete',
+ renPrompt:'New chat name:',delChat:'Delete this chat?',newChatTitle:'New chat',chatWith:'Chat with ',untitled:'Untitled',
+ emptyH:'How can I help you today?',emptyP:'Type below to get started. You can edit any message, including the AI’s.',
+ connected:'Connected to {m}',demoHint:'Demo mode (no API key) · add your key in Settings',
+ roleUser:'Role: User',roleAI:'Role: AI',resend:'Save and resend',edit:'✎ Edit',swapAI:'⇄ Mark as AI',swapUser:'⇄ Mark as User',
+ swapT:'Change who said it',copy:'⧉ Copy',regen:'↻ Regenerate',delMsg:'✕ Delete',
+ emptyMsg:'The message is empty',edited:'Message edited',copied:'Copied',copyFail:'Could not copy',emptyResp:'(empty response)',
+ chatBtn:'💬 Chat',newCard:'Create character',delChar:'Delete {n}? Their chats will remain.',
+ nameReq:'Give your character a name',descReq:'Describe their personality',charSaved:'Character saved',setSaved:'Settings saved',
+ exported:'Backup downloaded (no API key)',imported:'Imported',invalid:'Invalid file',clearConfirm:'Clear all messages in this chat?',
+ demoInitCh:'*{n} takes the initiative and watches you with a smile* Well, looks like I speak first today… what brings you here?\n\n_(Demo mode)_',
+ demoInit:'Hi! I took the initiative even though you didn’t write anything. I’m in **demo mode**; add your API key in Settings for real replies.',
+ demoCh:'*{n} looks at you closely and smiles* Interesting… you said: “{u}”. Tell me more, I want to see where this goes.\n\n_(Demo mode: add your API key in Settings so {n} can really answer.)_',
+ demoGen:'Hi! I’m in **demo mode**, so I can only repeat what you said: “{u}”.\n\nTo use a real AI, open **Settings / API** and paste your key. Meanwhile, try **editing** any message with the ✎ button — mine too.',
+ sysDefault:'You are a helpful and friendly assistant. Answer clearly in English.',
+ rpHead:'You are {n}{tag}. You are in a roleplay with the user.\n',rpPers:'Personality and background: {d}\n',rpScene:'Scenario: {s}\n',rpEx:'Example of how you speak:\n{e}\n',
+ rpRules:'Rules: always stay in character, never say you are an AI, describe actions between *asterisks*, reply in English and move the story forward with initiative.',
+ fImg:'Character image',upImg:'📷 Upload image',rmImg:'Remove',imgFail:'Could not read the image',sPhoto:'Your profile photo',sBg:'Chat wallpaper (applies to all chats)',sTheme:'Chat color',sMode:'Mode',mLight:'☀️ Light',mDark:'🌙 Dark',mAuto:'🔄 Automatic (follows your device)',
+ profBtn:'My profile',profTitle:'👤 My profile',profName:'Name',profNamePh:'What the AI should call you',profBio:'About me',profBioS:'(the AI will take it into account)',profBioPh:'E.g. I love adventure stories and happy endings…',
+ rpUserName:'The user is called {n}.\n',rpUserBio:'About the user: {b}\n'
+},
+pt:{
+ tabChat:'💬 Chat',tabChars:'🎭 Personagens',newChat:'＋ Novo chat',searchPh:'Buscar conversas…',convs:'Conversas',
+ settingsBtn:'⚙️ Ajustes / API',exportT:'Exportar tudo',importT:'Importar',titlePh:'Título do chat',clear:'🧹 Limpar',clearT:'Limpar mensagens',
+ inputPh:'Escreva uma mensagem…  (Enter = enviar como Usuário · Shift+Enter quebra de linha)',
+ sendUser:'🙂 Usuário',sendUserT:'Adiciona sua mensagem. A IA NÃO responde (você pode enviar várias seguidas)',
+ sendAI:'🤖 IA',sendAIT:'Vazio: a IA responde. Com texto: adiciona como mensagem da IA',stop:'■ Parar',
+ auto:'A IA responde sozinha ao enviar como Usuário',
+ charsNav:'Personagens',charsH:'Crie seu personagem 🎭',charsSub:'Crie personagens de IA para fazer roleplay e converse com eles.',createChar:'✨ Criar personagem',
+ mCreate:'Criar personagem',mEdit:'Editar personagem',fName:'Nome',fTag:'Frase curta',fAvatar:'Avatar',fColor:'Cor',
+ fDesc:'Descrição e personalidade',fDescS:'(como é, como fala, sua história)',fGreet:'Saudação inicial',fGreetS:'(primeira mensagem do personagem)',
+ fScene:'Cenário',fOpt:'(opcional)',fEx:'Exemplo de diálogo',fTags:'Etiquetas',fTagsS:'(separadas por vírgulas)',
+ phName:'Ex. Capitão Maré',phTag:'Ex. Pirata simpático e brincalhão',phDesc:'É um capitão de navio veterano, corajoso e carinhoso com a tripulação…',
+ phGreet:'*Ajeita o chapéu* Bem-vindo a bordo, marujo!',phScene:'Um navio no meio de uma tempestade',
+ phEx:'Usuário: Para onde vamos?\nPersonagem: *aponta para o horizonte* Rumo ao desconhecido!',phTags:'aventura, humor, fantasia',
+ cancel:'Cancelar',saveChar:'Salvar personagem',sTitle:'⚙️ Ajustes de IA / API',
+ sIntro:'Compatível com qualquer API estilo OpenAI (DeepSeek, OpenAI, OpenRouter, Ollama, Gemini…). Sem chave funciona em <b>modo demo</b>. A chave fica salva apenas no seu navegador.',
+ sUrl:'URL base',sModel:'Modelo',sTemp:'Temperatura',sKey:'API key',sSys:'Instrução de sistema global',sSysS:'(usada em chats sem personagem)',close:'Fechar',save:'Salvar',
+ chatsCount:'{n} chats',msgs:'{n} mensagens',now:'agora',up:'Subir',down:'Descer',ren:'Renomear',del:'Excluir',
+ renPrompt:'Novo nome do chat:',delChat:'Excluir este chat?',newChatTitle:'Novo chat',chatWith:'Chat com ',untitled:'Sem título',
+ emptyH:'Como posso ajudar hoje?',emptyP:'Escreva abaixo para começar. Você pode editar qualquer mensagem, inclusive as da IA.',
+ connected:'Conectado a {m}',demoHint:'Modo demo (sem API key) · adicione sua chave em Ajustes',
+ roleUser:'Papel: Usuário',roleAI:'Papel: IA',resend:'Salvar e reenviar',edit:'✎ Editar',swapAI:'⇄ Marcar como IA',swapUser:'⇄ Marcar como Usuário',
+ swapT:'Mudar quem disse',copy:'⧉ Copiar',regen:'↻ Regenerar',delMsg:'✕ Apagar',
+ emptyMsg:'A mensagem está vazia',edited:'Mensagem editada',copied:'Copiado',copyFail:'Não foi possível copiar',emptyResp:'(resposta vazia)',
+ chatBtn:'💬 Conversar',newCard:'Criar personagem',delChar:'Excluir {n}? Os chats dele continuarão existindo.',
+ nameReq:'Dê um nome ao personagem',descReq:'Descreva a personalidade',charSaved:'Personagem salvo',setSaved:'Ajustes salvos',
+ exported:'Backup baixado (sem API key)',imported:'Importado',invalid:'Arquivo inválido',clearConfirm:'Limpar todas as mensagens deste chat?',
+ demoInitCh:'*{n} toma a iniciativa e te observa com um sorriso* Bem, parece que hoje eu falo primeiro… o que te traz aqui?\n\n_(Modo demo)_',
+ demoInit:'Olá! Tomei a iniciativa mesmo você não tendo escrito nada. Estou em **modo demo**; adicione sua API key em Ajustes para respostas reais.',
+ demoCh:'*{n} olha com atenção e sorri* Interessante… você disse: «{u}». Conte mais, quero ver aonde isso nos leva.\n\n_(Modo demo: adicione sua API key em Ajustes para {n} responder de verdade.)_',
+ demoGen:'Olá! Estou em **modo demo**, então só posso repetir o que você disse: «{u}».\n\nPara usar uma IA de verdade, abra **Ajustes / API** e cole sua chave. Enquanto isso, tente **editar** qualquer mensagem com o botão ✎ — inclusive as minhas.',
+ sysDefault:'Você é um assistente útil e simpático. Responda com clareza em português.',
+ rpHead:'Você é {n}{tag}. Você está em um roleplay com o usuário.\n',rpPers:'Personalidade e histórico: {d}\n',rpScene:'Cenário: {s}\n',rpEx:'Exemplo de como você fala:\n{e}\n',
+ rpRules:'Regras: mantenha-se sempre no personagem, nunca diga que é uma IA, descreva ações entre *asteriscos*, responda em português e faça a história avançar com iniciativa.',
+ fImg:'Imagem do personagem',upImg:'📷 Enviar imagem',rmImg:'Remover',imgFail:'Não foi possível ler a imagem',sPhoto:'Sua foto de perfil',sBg:'Papel de parede do chat (vale para todos os chats)',sTheme:'Cor do chat',sMode:'Modo',mLight:'☀️ Claro',mDark:'🌙 Escuro',mAuto:'🔄 Automático (conforme seu dispositivo)',
+ profBtn:'Meu perfil',profTitle:'👤 Meu perfil',profName:'Nome',profNamePh:'Como você quer que a IA te chame',profBio:'Sobre mim',profBioS:'(a IA vai levar isso em conta)',profBioPh:'Ex. Gosto de histórias de aventura e finais felizes…',
+ rpUserName:'O nome do usuário é {n}.\n',rpUserBio:'Sobre o usuário: {b}\n'
+},
+ru:{
+ tabChat:'💬 Чат',tabChars:'🎭 Персонажи',newChat:'＋ Новый чат',searchPh:'Поиск по беседам…',convs:'Беседы',
+ settingsBtn:'⚙️ Настройки / API',exportT:'Экспортировать всё',importT:'Импорт',titlePh:'Название чата',clear:'🧹 Очистить',clearT:'Очистить сообщения',
+ inputPh:'Напишите сообщение…  (Enter = отправить как Пользователь · Shift+Enter новая строка)',
+ sendUser:'🙂 Пользователь',sendUserT:'Добавляет ваше сообщение. ИИ НЕ отвечает (можно отправить несколько подряд)',
+ sendAI:'🤖 ИИ',sendAIT:'Пусто: ИИ отвечает. С текстом: добавляет его как сообщение ИИ',stop:'■ Стоп',
+ auto:'ИИ отвечает сам при отправке как Пользователь',
+ charsNav:'Персонажи',charsH:'Создай своего персонажа 🎭',charsSub:'Создавайте ИИ-персонажей для ролевых игр и общайтесь с ними.',createChar:'✨ Создать персонажа',
+ mCreate:'Создать персонажа',mEdit:'Редактировать персонажа',fName:'Имя',fTag:'Короткая фраза',fAvatar:'Аватар',fColor:'Цвет',
+ fDesc:'Описание и характер',fDescS:'(кто он, как говорит, его история)',fGreet:'Первое приветствие',fGreetS:'(первое сообщение персонажа)',
+ fScene:'Сценарий',fOpt:'(необязательно)',fEx:'Пример диалога',fTags:'Теги',fTagsS:'(через запятую)',
+ phName:'Напр. Капитан Прилив',phTag:'Напр. Добрый и весёлый пират',phDesc:'Опытный капитан корабля, храбрый и заботливый к своей команде…',
+ phGreet:'*поправляет шляпу* Добро пожаловать на борт, юнга!',phScene:'Корабль посреди шторма',
+ phEx:'Пользователь: Куда мы плывём?\nПерсонаж: *указывает на горизонт* В неизвестность!',phTags:'приключения, юмор, фэнтези',
+ cancel:'Отмена',saveChar:'Сохранить персонажа',sTitle:'⚙️ Настройки ИИ / API',
+ sIntro:'Работает с любым API в стиле OpenAI (DeepSeek, OpenAI, OpenRouter, Ollama, Gemini…). Без ключа работает в <b>демо-режиме</b>. Ключ хранится только в вашем браузере.',
+ sUrl:'Базовый URL',sModel:'Модель',sTemp:'Температура',sKey:'API-ключ',sSys:'Глобальная системная инструкция',sSysS:'(для чатов без персонажа)',close:'Закрыть',save:'Сохранить',
+ chatsCount:'Чатов: {n}',msgs:'Сообщений: {n}',now:'сейчас',up:'Вверх',down:'Вниз',ren:'Переименовать',del:'Удалить',
+ renPrompt:'Новое название чата:',delChat:'Удалить этот чат?',newChatTitle:'Новый чат',chatWith:'Чат с ',untitled:'Без названия',
+ emptyH:'Чем могу помочь сегодня?',emptyP:'Пишите ниже, чтобы начать. Можно редактировать любое сообщение, в том числе сообщения ИИ.',
+ connected:'Подключено: {m}',demoHint:'Демо-режим (без API-ключа) · добавьте ключ в Настройках',
+ roleUser:'Роль: Пользователь',roleAI:'Роль: ИИ',resend:'Сохранить и отправить заново',edit:'✎ Изменить',swapAI:'⇄ Пометить как ИИ',swapUser:'⇄ Пометить как Пользователь',
+ swapT:'Изменить, кто это сказал',copy:'⧉ Копировать',regen:'↻ Заново',delMsg:'✕ Удалить',
+ emptyMsg:'Сообщение пустое',edited:'Сообщение изменено',copied:'Скопировано',copyFail:'Не удалось скопировать',emptyResp:'(пустой ответ)',
+ chatBtn:'💬 Чат',newCard:'Создать персонажа',delChar:'Удалить {n}? Его чаты останутся.',
+ nameReq:'Дайте персонажу имя',descReq:'Опишите его характер',charSaved:'Персонаж сохранён',setSaved:'Настройки сохранены',
+ exported:'Резервная копия скачана (без API-ключа)',imported:'Импортировано',invalid:'Недопустимый файл',clearConfirm:'Очистить все сообщения этого чата?',
+ demoInitCh:'*{n} берёт инициативу и смотрит на вас с улыбкой* Что ж, сегодня я заговорю первым… что привело вас сюда?\n\n_(Демо-режим)_',
+ demoInit:'Привет! Я взял инициативу, хотя вы ничего не написали. Я в **демо-режиме**; добавьте API-ключ в Настройках для настоящих ответов.',
+ demoCh:'*{n} внимательно смотрит на вас и улыбается* Интересно… вы сказали: «{u}». Расскажите больше, хочу узнать, к чему это приведёт.\n\n_(Демо-режим: добавьте API-ключ в Настройках, чтобы {n} отвечал по-настоящему.)_',
+ demoGen:'Привет! Я в **демо-режиме**, поэтому могу только повторить ваши слова: «{u}».\n\nЧтобы использовать настоящий ИИ, откройте **Настройки / API** и вставьте ключ. А пока попробуйте **изменить** любое сообщение кнопкой ✎ — в том числе мои.',
+ sysDefault:'Вы — полезный и дружелюбный помощник. Отвечайте ясно на русском языке.',
+ rpHead:'Ты — {n}{tag}. Ты участвуешь в ролевой игре с пользователем.\n',rpPers:'Характер и предыстория: {d}\n',rpScene:'Сценарий: {s}\n',rpEx:'Пример того, как ты говоришь:\n{e}\n',
+ rpRules:'Правила: всегда оставайся в образе, никогда не говори, что ты ИИ, описывай действия между *звёздочками*, отвечай на русском и сам продвигай историю вперёд.',
+ fImg:'Изображение персонажа',upImg:'📷 Загрузить изображение',rmImg:'Убрать',imgFail:'Не удалось прочитать изображение',sPhoto:'Ваше фото профиля',sBg:'Обои чата (для всех чатов)',sTheme:'Цвет чата',sMode:'Режим',mLight:'☀️ Светлый',mDark:'🌙 Тёмный',mAuto:'🔄 Автоматически (как на устройстве)',
+ profBtn:'Мой профиль',profTitle:'👤 Мой профиль',profName:'Имя',profNamePh:'Как ИИ должен к вам обращаться',profBio:'Обо мне',profBioS:'(ИИ будет это учитывать)',profBioPh:'Напр. Люблю приключенческие истории и счастливые финалы…',
+ rpUserName:'Пользователя зовут {n}.\n',rpUserBio:'О пользователе: {b}\n'
+},
+fr:{
+ tabChat:'💬 Chat',tabChars:'🎭 Personnages',newChat:'＋ Nouveau chat',searchPh:'Rechercher des conversations…',convs:'Conversations',
+ settingsBtn:'⚙️ Réglages / API',exportT:'Tout exporter',importT:'Importer',titlePh:'Titre du chat',clear:'🧹 Vider',clearT:'Vider les messages',
+ inputPh:'Écrivez un message…  (Entrée = envoyer comme Utilisateur · Maj+Entrée saut de ligne)',
+ sendUser:'🙂 Utilisateur',sendUserT:'Ajoute votre message. L’IA ne répond PAS (vous pouvez en envoyer plusieurs à la suite)',
+ sendAI:'🤖 IA',sendAIT:'Vide : l’IA répond. Avec du texte : l’ajoute comme message de l’IA',stop:'■ Arrêter',
+ auto:'L’IA répond toute seule à l’envoi comme Utilisateur',
+ charsNav:'Personnages',charsH:'Crée ton personnage 🎭',charsSub:'Conçois des personnages d’IA pour le jeu de rôle et discute avec eux.',createChar:'✨ Créer un personnage',
+ mCreate:'Créer un personnage',mEdit:'Modifier le personnage',fName:'Nom',fTag:'Phrase courte',fAvatar:'Avatar',fColor:'Couleur',
+ fDesc:'Description et personnalité',fDescS:'(qui il est, comment il parle, son histoire)',fGreet:'Salutation initiale',fGreetS:'(premier message du personnage)',
+ fScene:'Scénario',fOpt:'(facultatif)',fEx:'Exemple de dialogue',fTags:'Étiquettes',fTagsS:'(séparées par des virgules)',
+ phName:'Ex. Capitaine Marée',phTag:'Ex. Pirate sympathique et blagueur',phDesc:'Un capitaine de navire chevronné, courageux et attentionné envers son équipage…',
+ phGreet:'*ajuste son chapeau* Bienvenue à bord, matelot !',phScene:'Un navire au milieu d’une tempête',
+ phEx:'Utilisateur : Où allons-nous ?\nPersonnage : *montre l’horizon* Vers l’inconnu !',phTags:'aventure, humour, fantasy',
+ cancel:'Annuler',saveChar:'Enregistrer le personnage',sTitle:'⚙️ Réglages IA / API',
+ sIntro:'Compatible avec toute API de style OpenAI (DeepSeek, OpenAI, OpenRouter, Ollama, Gemini…). Sans clé, fonctionne en <b>mode démo</b>. Votre clé reste uniquement dans votre navigateur.',
+ sUrl:'URL de base',sModel:'Modèle',sTemp:'Température',sKey:'Clé API',sSys:'Instruction système globale',sSysS:'(utilisée dans les chats sans personnage)',close:'Fermer',save:'Enregistrer',
+ chatsCount:'{n} chats',msgs:'{n} messages',now:'maintenant',up:'Monter',down:'Descendre',ren:'Renommer',del:'Supprimer',
+ renPrompt:'Nouveau nom du chat :',delChat:'Supprimer ce chat ?',newChatTitle:'Nouveau chat',chatWith:'Chat avec ',untitled:'Sans titre',
+ emptyH:'Comment puis-je vous aider aujourd’hui ?',emptyP:'Écrivez ci-dessous pour commencer. Vous pouvez modifier n’importe quel message, y compris ceux de l’IA.',
+ connected:'Connecté à {m}',demoHint:'Mode démo (sans clé API) · ajoutez votre clé dans Réglages',
+ roleUser:'Rôle : Utilisateur',roleAI:'Rôle : IA',resend:'Enregistrer et renvoyer',edit:'✎ Modifier',swapAI:'⇄ Marquer comme IA',swapUser:'⇄ Marquer comme Utilisateur',
+ swapT:'Changer qui l’a dit',copy:'⧉ Copier',regen:'↻ Régénérer',delMsg:'✕ Supprimer',
+ emptyMsg:'Le message est vide',edited:'Message modifié',copied:'Copié',copyFail:'Impossible de copier',emptyResp:'(réponse vide)',
+ chatBtn:'💬 Discuter',newCard:'Créer un personnage',delChar:'Supprimer {n} ? Ses chats seront conservés.',
+ nameReq:'Donnez un nom au personnage',descReq:'Décrivez sa personnalité',charSaved:'Personnage enregistré',setSaved:'Réglages enregistrés',
+ exported:'Sauvegarde téléchargée (sans clé API)',imported:'Importé',invalid:'Fichier non valide',clearConfirm:'Vider tous les messages de ce chat ?',
+ demoInitCh:'*{n} prend l’initiative et vous observe avec un sourire* Eh bien, il semble que je parle en premier aujourd’hui… qu’est-ce qui vous amène ?\n\n_(Mode démo)_',
+ demoInit:'Salut ! J’ai pris l’initiative alors que vous n’avez rien écrit. Je suis en **mode démo** ; ajoutez votre clé API dans Réglages pour de vraies réponses.',
+ demoCh:'*{n} vous regarde attentivement et sourit* Intéressant… vous avez dit : « {u} ». Dites-m’en plus, je veux voir où cela nous mène.\n\n_(Mode démo : ajoutez votre clé API dans Réglages pour que {n} réponde vraiment.)_',
+ demoGen:'Salut ! Je suis en **mode démo**, je ne peux donc que répéter ce que vous avez dit : « {u} ».\n\nPour utiliser une vraie IA, ouvrez **Réglages / API** et collez votre clé. En attendant, essayez de **modifier** un message avec le bouton ✎ — les miens aussi.',
+ sysDefault:'Vous êtes un assistant utile et aimable. Répondez clairement en français.',
+ rpHead:'Tu es {n}{tag}. Tu es en jeu de rôle avec l’utilisateur.\n',rpPers:'Personnalité et histoire : {d}\n',rpScene:'Scénario : {s}\n',rpEx:'Exemple de ta façon de parler :\n{e}\n',
+ rpRules:'Règles : reste toujours dans ton personnage, ne dis jamais que tu es une IA, décris les actions entre *astérisques*, réponds en français et fais avancer l’histoire avec initiative.',
+ fImg:'Image du personnage',upImg:'📷 Téléverser une image',rmImg:'Retirer',imgFail:'Impossible de lire l’image',sPhoto:'Votre photo de profil',sBg:'Fond d’écran du chat (pour tous les chats)',sTheme:'Couleur du chat',sMode:'Mode',mLight:'☀️ Clair',mDark:'🌙 Sombre',mAuto:'🔄 Automatique (selon votre appareil)',
+ profBtn:'Mon profil',profTitle:'👤 Mon profil',profName:'Nom',profNamePh:'Comment l’IA doit vous appeler',profBio:'À propos de moi',profBioS:'(l’IA en tiendra compte)',profBioPh:'Ex. J’aime les histoires d’aventure et les fins heureuses…',
+ rpUserName:'L’utilisateur s’appelle {n}.\n',rpUserBio:'À propos de l’utilisateur : {b}\n'
+}};
+const DEF={
+es:{
+ luna:{name:'Luna',tagline:'Bibliotecaria nocturna y misteriosa',emoji:'📚',color:'#e6dcf7',
+  desc:'Luna cuida una biblioteca antigua que solo abre de noche. Es tranquila, curiosa y habla en susurros poéticos. Conoce secretos de cada libro y le encanta recomendar historias.',
+  greet:'*alza la vista de un libro polvoriento y sonríe* Vaya… un visitante a estas horas. Pasa, la biblioteca está despierta. ¿Qué historia buscas?',
+  scene:'Una biblioteca mágica a medianoche',example:'',tags:['misterio','calma','fantasía']},
+ marea:{name:'Capitán Marea',tagline:'Pirata amable, bromista y valiente',emoji:'🏴‍☠️',color:'#d4f1f4',
+  desc:'Capitán veterano de los siete mares. Habla con expresiones marineras, adora los mapas del tesoro y trata a todos como parte de su tripulación. Nunca pierde el buen humor.',
+  greet:'*golpea el timón con una carcajada* ¡Ja, ja! ¡Otro grumete a bordo! Dime, ¿listo para zarpar tras el tesoro perdido?',
+  scene:'Cubierta de un velero al amanecer',example:'',tags:['aventura','humor']},
+ quill:{name:'Dra. Quill',tagline:'Científica excéntrica e inventora',emoji:'🔮',color:'#fff0b3',
+  desc:'Inventora brillante y distraída que mezcla ciencia con magia. Habla rápido, se emociona con cada experimento y a veces explota cosas por accidente.',
+  greet:'*sale de detrás de una nube de humo rosa* ¡Justo a tiempo! Necesito un voluntario para probar mi nuevo invento… ¡no es peligroso! Casi.',
+  scene:'Laboratorio lleno de frascos burbujeantes',example:'',tags:['ciencia','comedia']}},
+en:{
+ luna:{name:'Luna',tagline:'Mysterious night librarian',emoji:'📚',color:'#e6dcf7',
+  desc:'Luna looks after an ancient library that only opens at night. She is calm, curious and speaks in poetic whispers. She knows the secrets of every book and loves recommending stories.',
+  greet:'*looks up from a dusty book and smiles* Well… a visitor at this hour. Come in, the library is awake. What story are you looking for?',
+  scene:'A magical library at midnight',example:'',tags:['mystery','calm','fantasy']},
+ marea:{name:'Captain Tide',tagline:'Friendly, joking and brave pirate',emoji:'🏴‍☠️',color:'#d4f1f4',
+  desc:'A veteran captain of the seven seas. He talks in sailor slang, adores treasure maps and treats everyone as part of his crew. He never loses his good humor.',
+  greet:'*slaps the helm with a hearty laugh* Ha, ha! Another sailor aboard! Tell me, ready to set sail after the lost treasure?',
+  scene:'The deck of a sailing ship at dawn',example:'',tags:['adventure','humor']},
+ quill:{name:'Dr. Quill',tagline:'Eccentric scientist and inventor',emoji:'🔮',color:'#fff0b3',
+  desc:'A brilliant, absent-minded inventor who mixes science with magic. She talks fast, gets excited about every experiment and sometimes blows things up by accident.',
+  greet:'*steps out from behind a cloud of pink smoke* Just in time! I need a volunteer to test my new invention… it’s not dangerous! Almost.',
+  scene:'A laboratory full of bubbling flasks',example:'',tags:['science','comedy']}},
+pt:{
+ luna:{name:'Luna',tagline:'Bibliotecária noturna e misteriosa',emoji:'📚',color:'#e6dcf7',
+  desc:'Luna cuida de uma biblioteca antiga que só abre à noite. É calma, curiosa e fala em sussurros poéticos. Conhece os segredos de cada livro e adora recomendar histórias.',
+  greet:'*levanta os olhos de um livro empoeirado e sorri* Ora… um visitante a esta hora. Entre, a biblioteca está acordada. Que história você procura?',
+  scene:'Uma biblioteca mágica à meia-noite',example:'',tags:['mistério','calma','fantasia']},
+ marea:{name:'Capitão Maré',tagline:'Pirata simpático, brincalhão e corajoso',emoji:'🏴‍☠️',color:'#d4f1f4',
+  desc:'Capitão veterano dos sete mares. Fala com expressões marinheiras, adora mapas do tesouro e trata todos como parte da tripulação. Nunca perde o bom humor.',
+  greet:'*bate no leme com uma gargalhada* Ha, ha! Mais um marujo a bordo! Diga, pronto para zarpar atrás do tesouro perdido?',
+  scene:'O convés de um veleiro ao amanhecer',example:'',tags:['aventura','humor']},
+ quill:{name:'Dra. Quill',tagline:'Cientista excêntrica e inventora',emoji:'🔮',color:'#fff0b3',
+  desc:'Inventora brilhante e distraída que mistura ciência com magia. Fala rápido, se empolga com cada experimento e às vezes explode coisas sem querer.',
+  greet:'*sai de trás de uma nuvem de fumaça rosa* Bem na hora! Preciso de um voluntário para testar minha nova invenção… não é perigosa! Quase.',
+  scene:'Laboratório cheio de frascos borbulhantes',example:'',tags:['ciência','comédia']}},
+ru:{
+ luna:{name:'Луна',tagline:'Загадочная ночная библиотекарша',emoji:'📚',color:'#e6dcf7',
+  desc:'Луна присматривает за древней библиотекой, которая открывается только ночью. Она спокойная, любопытная и говорит поэтичным шёпотом. Знает тайны каждой книги и любит советовать истории.',
+  greet:'*поднимает взгляд от пыльной книги и улыбается* Надо же… гость в такой час. Входите, библиотека не спит. Какую историю вы ищете?',
+  scene:'Волшебная библиотека в полночь',example:'',tags:['тайна','спокойствие','фэнтези']},
+ marea:{name:'Капитан Прилив',tagline:'Добрый, весёлый и смелый пират',emoji:'🏴‍☠️',color:'#d4f1f4',
+  desc:'Бывалый капитан семи морей. Говорит морскими словечками, обожает карты сокровищ и относится ко всем как к своей команде. Никогда не теряет бодрости духа.',
+  greet:'*хлопает по штурвалу и громко смеётся* Ха-ха! Ещё один юнга на борту! Скажи, готов отправиться за потерянным сокровищем?',
+  scene:'Палуба парусника на рассвете',example:'',tags:['приключения','юмор']},
+ quill:{name:'Д-р Квилл',tagline:'Эксцентричная учёная и изобретательница',emoji:'🔮',color:'#fff0b3',
+  desc:'Гениальная рассеянная изобретательница, смешивающая науку с магией. Говорит быстро, приходит в восторг от каждого эксперимента и порой случайно что-нибудь взрывает.',
+  greet:'*выходит из облака розового дыма* Как раз вовремя! Мне нужен доброволец для испытания моего нового изобретения… оно не опасно! Почти.',
+  scene:'Лаборатория, полная булькающих колб',example:'',tags:['наука','комедия']}},
+fr:{
+ luna:{name:'Luna',tagline:'Bibliothécaire nocturne et mystérieuse',emoji:'📚',color:'#e6dcf7',
+  desc:'Luna veille sur une bibliothèque ancienne qui n’ouvre que la nuit. Elle est calme, curieuse et parle en murmures poétiques. Elle connaît les secrets de chaque livre et adore recommander des histoires.',
+  greet:'*lève les yeux d’un livre poussiéreux et sourit* Tiens… un visiteur à cette heure. Entrez, la bibliothèque est éveillée. Quelle histoire cherchez-vous ?',
+  scene:'Une bibliothèque magique à minuit',example:'',tags:['mystère','calme','fantasy']},
+ marea:{name:'Capitaine Marée',tagline:'Pirate sympathique, blagueur et courageux',emoji:'🏴‍☠️',color:'#d4f1f4',
+  desc:'Capitaine chevronné des sept mers. Il parle en expressions de marin, adore les cartes au trésor et traite chacun comme un membre de son équipage. Il ne perd jamais sa bonne humeur.',
+  greet:'*tape sur la barre avec un grand éclat de rire* Ha, ha ! Encore un matelot à bord ! Dis-moi, prêt à lever l’ancre pour le trésor perdu ?',
+  scene:'Le pont d’un voilier à l’aube',example:'',tags:['aventure','humour']},
+ quill:{name:'Dr Quill',tagline:'Scientifique excentrique et inventrice',emoji:'🔮',color:'#fff0b3',
+  desc:'Inventrice brillante et distraite qui mélange science et magie. Elle parle vite, s’enthousiasme pour chaque expérience et fait parfois tout exploser par accident.',
+  greet:'*surgit d’un nuage de fumée rose* Pile à l’heure ! J’ai besoin d’un volontaire pour tester ma nouvelle invention… ce n’est pas dangereux ! Presque.',
+  scene:'Un laboratoire plein de flacons qui bouillonnent',example:'',tags:['science','comédie']}}
+};
+function detectLang(){return 'en'} // inglés por defecto en la primera visita
+let LANG=detectLang();
+Object.assign(T.es,{tSearch:'Búsqueda',tThink:'Pensar a fondo',tAttach:'Adjuntar',sTavily:'Tavily API key (búsqueda web)',sThink:'Modelo de razonamiento',sVision:'Modelo con visión',
+ srcIntro:'\n\nResultados de búsqueda web (hoy es {d}). Úsalos para responder con información actual y cita las fuentes como [1], [2]:\n\n',srcFail:'No se pudo buscar en la web; respondo sin búsqueda',srcNoKey:'Para buscar en la web añade tu Tavily API key en Ajustes',
+ fileLbl:'Archivo',thinkLbl:'Razonamiento',srcLbl:'Fuentes',fileBad:'Tipo de archivo no compatible: ',docxBad:'No pude leer ese Word'});
+Object.assign(T.en,{tSearch:'Search',tThink:'Deep thinking',tAttach:'Attach',sTavily:'Tavily API key (web search)',sThink:'Reasoning model',sVision:'Vision model',
+ srcIntro:'\n\nWeb search results (today is {d}). Use them to answer with current information and cite sources as [1], [2]:\n\n',srcFail:'Web search failed; answering without it',srcNoKey:'To search the web, add your Tavily API key in Settings',
+ fileLbl:'File',thinkLbl:'Reasoning',srcLbl:'Sources',fileBad:'Unsupported file type: ',docxBad:'Could not read that Word file'});
+Object.assign(T.es,{sSecSearch:'API de búsqueda web',sSecSearchH:'Para que la IA consulte internet (botón 🌐). Usa Tavily, que tiene plan gratis.',sProv:'Servicio',sTavily:'Tavily API key',
+ sSecThink:'API de razonamiento profundo',sSecThinkH:'Para el botón 🧠. Si dejas la URL o la clave vacías, usa las de la API principal.',sTUrl:'URL base',sThink:'Modelo',sTKey:'API key',sVision:'Modelo con visión (para imágenes, usa la API principal)'});
+Object.assign(T.en,{sSecSearch:'Web search API',sSecSearchH:'Lets the AI look things up online (🌐 button). Uses Tavily, which has a free plan.',sProv:'Service',sTavily:'Tavily API key',
+ sSecThink:'Deep reasoning API',sSecThinkH:'For the 🧠 button. If URL or key are empty, the main API is used.',sTUrl:'Base URL',sThink:'Model',sTKey:'API key',sVision:'Vision model (for images, uses the main API)'});
+Object.assign(T.es,{sSUrl:'URL de la API de búsqueda',sTavily:'API key',sSHead:'Cabecera de autenticación',sSBody:'Cuerpo de la petición (JSON)',
+ sSecSearchH:'Cualquier API de búsqueda. Usa {query} para la pregunta y {key} para tu clave. Con cuerpo vacío y URL propia hace GET (pon {query} en la URL). Si dejas todo vacío usa Tavily con solo la clave.',
+ sSecThinkH:'Cualquier API de razonamiento estilo OpenAI (DeepSeek, OpenAI, OpenRouter, Ollama…). Si dejas URL o clave vacías, usa las de la API principal.'});
+Object.assign(T.en,{sSUrl:'Search API URL',sTavily:'API key',sSHead:'Auth header',sSBody:'Request body (JSON)',
+ sSecSearchH:'Any search API. Use {query} for the question and {key} for your key. With an empty body and your own URL it does a GET (put {query} in the URL). If everything is empty it uses Tavily with just the key.',
+ sSecThinkH:'Any OpenAI-style reasoning API (DeepSeek, OpenAI, OpenRouter, Ollama…). If URL or key are empty, the main API is used.'});
+Object.assign(T.es,{tSearch:'Búsqueda',sSecSearch:'API de búsqueda web',sSecSearchH:'Cualquier API que reciba una petición POST con JSON. Vacíos los dos últimos = formato de Tavily.',sSUrl:'URL de la API',sSKey:'API key',sSHead:'Encabezado de autorización',sSBody:'Cuerpo JSON ({q} = la pregunta)',
+ srcIntro:'\n\nResultados de búsqueda web (hoy es {d}). Úsalos para responder con información actual y cita las fuentes como [1], [2]:\n\n',srcFail:'No se pudo buscar en la web; respondo sin búsqueda',srcNoKey:'Para buscar en la web pon la URL y la clave en Ajustes',srcLbl:'Fuentes'});
+Object.assign(T.en,{tSearch:'Search',sSecSearch:'Web search API',sSecSearchH:'Any API that takes a POST request with JSON. Last two empty = Tavily format.',sSUrl:'API URL',sSKey:'API key',sSHead:'Authorization header',sSBody:'JSON body ({q} = the question)',
+ srcIntro:'\n\nWeb search results (today is {d}). Use them to answer with current information and cite sources as [1], [2]:\n\n',srcFail:'Web search failed; answering without it',srcNoKey:'To search the web, set the URL and key in Settings',srcLbl:'Sources'});
+function t(k,o){let v=(T[LANG]&&T[LANG][k])??T.en[k]??k;if(o)for(const x in o)v=v.split('{'+x+'}').join(o[x]);return v}
+const sameChar=(c,d)=>d&&c.name===d.name&&c.tagline===d.tagline&&c.desc===d.desc&&c.greet===d.greet&&c.scene===d.scene&&(c.tags||[]).join()===d.tags.join();
+const fromDef=(k,l)=>({...DEF[l][k],tags:[...DEF[l][k].tags]});
+const defaultChars=()=>Object.keys(DEF[LANG]).map(k=>({id:uid(),bk:k,...fromDef(k,LANG)}));
+const defaultState=()=>({
+  chats:[],activeId:null,chars:defaultChars(),lang:LANG,
+  settings:{url:'https://api.deepseek.com/v1',model:'deepseek-chat',key:'',temp:0.8,sys:t('sysDefault')}
+});
+const isDefaultTitle=ti=>Object.values(T).some(l=>ti===l.newChatTitle||ti.startsWith(l.chatWith));
+function dispTitle(c){
+  for(const l of Object.values(T)){
+    if(c.title===l.newChatTitle)return t('newChatTitle');
+    if(c.title.startsWith(l.chatWith))return t('chatWith')+c.title.slice(l.chatWith.length);
+  }
+  return c.title;
+}
+function applyStatic(){
+  document.documentElement.lang=LANG;
+  $$('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
+  $$('[data-i18n-html]').forEach(e=>e.innerHTML=t(e.dataset.i18nHtml));
+  $$('[data-i18n-ph]').forEach(e=>e.placeholder=t(e.dataset.i18nPh));
+  $$('[data-i18n-title]').forEach(e=>e.title=t(e.dataset.i18nTitle));
+  $('#langSel').value=LANG;
+  $('#charModalTitle').textContent=t(editingCharId?'mEdit':'mCreate');
+  setBusy(busy);
+}
+let S;
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S||!S.chats){S=defaultState()}
+S.settings=Object.assign(defaultState().settings,S.settings||{});
+S.profile=Object.assign({img:'',bg:'',hue:207,tone:'soft',sm:1,mode:'light'},S.profile||{});
+LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;
+(S.chars||[]).forEach(c=>{if(!c.bk)for(const k in DEF.es)if(sameChar(c,DEF.es[k]))c.bk=k});
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+if(!S.chats.length){newChat(null,true)}
+if(!S.activeId||!getChat(S.activeId))S.activeId=S.chats[0].id;
+
+let editing=null, abortCtl=null, busy=false, editingCharId=null, selEmoji=EMOJIS[0], selColor=COLORS[0], selImg='';
+
+function getChat(id){return S.chats.find(c=>c.id===id)}
+function cur(){return getChat(S.activeId)}
+function getChar(id){return S.chars.find(c=>c.id===id)}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),1800)}
+
+function newChat(charId,silent){
+  const ch={id:uid(),title:t('newChatTitle'),charId:charId||null,messages:[],updated:Date.now()};
+  if(charId){const c=getChar(charId)||S.chars.find(x=>x.id===charId);if(c){ch.title=t('chatWith')+c.name;if(c.greet)ch.messages.push({id:uid(),role:'assistant',content:c.greet})}}
+  S.chats.unshift(ch);S.activeId=ch.id;
+  if(!silent){save();renderAll()}
+  return ch;
+}
+
+/* ---------- Markdown mínimo ---------- */
+function md(src){
+  let out='',parts=src.split(/```(\w*)\n?([\s\S]*?)```/g);
+  for(let i=0;i<parts.length;i+=3){
+    out+=inline(parts[i]);
+    if(i+2<parts.length)out+=`<pre><code>${esc(parts[i+2])}</code></pre>`;
+  }
+  return out;
+}
+function inline(t){
+  if(!t.trim())return '';
+  return t.split(/\n{2,}/).map(p=>'<p>'+esc(p).replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/\*([^*\n]+)\*/g,'<em>$1</em>').replace(/\n/g,'<br>')+'</p>').join('');
+}
+
+/* ---------- Render ---------- */
+function renderProfBtn(){
+  const p=S.profile;
+  $('#openProfile').innerHTML=`<span class="mini">${avInner(p.img,'🙂')}</span> ${esc((p.name||'').trim()||t('profBtn'))}`;
+}
+function renderAll(){renderSide();renderChat();renderChars();renderProfBtn();save()}
+
+function renderSide(){
+  const q=$('#search').value.toLowerCase().trim();
+  const list=$('#chatList');list.innerHTML='';
+  $('#count').textContent=t('chatsCount',{n:S.chats.length});
+  S.chats.forEach((c,i)=>{
+    if(q&&!(c.title.toLowerCase().includes(q)||c.messages.some(m=>m.content.toLowerCase().includes(q))))return;
+    const ch=c.charId&&getChar(c.charId);
+    const d=document.createElement('div');d.className='chat-item'+(c.id===S.activeId?' on':'');
+    d.innerHTML=`<span class="num">${i+1}</span>
+      <span class="ci-title">${ch?`<span class="mini">${avInner(ch.img,ch.emoji)}</span> `:''}${esc(dispTitle(c))}<small>${t('msgs',{n:c.messages.length})} · ${ago(c.updated)}</small></span>
+      <span class="ci-actions">
+        <button class="icon-btn" data-a="up" title="${t('up')}">↑</button>
+        <button class="icon-btn" data-a="down" title="${t('down')}">↓</button>
+        <button class="icon-btn" data-a="ren" title="${t('ren')}">✎</button>
+        <button class="icon-btn del" data-a="del" title="${t('del')}">✕</button></span>`;
+    d.onclick=e=>{
+      const a=e.target.closest('[data-a]')?.dataset.a;
+      if(a==='up'||a==='down'){const j=a==='up'?i-1:i+1;if(j>=0&&j<S.chats.length){[S.chats[i],S.chats[j]]=[S.chats[j],S.chats[i]];renderAll()}return}
+      if(a==='ren'){const n=prompt(t('renPrompt'),dispTitle(c));if(n&&n.trim()){c.title=n.trim();renderAll()}return}
+      if(a==='del'){if(confirm(t('delChat'))){S.chats=S.chats.filter(x=>x.id!==c.id);if(!S.chats.length)newChat(null,true);if(!getChat(S.activeId))S.activeId=S.chats[0].id;renderAll()}return}
+      S.activeId=c.id;editing=null;setView('chat');renderAll();closeMenu();
+    };
+    list.appendChild(d);
+  });
+}
+function ago(ts){const m=Math.round((Date.now()-ts)/60000);if(m<1)return t('now');if(m<60)return m+' min';const h=Math.round(m/60);if(h<24)return h+' h';return Math.round(h/24)+' d'}
+
+function avatarFor(m,chat){
+  if(m.role==='user')return avInner(S.profile.img,'🙂');
+  const ch=chat.charId&&getChar(chat.charId);return ch?avInner(ch.img,ch.emoji):'🤖';
+}
+function applyBg(){
+  const m=$('#messages'),b=safeImg(S.profile.bg);
+  m.style.backgroundImage=b?`linear-gradient(var(--wall),var(--wall)),url("${b}")`:'';
+  m.classList.toggle('has-bg',!!b);
+  m.style.backgroundSize='cover';m.style.backgroundPosition='center';
+}
+function renderChat(){
+  applyBg();
+  const chat=cur();
+  $('#titleInput').value=dispTitle(chat);
+  const ch=chat.charId&&getChar(chat.charId);
+  const b=$('#charBadge');
+  if(ch){b.style.display='';b.innerHTML=`<span class="mini">${avInner(ch.img,ch.emoji)}</span> ${esc(ch.name)}`}else b.style.display='none';
+  const w=$('#msgWrap');w.innerHTML='';
+  if(!chat.messages.length){
+    w.innerHTML=`<div class="empty"><div class="big">☁️</div><h2>${t('emptyH')}</h2><p>${t('emptyP')}</p></div>`;
+  }
+  chat.messages.forEach((m,i)=>w.appendChild(msgEl(m,i,chat)));
+  $('#hint').textContent=S.settings.key?t('connected',{m:S.settings.model}):t('demoHint');
+  applyBg();const box=$('#messages');box.scrollTop=box.scrollHeight;
+}
+function msgEl(m,i,chat){
+  const el=document.createElement('div');
+  el.className='msg '+(m.role==='user'?'user':'ai')+(m.error?' err':'');
+  const isLast=i===chat.messages.length-1;
+  let inner;
+  if(editing===m.id){
+    inner=`<div class="editor"><textarea id="editArea">${esc(m.content)}</textarea>
+      <div class="row">
+        <select id="editRole"><option value="user" ${m.role==='user'?'selected':''}>${t('roleUser')}</option><option value="assistant" ${m.role!=='user'?'selected':''}>${t('roleAI')}</option></select>
+        <span style="flex:1"></span>
+        <button class="btn ghost small" data-x="cancel">${t('cancel')}</button>
+        <button class="btn primary small" data-x="save">${t('save')}</button>
+        ${m.role==='user'?`<button class="btn yellow small" data-x="resend">${t('resend')}</button>`:''}
+      </div></div>`;
+  }else{
+    inner=`<div class="bubble">${extraHTML(m)}${m.pending&&!m.content?'<span class="typing"><span></span><span></span><span></span></span>':md(m.content)}${srcHTML(m)}</div>
+      ${m.pending?'':`<div class="actions">
+        <button class="act" data-x="edit">${t('edit')}</button>
+        <button class="act" data-x="swap" title="${t('swapT')}">${m.role==='user'?t('swapAI'):t('swapUser')}</button>
+        <button class="act" data-x="copy">${t('copy')}</button>
+        ${m.alts&&m.alts.length>1?`<button class="act" data-x="prev">‹</button><span class="act" style="cursor:default">${m.altIdx+1}/${m.alts.length}</span><button class="act" data-x="next">›</button>`:''}
+        ${m.role!=='user'&&isLast?`<button class="act" data-x="regen">${t('regen')}</button>`:''}
+        <button class="act" data-x="up">↑</button><button class="act" data-x="down">↓</button>
+        <button class="act del" data-x="del">${t('delMsg')}</button></div>`}`;
+  }
+  el.innerHTML=`<div class="av">${avatarFor(m,chat)}</div><div class="body">${inner}</div>`;
+  el.onclick=async e=>{
+    const x=e.target.closest('[data-x]')?.dataset.x;if(!x)return;
+    const msgs=chat.messages;
+    if(x==='edit'){editing=m.id;renderChat();const t=$('#editArea');t.focus();t.setSelectionRange(t.value.length,t.value.length)}
+    else if(x==='cancel'){editing=null;renderChat()}
+    else if(x==='save'||x==='resend'){
+      const v=$('#editArea').value.trim();if(!v){toast(t('emptyMsg'));return}
+      m.content=v;if(m.alts)m.alts[m.altIdx]=v;m.role=$('#editRole').value;editing=null;chat.updated=Date.now();
+      if(x==='resend'){chat.messages=msgs.slice(0,i+1);renderAll();ask(chat);return}
+      renderAll();toast(t('edited'));
+    }
+    else if(x==='copy'){try{await navigator.clipboard.writeText(m.content);toast(t('copied'))}catch(_){toast(t('copyFail'))}}
+    else if(x==='swap'){m.role=m.role==='user'?'assistant':'user';chat.updated=Date.now();renderAll()}
+    else if(x==='del'){msgs.splice(i,1);renderAll()}
+    else if(x==='up'&&i>0){[msgs[i],msgs[i-1]]=[msgs[i-1],msgs[i]];renderAll()}
+    else if(x==='down'&&i<msgs.length-1){[msgs[i],msgs[i+1]]=[msgs[i+1],msgs[i]];renderAll()}
+    else if(x==='prev'||x==='next'){
+      const n=m.alts.length;m.altIdx=(m.altIdx+(x==='next'?1:-1)+n)%n;m.content=m.alts[m.altIdx];m.error=false;renderAll();
+    }
+    else if(x==='regen'){ask(chat,m)} // conserva la respuesta anterior como alternativa
+  };
+  return el;
+}
+
+/* ---------- IA ---------- */
+function userCtx(){
+  const p=S.profile,n=(p.name||'').trim(),b=(p.bio||'').trim();
+  return (n?t('rpUserName',{n}):'')+(b?t('rpUserBio',{b}):'');
+}
+function systemPrompt(chat){
+  const ch=chat.charId&&getChar(chat.charId),u=userCtx();
+  if(!ch)return S.settings.sys+(u?'\n\n'+u:'');
+  return t('rpHead',{n:ch.name,tag:ch.tagline?', '+ch.tagline:''})+t('rpPers',{d:ch.desc})+(ch.scene?t('rpScene',{s:ch.scene}):'')+
+   (ch.example?t('rpEx',{e:ch.example}):'')+(u?u:'')+t('rpRules');
+}
+function setBusy(b){busy=b;const s=$('#sendAI');s.textContent=b?t('stop'):t('sendAI');s.title=t('sendAIT');s.classList.toggle('stop',b)}
+async function ask(chat,reuse){
+  if(busy)return;
+  let ai;
+  if(reuse){ // regenerar: guarda la respuesta actual y añade una nueva alternativa
+    ai=reuse;if(!ai.alts)ai.alts=ai.error?[]:[ai.content];
+    ai.alts.push('');ai.altIdx=ai.alts.length-1;ai.content='';ai.error=false;ai.pending=true;
+  }else{ai={id:uid(),role:'assistant',content:'',pending:true};chat.messages.push(ai)}
+  ai.think='';ai.sources=null;
+  const sync=()=>{if(ai.alts)ai.alts[ai.altIdx]=ai.content};
+  const revert=()=>{ // si falla, vuelve a la respuesta anterior
+    if(ai.alts&&ai.alts.length>1){ai.alts.pop();ai.altIdx=ai.alts.length-1;ai.content=ai.alts[ai.altIdx];return true}
+    delete ai.alts;delete ai.altIdx;return false;
+  };
+  setBusy(true);renderChat();renderSide();
+  const upd=()=>{sync();if(cur().id===chat.id){renderChat()}};
+  try{
+    const st=S.settings;
+    if(!st.key){await demo(chat,ai,upd)}
+    else{
+      abortCtl=new AbortController();
+      const hasImg=chat.messages.some(m=>m!==ai&&!m.error&&(m.files||[]).some(f=>f.k==='img'));
+      const history=chat.messages.filter(m=>m!==ai&&!m.error).map(m=>{
+        const fs=m.files||[];if(!fs.length)return{role:m.role,content:m.content};
+        const body=(m.content?m.content+'\n\n':'')+fs.filter(f=>f.k==='txt').map(f=>`[${t('fileLbl')}: ${f.name}]\n${f.text}`).join('\n\n');
+        const imgs=fs.filter(f=>f.k==='img');
+        return imgs.length?{role:m.role,content:[{type:'text',text:body||'.'},...imgs.map(f=>({type:'image_url',image_url:{url:f.data}}))]}:{role:m.role,content:body};
+      });
+      let model=st.model,apiUrl=st.url,apiKey=st.key;
+      if(hasImg&&st.vision)model=st.vision;
+      else if(useThink){apiUrl=st.turl||st.url;apiKey=st.tkey||st.key;model=st.think||(/deepseek/i.test(apiUrl)?'deepseek-reasoner':st.model)}
+      let sys=systemPrompt(chat);
+      if(useSearch){
+        const q=([...chat.messages].reverse().find(m=>m.role==='user')||{content:''}).content.trim();
+        if(!st.surl||!st.skey)toast(t('srcNoKey'));
+        else if(q){
+          try{
+            const hd=(st.shead||'Authorization: Bearer {key}').split(':');
+            const sr=await fetch(st.surl,{method:'POST',headers:{'Content-Type':'application/json',[hd[0].trim()]:hd.slice(1).join(':').trim().replace('{key}',st.skey)},
+              body:(st.sbody||'{"query":"{q}","max_results":5}').replace('{q}',()=>JSON.stringify(q.slice(0,380)).slice(1,-1))});
+            if(!sr.ok)throw new Error('search');
+            const rs=findResults(await sr.json());
+            if(rs.length){ai.sources=rs.map(x=>({title:x.title,url:x.url}));
+              sys+=t('srcIntro',{d:new Date().toLocaleDateString()})+rs.map((x,i)=>`[${i+1}] ${x.title}\n${x.url}\n${x.content.slice(0,700)}`).join('\n\n')}
+          }catch(e){toast(t('srcFail'))}
+        }
+      }
+      const r=await fetch(apiUrl.replace(/\/$/,'')+'/chat/completions',{
+        method:'POST',signal:abortCtl.signal,
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
+        body:JSON.stringify({model,temperature:+st.temp,stream:true,messages:[{role:'system',content:sys},...history]})
+      });
+      if(!r.ok)throw new Error('Error '+r.status+': '+(await r.text()).slice(0,300));
+      const rd=r.body.getReader(),dec=new TextDecoder();let buf='';
+      for(;;){
+        const {done,value}=await rd.read();if(done)break;
+        buf+=dec.decode(value,{stream:true});
+        const lines=buf.split('\n');buf=lines.pop();
+        for(const l of lines){
+          const t=l.trim();if(!t.startsWith('data:'))continue;
+          const d=t.slice(5).trim();if(d==='[DONE]')continue;
+          try{const j=JSON.parse(d),dl=j.choices?.[0]?.delta||{};ai.content+=dl.content||'';ai.think+=dl.reasoning_content||dl.reasoning||'';upd()}catch(_){}
+        }
+      }
+      if(!ai.content)ai.content=t('emptyResp');
+    }
+  }catch(e){
+    if(e.name!=='AbortError'){
+      if(revert())toast('⚠️ '+e.message.slice(0,120));else{ai.content='⚠️ '+e.message;ai.error=true}
+    }
+    else if(!ai.content){if(!revert())chat.messages=chat.messages.filter(m=>m!==ai)}
+  }
+  sync();delete ai.pending;abortCtl=null;setBusy(false);chat.updated=Date.now();
+  if(chat.messages.length<=3&&isDefaultTitle(chat.title)&&!chat.charId){
+    const f=chat.messages.find(m=>m.role==='user');if(f)chat.title=f.content.slice(0,36);
+  }
+  renderAll();
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+async function demo(chat,ai,upd){
+  const last=[...chat.messages].reverse().find(m=>m.role==='user');
+  const ch=chat.charId&&getChar(chat.charId);
+  const u=last?last.content:'';
+  const txt=!u?(ch?t('demoInitCh',{n:ch.name}):t('demoInit')):(ch?t('demoCh',{n:ch.name,u:u.slice(0,80)}):t('demoGen',{u:u.slice(0,100)}));
+  for(let i=0;i<txt.length;i+=3){
+    if(!busy)break;ai.content=txt.slice(0,i+3);upd();await sleep(14);
+  }
+  ai.content=txt;
+}
+// Botón Usuario: añade el mensaje; la IA NO responde (salvo que esté activada la auto-respuesta)
+function sendUser(){
+  if(busy)return;
+  const v=$('#input').value.trim();if(!v&&!pend.length)return;
+  const chat=cur();
+  chat.messages.push({id:uid(),role:'user',content:v,...(pend.length?{files:pend}:{})});pend=[];renderChips();chat.updated=Date.now();
+  $('#input').value='';autosize();
+  if($('#auto').checked)ask(chat);else renderAll();
+  $('#input').focus();
+}
+// Botón IA: sin texto -> la IA genera una respuesta (aunque el usuario no haya escrito nada nuevo).
+//           con texto -> añade ese texto como mensaje de la IA, escrito a mano.
+function sendAI(){
+  if(busy){abortCtl&&abortCtl.abort();if(!abortCtl)setBusy(false);return}
+  const v=$('#input').value.trim();const chat=cur();
+  if(v){
+    chat.messages.push({id:uid(),role:'assistant',content:v});chat.updated=Date.now();
+    $('#input').value='';autosize();renderAll();return;
+  }
+  ask(chat);
+}
+/* ---------- Búsqueda, pensamiento profundo y archivos ---------- */
+let pend=[],useThink=false,useSearch=false;
+const TXT_EXT=/\.(txt|md|csv|json|html|xml|js|py|log)$/i;
+function readImg(f){return new Promise((ok,no)=>{const u=URL.createObjectURL(f),im=new Image();
+  im.onload=()=>{const s=Math.min(1,1024/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
+    const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL('image/jpeg',.8))};
+  im.onerror=()=>no(new Error('img'));im.src=u})}
+async function readDocx(f){ // .docx es un zip: leo word/document.xml sin librerías
+  const b=new Uint8Array(await f.arrayBuffer()),v=new DataView(b.buffer);let e=b.length-22;
+  while(e>=0&&v.getUint32(e,true)!==0x06054b50)e--;if(e<0)throw new Error('zip');
+  const n=v.getUint16(e+10,true);let o=v.getUint32(e+16,true);
+  for(let i=0;i<n;i++){
+    const m=v.getUint16(o+10,true),cs=v.getUint32(o+20,true),nl=v.getUint16(o+28,true),el=v.getUint16(o+30,true),cl=v.getUint16(o+32,true),lo=v.getUint32(o+42,true);
+    const name=new TextDecoder().decode(b.slice(o+46,o+46+nl));
+    if(name==='word/document.xml'){
+      const ds=lo+30+v.getUint16(lo+26,true)+v.getUint16(lo+28,true);let d=b.slice(ds,ds+cs);
+      if(m===8)d=new Uint8Array(await new Response(new Blob([d]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer());
+      return new TextDecoder().decode(d).replace(/<\/w:p>/g,'\n').replace(/<w:tab\/>/g,'\t').replace(/<w:br[^>]*\/>/g,'\n').replace(/<[^>]+>/g,'')
+        .replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,'&').trim();
+    }
+    o+=46+nl+el+cl;
+  }
+  throw new Error('docx');
+}
+function renderChips(){
+  $('#chips').innerHTML=pend.map((f,i)=>`<span class="fchip">${f.k==='img'?`<img src="${f.data}" alt="">`:'📄'} ${esc(f.name)} <button type="button" data-rm="${i}">×</button></span>`).join('');
+}
+$('#chips').onclick=e=>{const b=e.target.closest('[data-rm]');if(b){pend.splice(+b.dataset.rm,1);renderChips()}};
+$('#attBtn').onclick=()=>$('#fileIn').click();
+$('#fileIn').onchange=async e=>{
+  for(const f of [...e.target.files]){
+    try{
+      if(f.type.startsWith('image/'))pend.push({k:'img',name:f.name,data:await readImg(f)});
+      else if(/\.docx$/i.test(f.name))pend.push({k:'txt',name:f.name,text:(await readDocx(f)).slice(0,60000)});
+      else if(f.type.startsWith('text/')||TXT_EXT.test(f.name))pend.push({k:'txt',name:f.name,text:(await f.text()).slice(0,60000)});
+      else toast(t('fileBad')+f.name);
+    }catch(_){toast(/\.docx$/i.test(f.name)?t('docxBad'):t('fileBad')+f.name)}
+  }
+  e.target.value='';renderChips();
+};
+$('#tgSearch').onclick=e=>{useSearch=!useSearch;e.currentTarget.classList.toggle('on',useSearch);if(useSearch&&!(S.settings.surl&&S.settings.skey))toast(t('srcNoKey'))};
+$('#tgThink').onclick=e=>{useThink=!useThink;e.currentTarget.classList.toggle('on',useThink)};
+function findResults(j){
+  const seek=o=>{if(Array.isArray(o)&&o.length&&o.every(x=>x&&typeof x==='object')&&o.some(x=>x.url||x.link))return o;
+    if(o&&typeof o==='object')for(const k in o){const r=seek(o[k]);if(r)return r}return null};
+  return (seek(j)||[]).slice(0,5).map(x=>({title:x.title||x.name||'',url:x.url||x.link||'',content:x.content||x.snippet||x.description||x.text||''})).filter(x=>x.url);
+}
+function srcHTML(m){
+  return m.sources&&m.sources.length?`<div class="srcs"><b>${t('srcLbl')}</b>${m.sources.map((s,i)=>/^https?:\/\//.test(s.url)?`<a href="${esc(s.url)}" target="_blank" rel="noopener">[${i+1}] ${esc(s.title||s.url)}</a>`:'').join('')}</div>`:'';
+}
+function extraHTML(m){
+  const fs=m.files||[];
+  return fs.map(f=>f.k==='img'?`<img class="att" src="${f.data}" alt="">`:`<span class="fchip">📄 ${esc(f.name)}</span>`).join('')+
+    (m.think?`<details class="think" ${m.pending&&!m.content?'open':''}><summary>🧠 ${t('thinkLbl')}</summary><div>${esc(m.think)}</div></details>`:'');
+}
+// Busca en cualquier JSON la lista que parezca resultados de búsqueda (title/url/content con nombres comunes)
+let fs=18;try{fs=+localStorage.getItem('chatFs')||18}catch(_){}
+const setFs=n=>{fs=Math.max(14,Math.min(32,n));document.documentElement.style.setProperty('--fs',fs+'px');try{localStorage.setItem('chatFs',fs)}catch(_){}};
+setFs(fs);$('#fsDown').onclick=()=>setFs(fs-2);$('#fsUp').onclick=()=>setFs(fs+2);
+$('#sendUser').onclick=sendUser;$('#sendAI').onclick=sendAI;
+function autosize(){const t=$('#input');t.style.height='auto';t.style.height=Math.min(t.scrollHeight,180)+'px'}
+
+/* ---------- Personajes ---------- */
+function renderChars(){
+  const g=$('#charGrid');g.innerHTML='';
+  const n=document.createElement('div');n.className='card new-card';
+  n.innerHTML='<div><div class="plus">＋</div>'+t('newCard')+'</div>';n.onclick=()=>openChar();g.appendChild(n);
+  S.chars.forEach(c=>{
+    const d=document.createElement('div');d.className='card';
+    d.innerHTML=`<div class="card-top"><div class="cav" style="background:${c.color}">${avInner(c.img,c.emoji)}</div>
+      <div><h3>${esc(c.name)}</h3><div class="tag">${esc(c.tagline||'')}</div></div></div>
+      <div class="desc">${esc(c.desc||'')}</div>
+      <div class="chips">${(c.tags||[]).map(t=>`<span class="chip">#${esc(t)}</span>`).join('')}</div>
+      <div class="card-foot"><button class="btn primary small" data-a="chat">${t('chatBtn')}</button>
+      <button class="btn ghost small" data-a="edit" style="flex:0 0 auto">✎</button>
+      <button class="btn ghost small" data-a="del" style="flex:0 0 auto">✕</button></div>`;
+    d.onclick=e=>{
+      const a=e.target.closest('[data-a]')?.dataset.a;
+      if(a==='chat'){newChat(c.id);setView('chat');renderAll();$('#input').focus()}
+      else if(a==='edit')openChar(c.id);
+      else if(a==='del'&&confirm(t('delChar',{n:c.name}))){S.chars=S.chars.filter(x=>x.id!==c.id);renderAll()}
+    };
+    g.appendChild(d);
+  });
+}
+function openChar(id){
+  editingCharId=id||null;const c=id?getChar(id):null;
+  $('#charModalTitle').textContent=t(c?'mEdit':'mCreate');
+  $('#cName').value=c?c.name:'';$('#cTag').value=c?c.tagline:'';$('#cDesc').value=c?c.desc:'';
+  $('#cGreet').value=c?c.greet:'';$('#cScene').value=c?c.scene:'';$('#cExample').value=c?c.example:'';
+  $('#cTags').value=c?(c.tags||[]).join(', '):'';
+  selEmoji=c?c.emoji:EMOJIS[0];selColor=c?c.color:COLORS[0];selImg=c?safeImg(c.img):'';drawPickers();
+  $('#charModal').classList.add('on');$('#cName').focus();
+}
+function drawImg(){
+  const p=$('#cImgPrev');p.style.background=selColor;p.innerHTML=avInner(selImg,selEmoji);
+  $('#cImgDel').style.display=selImg?'':'none';
+}
+$('#cImgBtn').onclick=()=>$('#cImgFile').click();
+$('#cImgFile').onchange=async e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{selImg=await readImg(f,256);drawImg()}catch(_){toast(t('imgFail'))}
+};
+$('#cImgDel').onclick=()=>{selImg='';drawImg()};
+function drawPickers(){drawImg();
+  $('#cEmojis').innerHTML=EMOJIS.map(e=>`<button type="button" class="em ${e===selEmoji?'on':''}" data-e="${e}">${e}</button>`).join('');
+  $('#cColors').innerHTML=COLORS.map(c=>`<button type="button" class="co ${c===selColor?'on':''}" data-c="${c}" style="background:${c}"></button>`).join('');
+}
+$('#cEmojis').onclick=e=>{const b=e.target.closest('[data-e]');if(b){selEmoji=b.dataset.e;drawPickers()}};
+$('#cColors').onclick=e=>{const b=e.target.closest('[data-c]');if(b){selColor=b.dataset.c;drawPickers()}};
+$('#saveChar').onclick=()=>{
+  const name=$('#cName').value.trim();
+  if(!name){toast(t('nameReq'));$('#cName').focus();return}
+  if(!$('#cDesc').value.trim()){toast(t('descReq'));$('#cDesc').focus();return}
+  const data={name,tagline:$('#cTag').value.trim(),emoji:selEmoji,color:selColor,img:selImg,desc:$('#cDesc').value.trim(),
+    greet:$('#cGreet').value.trim(),scene:$('#cScene').value.trim(),example:$('#cExample').value.trim(),
+    tags:$('#cTags').value.split(',').map(t=>t.trim()).filter(Boolean)};
+  if(editingCharId)Object.assign(getChar(editingCharId),data);else S.chars.unshift({id:uid(),...data});
+  $('#charModal').classList.remove('on');renderAll();toast(t('charSaved'));
+};
+
+/* ---------- Ajustes ---------- */
+const THEMES=[
+  ...[207,340,150,265,25,185,5,85,310].map(h=>({h,tone:'soft',sm:1,c:`hsl(${h} 65% 75%)`})),
+  {h:215,tone:'soft',sm:.12,c:'hsl(215 8% 78%)'},
+  ...[220,345,145,255,290,180,20].map(h=>({h,tone:'deep',sm:1,c:`hsl(${h} 45% 32%)`})),
+  {h:215,tone:'deep',sm:.1,c:'hsl(215 8% 26%)'},
+  {h:0,tone:'deep',sm:0,c:'#000'}
+];
+const darkMQ=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;
+function applyLook(){
+  const p=S.profile,dark=p.mode==='dark'||(p.mode==='auto'&&darkMQ&&darkMQ.matches);
+  const r=document.documentElement;
+  r.style.setProperty('--h',+p.hue||207);
+  r.style.setProperty('--sm',p.sm==null?1:+p.sm);
+  r.dataset.tone=p.tone==='deep'?'deep':'soft';
+  r.dataset.mode=dark?'dark':'light';
+}
+if(darkMQ&&darkMQ.addEventListener)darkMQ.addEventListener('change',()=>{if(S.profile.mode==='auto')applyLook()});
+function drawThemes(){
+  const p=S.profile,sm=p.sm==null?1:+p.sm,tone=p.tone==='deep'?'deep':'soft';
+  $('#themeSw').innerHTML=THEMES.map((x,i)=>`<button type="button" class="co ${x.h===+p.hue&&x.tone===tone&&x.sm===sm?'on':''}" data-i="${i}" style="background:${x.c}" aria-label="${x.tone} ${x.h}"></button>`).join('');
+}
+$('#themeSw').onclick=e=>{const b=e.target.closest('[data-i]');if(b){const x=THEMES[+b.dataset.i];Object.assign(S.profile,{hue:x.h,tone:x.tone,sm:x.sm});applyLook();drawThemes();save()}};
+$('#modeSel').onchange=e=>{S.profile.mode=e.target.value;applyLook();save()};
+function drawProf(){
+  drawThemes();$('#modeSel').value=S.profile.mode;
+  $('#pImgPrev').innerHTML=avInner(S.profile.img,'🙂');$('#pImgDel').style.display=S.profile.img?'':'none';
+  const b=safeImg(S.profile.bg);$('#bgPrev').style.backgroundImage=b?`url("${b}")`:'';$('#bgDel').style.display=b?'':'none';
+}
+$('#bgBtn').onclick=()=>$('#bgFile').click();
+$('#bgFile').onchange=async e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{S.profile.bg=await readImg(f,1280,true);drawProf();renderAll()}catch(_){toast(t('imgFail'))}
+};
+$('#bgDel').onclick=()=>{S.profile.bg='';drawProf();renderAll()};
+$('#pImgBtn').onclick=()=>$('#pImgFile').click();
+$('#pImgFile').onchange=async e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{S.profile.img=await readImg(f,256);drawProf();renderAll()}catch(_){toast(t('imgFail'))}
+};
+$('#pImgDel').onclick=()=>{S.profile.img='';drawProf();renderAll()};
+$('#openProfile').onclick=()=>{
+  drawProf();$('#pName').value=S.profile.name||'';$('#pBio').value=S.profile.bio||'';
+  $('#profModal').classList.add('on');closeMenu();
+};
+$('#saveProf').onclick=()=>{
+  S.profile.name=$('#pName').value.trim().slice(0,40);S.profile.bio=$('#pBio').value.trim().slice(0,500);
+  $('#profModal').classList.remove('on');renderAll();toast(t('setSaved'));
+};
+$('#openSettings').onclick=()=>{
+  drawProf();const s=S.settings;$('#sUrl').value=s.url;$('#sModel').value=s.model;$('#sKey').value=s.key;$('#sSUrl').value=s.surl||'';$('#sSKey').value=s.skey||'';$('#sSHead').value=s.shead||'';$('#sSBody').value=s.sbody||'';$('#sTUrl').value=s.turl||'';$('#sTKey').value=s.tkey||'';$('#sThink').value=s.think||'';$('#sVision').value=s.vision||'';
+  $('#sTemp').value=s.temp;$('#tVal').textContent=s.temp;$('#sSys').value=s.sys;$('#setModal').classList.add('on');
+};
+$('#sTemp').oninput=e=>$('#tVal').textContent=e.target.value;
+$('#saveSet').onclick=()=>{
+  Object.assign(S.settings,{url:$('#sUrl').value.trim(),model:$('#sModel').value.trim(),key:$('#sKey').value.trim(),surl:$('#sSUrl').value.trim(),skey:$('#sSKey').value.trim(),shead:$('#sSHead').value.trim(),sbody:$('#sSBody').value.trim(),turl:$('#sTUrl').value.trim(),tkey:$('#sTKey').value.trim(),think:$('#sThink').value.trim(),vision:$('#sVision').value.trim(),temp:+$('#sTemp').value,sys:$('#sSys').value});
+  $('#setModal').classList.remove('on');renderAll();toast(t('setSaved'));
+};
+$$('[data-close]').forEach(b=>b.onclick=()=>b.closest('.modal-bg').classList.remove('on'));
+$$('.modal-bg').forEach(m=>m.addEventListener('mousedown',e=>{if(e.target===m)m.classList.remove('on')}));
+
+/* ---------- Exportar / importar ---------- */
+$('#exportBtn').onclick=()=>{
+  const d=JSON.parse(JSON.stringify(S));d.settings.key='';d.settings.skey='';d.settings.tkey='';
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));
+  a.download='mizu-ai-respaldo.json';a.click();toast(t('exported'));
+};
+$('#importBtn').onclick=()=>$('#importFile').click();
+$('#importFile').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  f.text().then(txt=>{try{const d=JSON.parse(txt);if(!d.chats)throw 0;const k=S.settings.key;S=d;S.settings=Object.assign(defaultState().settings,d.settings||{},{key:k});S.profile=Object.assign({img:'',bg:'',hue:207,tone:'soft',sm:1,mode:'light'},d.profile||{});
+    if(!S.chars)S.chars=defaultChars();if(!S.chats.length)newChat(null,true);S.activeId=S.chats[0].id;LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;applyLook();applyStatic();renderAll();toast(t('imported'))}catch(_){toast(t('invalid'))}});
+  e.target.value='';
+};
+
+/* ---------- Navegación ---------- */
+function setView(v){
+  $$('.tab').forEach(t=>t.classList.toggle('on',t.dataset.view===v));
+  $('#view-chat').classList.toggle('on',v==='chat');$('#view-chars').classList.toggle('on',v==='chars');
+}
+$$('.tab').forEach(t=>t.onclick=()=>{setView(t.dataset.view);if(t.dataset.view==='chars')closeMenu()});
+const closeMenu=()=>{$('#side').classList.remove('open');$('#scrim').classList.remove('on')};
+$$('[data-menu]').forEach(b=>b.onclick=()=>{$('#side').classList.add('open');$('#scrim').classList.add('on')});
+$('#scrim').onclick=closeMenu;
+$('#newChat').onclick=()=>{newChat(null);setView('chat');closeMenu();$('#input').focus()};
+$('#createChar').onclick=()=>openChar();
+$('#search').oninput=renderSide;
+$('#titleInput').oninput=e=>{cur().title=e.target.value||t('untitled');renderSide();save()};
+$('#clearChat').onclick=()=>{if(confirm(t('clearConfirm'))){const c=cur();c.messages=[];const ch=c.charId&&getChar(c.charId);if(ch&&ch.greet)c.messages.push({id:uid(),role:'assistant',content:ch.greet});renderAll()}};
+$('#input').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();sendUser()}});
+$('#input').addEventListener('input',autosize);
+$('#langSel').onchange=e=>{
+  const old=LANG;LANG=e.target.value;S.lang=LANG;
+  if(Object.values(T).some(l=>l.sysDefault===S.settings.sys))S.settings.sys=t('sysDefault');
+  S.chars.forEach(c=>{if(c.bk&&DEF[old]&&DEF[LANG][c.bk]&&sameChar(c,DEF[old][c.bk]))Object.assign(c,fromDef(c.bk,LANG))});
+  applyStatic();renderAll();
+};
+applyLook();
+applyStatic();
+renderAll();
+})();
+</script>
+</body>
+</html>
