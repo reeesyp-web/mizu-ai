@@ -356,9 +356,16 @@ textarea.field{resize:vertical;min-height:70px}
       <option value="dark" data-i18n="mDark"></option>
       <option value="auto" data-i18n="mAuto"></option>
     </select></div>
-  <div class="f"><label data-i18n="sUrl"></label><input class="field" id="sUrl" placeholder="https://api.deepseek.com/v1"></div>
+  <div class="f"><label data-i18n="sFmt"></label>
+    <select class="field" id="sFmt">
+      <option value="openai">OpenAI (DeepSeek, OpenRouter, Ollama, Gemini…)</option>
+      <option value="anthropic">Anthropic (Claude)</option>
+      <option value="gemini">Google Gemini</option>
+    </select>
+    <small data-i18n="fmtHint" style="display:block;color:var(--muted);margin-top:4px"></small></div>
+  <div class="f"><label data-i18n="sUrl"></label><input class="field" id="sUrl" placeholder="https://api.deepseek.com"></div>
   <div class="two">
-    <div class="f"><label data-i18n="sModel"></label><input class="field" id="sModel" placeholder="deepseek-chat"></div>
+    <div class="f"><label data-i18n="sModel"></label><input class="field" id="sModel" placeholder="deepseek-flash"></div>
     <div class="f"><label><span data-i18n="sTemp"></span> <small id="tVal"></small></label><input type="range" id="sTemp" min="0" max="1.5" step="0.1" style="width:100%"></div>
   </div>
   <div class="f"><label data-i18n="sKey"></label><input class="field" id="sKey" type="password" placeholder="sk-…"></div>
@@ -371,9 +378,9 @@ textarea.field{resize:vertical;min-height:70px}
   <div class="f"><label data-i18n="sSHead"></label><input class="field" id="sSHead" placeholder="Authorization: Bearer {key}"></div>
   <div class="f"><label data-i18n="sSBody"></label><input class="field" id="sSBody" placeholder='{"query":"{q}","max_results":5}'></div>
   <div class="sec">🧠 <span data-i18n="sSecThink"></span></div><small data-i18n="sSecThinkH"></small>
-  <div class="f"><label data-i18n="sTUrl"></label><input class="field" id="sTUrl" placeholder="https://api.deepseek.com/v1"></div>
+  <div class="f"><label data-i18n="sTUrl"></label><input class="field" id="sTUrl" placeholder="https://api.deepseek.com"></div>
   <div class="two">
-    <div class="f"><label data-i18n="sThink"></label><input class="field" id="sThink" placeholder="deepseek-reasoner"></div>
+    <div class="f"><label data-i18n="sThink"></label><input class="field" id="sThink" placeholder="deepseek-flash"></div>
     <div class="f"><label data-i18n="sTKey"></label><input class="field" id="sTKey" type="password" placeholder="sk-…"></div>
   </div>
   <div class="sec">🖼️ <span data-i18n="sVision"></span></div>
@@ -722,13 +729,42 @@ pt:{spendNote:'💡 Ao criar sua chave no seu provedor (DeepSeek, OpenAI, OpenRo
 ru:{spendNote:'💡 Создавая ключ у провайдера (DeepSeek, OpenAI, OpenRouter…), задайте низкий месячный лимит расходов, например 1–2 USD.',clearKeys:'🗑️ Удалить мои ключи из этого браузера',clearKeysAsk:'Удалить все API-ключи, сохранённые в этом браузере?',clearKeysDone:'Ключи удалены'},
 fr:{spendNote:'💡 Lorsque vous créez votre clé chez votre fournisseur (DeepSeek, OpenAI, OpenRouter…), fixez une limite de dépenses mensuelle basse, par exemple 1–2 USD.',clearKeys:'🗑️ Supprimer mes clés de ce navigateur',clearKeysAsk:'Supprimer toutes les clés API stockées dans ce navigateur ?',clearKeysDone:'Clés supprimées'}};
 for(const k in X)if(T[k])Object.assign(T[k],X[k])})();
+
+(()=>{const X={
+pt:{tSearch:'Pesquisa',tThink:'Pensar a fundo',tAttach:'Anexar',
+ sSecSearch:'API de pesquisa na web',sSecSearchH:'Qualquer API que receba uma requisição POST com JSON. Os dois últimos vazios = formato Tavily.',sSUrl:'URL da API',sSKey:'API key',sSHead:'Cabeçalho de autorização',sSBody:'Corpo JSON ({q} = a pergunta)',
+ sSecThink:'API de raciocínio profundo',sSecThinkH:'Qualquer API de raciocínio estilo OpenAI (DeepSeek, OpenAI, OpenRouter, Ollama…). Se a URL ou a chave estiverem vazias, usa as da API principal.',sTUrl:'URL base',sThink:'Modelo',sTKey:'API key',sVision:'Modelo com visão (para imagens, usa a API principal)',
+ srcIntro:'\n\nResultados de pesquisa na web (hoje é {d}). Use-os para responder com informações atuais e cite as fontes como [1], [2]:\n\n',srcFail:'Não foi possível pesquisar na web; respondo sem pesquisa',srcNoKey:'Para pesquisar na web, defina a URL e a chave em Ajustes',srcLbl:'Fontes',
+ fileLbl:'Arquivo',thinkLbl:'Raciocínio',fileBad:'Tipo de arquivo não compatível: ',docxBad:'Não consegui ler esse Word',
+ gdIn:'Entrar com o Google',gdRe:'Reconectar ao Google',gdOut:'Sair do Google? Seus chats continuarão no Drive.',gdFail:'Não foi possível conectar ao Google',gdSaved:'salvo no Drive',gdAsk:'Há chats no seu Drive e também neste dispositivo.\n\nOK = usar os do Drive.\nCancelar = manter os deste dispositivo e enviá-los ao Drive.'},
+ru:{tSearch:'Поиск',tThink:'Глубокое мышление',tAttach:'Прикрепить',
+ sSecSearch:'API веб-поиска',sSecSearchH:'Любой API, принимающий POST-запрос с JSON. Если два последних поля пусты — формат Tavily.',sSUrl:'URL API',sSKey:'API-ключ',sSHead:'Заголовок авторизации',sSBody:'JSON-тело ({q} = вопрос)',
+ sSecThink:'API глубокого рассуждения',sSecThinkH:'Любой API рассуждения в стиле OpenAI (DeepSeek, OpenAI, OpenRouter, Ollama…). Если URL или ключ пусты, используются данные основного API.',sTUrl:'Базовый URL',sThink:'Модель',sTKey:'API-ключ',sVision:'Модель со зрением (для изображений, использует основной API)',
+ srcIntro:'\n\nРезультаты веб-поиска (сегодня {d}). Используйте их для ответа с актуальной информацией и указывайте источники как [1], [2]:\n\n',srcFail:'Не удалось выполнить поиск в интернете; отвечаю без поиска',srcNoKey:'Чтобы искать в интернете, укажите URL и ключ в Настройках',srcLbl:'Источники',
+ fileLbl:'Файл',thinkLbl:'Рассуждение',fileBad:'Неподдерживаемый тип файла: ',docxBad:'Не удалось прочитать этот Word-файл',
+ gdIn:'Войти через Google',gdRe:'Переподключиться к Google',gdOut:'Выйти из Google? Ваши чаты останутся в Drive.',gdFail:'Не удалось подключиться к Google',gdSaved:'сохранено в Drive',gdAsk:'Чаты есть и в вашем Drive, и на этом устройстве.\n\nОК = использовать чаты из Drive.\nОтмена = оставить чаты этого устройства и загрузить их в Drive.'},
+fr:{tSearch:'Recherche',tThink:'Réflexion approfondie',tAttach:'Joindre',
+ sSecSearch:'API de recherche web',sSecSearchH:'Toute API qui accepte une requête POST avec JSON. Les deux derniers champs vides = format Tavily.',sSUrl:'URL de l’API',sSKey:'Clé API',sSHead:'En-tête d’autorisation',sSBody:'Corps JSON ({q} = la question)',
+ sSecThink:'API de raisonnement approfondi',sSecThinkH:'Toute API de raisonnement de style OpenAI (DeepSeek, OpenAI, OpenRouter, Ollama…). Si l’URL ou la clé sont vides, celles de l’API principale sont utilisées.',sTUrl:'URL de base',sThink:'Modèle',sTKey:'Clé API',sVision:'Modèle avec vision (pour les images, utilise l’API principale)',
+ srcIntro:'\n\nRésultats de recherche web (nous sommes le {d}). Utilisez-les pour répondre avec des informations actuelles et citez les sources sous la forme [1], [2] :\n\n',srcFail:'La recherche web a échoué ; je réponds sans elle',srcNoKey:'Pour chercher sur le web, renseignez l’URL et la clé dans Réglages',srcLbl:'Sources',
+ fileLbl:'Fichier',thinkLbl:'Raisonnement',fileBad:'Type de fichier non pris en charge : ',docxBad:'Impossible de lire ce fichier Word',
+ gdIn:'Se connecter avec Google',gdRe:'Se reconnecter à Google',gdOut:'Se déconnecter de Google ? Vos chats resteront dans Drive.',gdFail:'Impossible de se connecter à Google',gdSaved:'enregistré dans Drive',gdAsk:'Il y a des chats dans votre Drive et aussi sur cet appareil.\n\nOK = utiliser ceux de Drive.\nAnnuler = garder ceux de cet appareil et les envoyer vers Drive.'}};
+for(const k in X)if(T[k])Object.assign(T[k],X[k])})();
+
+(()=>{const X={
+es:{sFmt:'Formato de la API',fmtHint:'OpenAI sirve para casi todos. Elige Anthropic o Gemini solo si usas su API nativa (la URL se rellena sola).'},
+en:{sFmt:'API format',fmtHint:'OpenAI works for almost everyone. Pick Anthropic or Gemini only if you use their native API (the URL fills itself in).'},
+pt:{sFmt:'Formato da API',fmtHint:'OpenAI serve para quase todos. Escolha Anthropic ou Gemini só se usar a API nativa deles (a URL é preenchida sozinha).'},
+ru:{sFmt:'Формат API',fmtHint:'OpenAI подходит почти всем. Выбирайте Anthropic или Gemini, только если используете их нативный API (URL подставится сам).'},
+fr:{sFmt:'Format de l’API',fmtHint:'OpenAI convient à presque tout le monde. Choisissez Anthropic ou Gemini seulement si vous utilisez leur API native (l’URL se remplit toute seule).'}};
+for(const k in X)if(T[k])Object.assign(T[k],X[k])})();
 function t(k,o){let v=(T[LANG]&&T[LANG][k])??T.en[k]??k;if(o)for(const x in o)v=v.split('{'+x+'}').join(o[x]);return v}
 const sameChar=(c,d)=>d&&c.name===d.name&&c.tagline===d.tagline&&c.desc===d.desc&&c.greet===d.greet&&c.scene===d.scene&&(c.tags||[]).join()===d.tags.join();
 const fromDef=(k,l)=>({...DEF[l][k],tags:[...DEF[l][k].tags]});
 const defaultChars=()=>Object.keys(DEF[LANG]).map(k=>({id:uid(),bk:k,...fromDef(k,LANG)}));
 const defaultState=()=>({
   chats:[],activeId:null,chars:defaultChars(),lang:LANG,
-  settings:{url:'https://api.deepseek.com/v1',model:'deepseek-chat',key:'',temp:0.8,sys:t('sysDefault')}
+  settings:{fmt:'openai',url:'https://api.deepseek.com',model:'deepseek-flash',key:'',temp:0.8,sys:t('sysDefault')}
 });
 const isDefaultTitle=ti=>Object.values(T).some(l=>ti===l.newChatTitle||ti.startsWith(l.chatWith));
 function dispTitle(c){
@@ -910,6 +946,51 @@ function systemPrompt(chat){
    (ch.example?t('rpEx',{e:ch.example}):'')+(u?u:'')+t('rpRules');
 }
 function setBusy(b){busy=b;const s=$('#sendAI');s.textContent=b?t('stop'):t('sendAI');s.title=t('sendAIT');s.classList.toggle('stop',b)}
+/* ---------- Formatos de API: OpenAI / Anthropic / Gemini ---------- */
+function dataParts(u){const m=/^data:([^;]+);base64,(.+)$/.exec(u||'');return m?{mt:m[1],d:m[2]}:null}
+function mergeTurns(h){ // alterna roles, empieza y termina con usuario (lo piden Anthropic y Gemini)
+  const out=[];
+  for(const m of h){
+    const imgs=m.role==='user'?m.imgs:[],last=out[out.length-1];
+    if(last&&last.role===m.role){last.text=(last.text+'\n\n'+m.text).trim();last.imgs=last.imgs.concat(imgs)}
+    else out.push({role:m.role,text:m.text,imgs:[...imgs]});
+  }
+  if(!out.length||out[0].role!=='user')out.unshift({role:'user',text:'.',imgs:[]});
+  if(out[out.length-1].role!=='user')out.push({role:'user',text:'(…)',imgs:[]});
+  return out;
+}
+function buildNative(fmt,base,key,model,sys,hist,temp){
+  base=base.replace(/\/+$/,'');const turns=mergeTurns(hist);
+  if(fmt==='anthropic'){
+    base=base.replace(/\/v1$/,'');
+    return{url:base+'/v1/messages',
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:{model,max_tokens:4096,temperature:Math.min(1,Math.max(0,temp)),stream:true,system:sys,
+        messages:turns.map(m=>({role:m.role,content:[...m.imgs.map(u=>{const p=dataParts(u);return p&&{type:'image',source:{type:'base64',media_type:p.mt,data:p.d}}}).filter(Boolean),{type:'text',text:m.text||'.'}]}))}};
+  }
+  base=base.replace(/\/v1(beta)?(\/openai)?$/,'');
+  return{url:base+'/v1beta/models/'+encodeURIComponent(model.replace(/^models\//,''))+':streamGenerateContent?alt=sse',
+    headers:{'Content-Type':'application/json','x-goog-api-key':key},
+    body:{systemInstruction:{parts:[{text:sys}]},generationConfig:{temperature:temp},
+      contents:turns.map(m=>({role:m.role==='user'?'user':'model',parts:[...m.imgs.map(u=>{const p=dataParts(u);return p&&{inlineData:{mimeType:p.mt,data:p.d}}}).filter(Boolean),{text:m.text||'.'}]}))}};
+}
+function feedChunk(fmt,j,ai){
+  if(fmt==='anthropic'){
+    if(j.type==='error')throw new Error((j.error&&j.error.message)||'stream error');
+    if(j.type==='content_block_delta'&&j.delta){
+      if(j.delta.type==='text_delta')ai.content+=j.delta.text||'';
+      else if(j.delta.type==='thinking_delta')ai.think+=j.delta.thinking||'';
+    }
+  }else if(fmt==='gemini'){
+    if(j.error)throw new Error(j.error.message||'error');
+    if(j.promptFeedback&&j.promptFeedback.blockReason)throw new Error('Blocked: '+j.promptFeedback.blockReason);
+    const ps=(j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts)||[];
+    for(const p of ps)if(typeof p.text==='string'){if(p.thought)ai.think+=p.text;else ai.content+=p.text}
+  }else{
+    const dl=(j.choices&&j.choices[0]&&j.choices[0].delta)||{};
+    ai.content+=dl.content||'';ai.think+=dl.reasoning_content||dl.reasoning||'';
+  }
+}
 async function ask(chat,reuse){
   if(busy)return;
   let ai;
@@ -937,9 +1018,14 @@ async function ask(chat,reuse){
         const imgs=fs.filter(f=>f.k==='img');
         return imgs.length?{role:m.role,content:[{type:'text',text:body||'.'},...imgs.map(f=>({type:'image_url',image_url:{url:f.data}}))]}:{role:m.role,content:body};
       });
-      let model=st.model,apiUrl=st.url,apiKey=st.key;
+      const hist=chat.messages.filter(m=>m!==ai&&!m.error).map(m=>{
+        const fs=m.files||[];
+        const text=((m.content?m.content+'\n\n':'')+fs.filter(f=>f.k==='txt').map(f=>`[${t('fileLbl')}: ${f.name}]\n${f.text}`).join('\n\n')).trim();
+        return{role:m.role==='user'?'user':'assistant',text,imgs:fs.filter(f=>f.k==='img').map(f=>f.data)};
+      });
+      let model=st.model,apiUrl=st.url,apiKey=st.key,fmt=st.fmt||'openai';
       if(hasImg&&st.vision)model=st.vision;
-      else if(useThink){apiUrl=st.turl||st.url;apiKey=st.tkey||st.key;model=st.think||(/deepseek/i.test(apiUrl)?'deepseek-reasoner':st.model)}
+      else if(useThink){if(st.turl)fmt='openai';apiUrl=st.turl||st.url;apiKey=st.tkey||st.key;model=st.think||(/deepseek/i.test(apiUrl)?'deepseek-flash':st.model)}
       let sys=systemPrompt(chat);
       if(useSearch){
         const q=([...chat.messages].reverse().find(m=>m.role==='user')||{content:''}).content.trim();
@@ -956,11 +1042,11 @@ async function ask(chat,reuse){
           }catch(e){toast(t('srcFail'))}
         }
       }
-      const r=await fetch(apiUrl.replace(/\/$/,'')+'/chat/completions',{
-        method:'POST',signal:abortCtl.signal,
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
-        body:JSON.stringify({model,temperature:+st.temp,stream:true,messages:[{role:'system',content:sys},...history]})
-      });
+      let rq;
+      if(fmt==='openai')rq={url:apiUrl.replace(/\/$/,'')+'/chat/completions',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
+        body:{model,temperature:+st.temp,stream:true,messages:[{role:'system',content:sys},...history]}};
+      else rq=buildNative(fmt,apiUrl,apiKey,model,sys,hist,+st.temp);
+      const r=await fetch(rq.url,{method:'POST',signal:abortCtl.signal,headers:rq.headers,body:JSON.stringify(rq.body)});
       if(!r.ok)throw new Error('Error '+r.status+': '+(await r.text()).slice(0,300));
       const rd=r.body.getReader(),dec=new TextDecoder();let buf='';
       for(;;){
@@ -968,9 +1054,10 @@ async function ask(chat,reuse){
         buf+=dec.decode(value,{stream:true});
         const lines=buf.split('\n');buf=lines.pop();
         for(const l of lines){
-          const t=l.trim();if(!t.startsWith('data:'))continue;
-          const d=t.slice(5).trim();if(d==='[DONE]')continue;
-          try{const j=JSON.parse(d),dl=j.choices?.[0]?.delta||{};ai.content+=dl.content||'';ai.think+=dl.reasoning_content||dl.reasoning||'';upd()}catch(_){}
+          const ln=l.trim();if(!ln.startsWith('data:'))continue;
+          const d=ln.slice(5).trim();if(!d||d==='[DONE]')continue;
+          let j;try{j=JSON.parse(d)}catch(_){continue}
+          feedChunk(fmt,j,ai);upd();
         }
       }
       if(!ai.content)ai.content=t('emptyResp');
@@ -1190,8 +1277,14 @@ $('#saveProf').onclick=()=>{
   $('#profModal').classList.remove('on');renderAll();toast(t('setSaved'));
 };
 $('#openSettings').onclick=()=>{
-  drawProf();const s=S.settings;$('#sUrl').value=s.url;$('#sModel').value=s.model;$('#sKey').value=s.key;$('#sSUrl').value=s.surl||'';$('#sSKey').value=s.skey||'';$('#sSHead').value=s.shead||'';$('#sSBody').value=s.sbody||'';$('#sTUrl').value=s.turl||'';$('#sTKey').value=s.tkey||'';$('#sThink').value=s.think||'';$('#sVision').value=s.vision||'';
+  drawProf();const s=S.settings;$('#sFmt').value=s.fmt||'openai';$('#sUrl').value=s.url;$('#sModel').value=s.model;$('#sKey').value=s.key;$('#sSUrl').value=s.surl||'';$('#sSKey').value=s.skey||'';$('#sSHead').value=s.shead||'';$('#sSBody').value=s.sbody||'';$('#sTUrl').value=s.turl||'';$('#sTKey').value=s.tkey||'';$('#sThink').value=s.think||'';$('#sVision').value=s.vision||'';
   $('#sTemp').value=s.temp;$('#tVal').textContent=s.temp;$('#sSys').value=s.sys;$('#setModal').classList.add('on');
+};
+$('#sFmt').onchange=e=>{
+  const f=e.target.value,u=$('#sUrl'),v=u.value.trim();
+  if(f==='anthropic'&&!/anthropic\.com/i.test(v))u.value='https://api.anthropic.com';
+  else if(f==='gemini'&&!/googleapis\.com/i.test(v))u.value='https://generativelanguage.googleapis.com';
+  else if(f==='openai'&&/api\.anthropic\.com/i.test(v))u.value='https://api.deepseek.com';
 };
 $('#sTemp').oninput=e=>$('#tVal').textContent=e.target.value;
 $('#clearKeys').onclick=()=>{
@@ -1201,7 +1294,7 @@ $('#clearKeys').onclick=()=>{
   save();renderAll();toast(t('clearKeysDone'));
 };
 $('#saveSet').onclick=()=>{
-  Object.assign(S.settings,{url:$('#sUrl').value.trim(),model:$('#sModel').value.trim(),key:$('#sKey').value.trim(),surl:$('#sSUrl').value.trim(),skey:$('#sSKey').value.trim(),shead:$('#sSHead').value.trim(),sbody:$('#sSBody').value.trim(),turl:$('#sTUrl').value.trim(),tkey:$('#sTKey').value.trim(),think:$('#sThink').value.trim(),vision:$('#sVision').value.trim(),temp:+$('#sTemp').value,sys:$('#sSys').value});
+  Object.assign(S.settings,{fmt:$('#sFmt').value,url:$('#sUrl').value.trim(),model:$('#sModel').value.trim(),key:$('#sKey').value.trim(),surl:$('#sSUrl').value.trim(),skey:$('#sSKey').value.trim(),shead:$('#sSHead').value.trim(),sbody:$('#sSBody').value.trim(),turl:$('#sTUrl').value.trim(),tkey:$('#sTKey').value.trim(),think:$('#sThink').value.trim(),vision:$('#sVision').value.trim(),temp:+$('#sTemp').value,sys:$('#sSys').value});
   $('#setModal').classList.remove('on');renderAll();toast(t('setSaved'));
 };
 $$('[data-close]').forEach(b=>b.onclick=()=>b.closest('.modal-bg').classList.remove('on'));
