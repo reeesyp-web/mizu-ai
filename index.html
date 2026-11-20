@@ -232,6 +232,7 @@ textarea.field{resize:vertical;min-height:70px}
       <option value="fr">🌐 Français</option>
     </select>
     <button class="btn ghost small" id="openProfile" style="text-align:left"></button>
+    <button class="btn ghost small" id="gdBtn" style="text-align:left"></button>
     <div class="side-foot">
       <button class="btn ghost small" id="openSettings" style="flex:1" data-i18n="settingsBtn"></button>
       <button class="btn ghost small" id="exportBtn" data-i18n-title="exportT">⬇️</button>
@@ -689,6 +690,8 @@ Object.assign(T.es,{tSearch:'Búsqueda',sSecSearch:'API de búsqueda web',sSecSe
  srcIntro:'\n\nResultados de búsqueda web (hoy es {d}). Úsalos para responder con información actual y cita las fuentes como [1], [2]:\n\n',srcFail:'No se pudo buscar en la web; respondo sin búsqueda',srcNoKey:'Para buscar en la web pon la URL y la clave en Ajustes',srcLbl:'Fuentes'});
 Object.assign(T.en,{tSearch:'Search',sSecSearch:'Web search API',sSecSearchH:'Any API that takes a POST request with JSON. Last two empty = Tavily format.',sSUrl:'API URL',sSKey:'API key',sSHead:'Authorization header',sSBody:'JSON body ({q} = the question)',
  srcIntro:'\n\nWeb search results (today is {d}). Use them to answer with current information and cite sources as [1], [2]:\n\n',srcFail:'Web search failed; answering without it',srcNoKey:'To search the web, set the URL and key in Settings',srcLbl:'Sources'});
+Object.assign(T.es,{gdIn:'Iniciar sesión con Google',gdRe:'Reconectar con Google',gdOut:'¿Cerrar sesión de Google? Tus chats seguirán en Drive.',gdFail:'No se pudo conectar con Google',gdSaved:'guardado en Drive',gdAsk:'Hay chats en tu Drive y también en este dispositivo.\n\nAceptar = usar los de Drive.\nCancelar = conservar los de este dispositivo y subirlos a Drive.'});
+Object.assign(T.en,{gdIn:'Sign in with Google',gdRe:'Reconnect to Google',gdOut:'Sign out of Google? Your chats will stay in Drive.',gdFail:'Could not connect to Google',gdSaved:'saved to Drive',gdAsk:'There are chats in your Drive and on this device.\n\nOK = use the Drive ones.\nCancel = keep this device\'s chats and upload them to Drive.'});
 function t(k,o){let v=(T[LANG]&&T[LANG][k])??T.en[k]??k;if(o)for(const x in o)v=v.split('{'+x+'}').join(o[x]);return v}
 const sameChar=(c,d)=>d&&c.name===d.name&&c.tagline===d.tagline&&c.desc===d.desc&&c.greet===d.greet&&c.scene===d.scene&&(c.tags||[]).join()===d.tags.join();
 const fromDef=(k,l)=>({...DEF[l][k],tags:[...DEF[l][k].tags]});
@@ -722,7 +725,7 @@ S.settings=Object.assign(defaultState().settings,S.settings||{});
 S.profile=Object.assign({img:'',bg:'',hue:207,tone:'soft',sm:1,mode:'light'},S.profile||{});
 LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;
 (S.chars||[]).forEach(c=>{if(!c.bk)for(const k in DEF.es)if(sameChar(c,DEF.es[k]))c.bk=k});
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}gdQueue()};
 if(!S.chats.length){newChat(null,true)}
 if(!S.activeId||!getChat(S.activeId))S.activeId=S.chats[0].id;
 
@@ -1181,6 +1184,60 @@ $('#importFile').onchange=e=>{
     if(!S.chars)S.chars=defaultChars();if(!S.chats.length)newChat(null,true);S.activeId=S.chats[0].id;LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;applyLook();applyStatic();renderAll();toast(t('imported'))}catch(_){toast(t('invalid'))}});
   e.target.value='';
 };
+
+/* ---------- Cuenta de Google + guardado en Drive ---------- */
+var GD_CLIENT='1060785017392-epmfufbf64gp63ut7qvu2ihbkjsd7req.apps.googleusercontent.com',GD_SCOPE='openid email https://www.googleapis.com/auth/drive.appdata',GD_FILE='mizu-ai-data.json';
+var gdTok=null,gdId=null,gdTimer=0,gdSkip=false,gdNote='';
+const gdLS=(k,v)=>{try{return v===undefined?localStorage.getItem(k):v===null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(_){}};
+function gdUI(){const e=gdLS('gdEmail')||'';$('#gdBtn').textContent='☁️ '+(gdTok?(e+(gdNote?' · '+gdNote:'')):(gdLS('gdOn')?t('gdRe'):t('gdIn')))}
+function gdLoad(){return window.google&&google.accounts?Promise.resolve():new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+function gdAuth(silent){return gdLoad().then(()=>new Promise((ok,no)=>{
+  google.accounts.oauth2.initTokenClient({client_id:GD_CLIENT,scope:GD_SCOPE,callback:r=>{if(r.error)return no(r);gdTok=r.access_token;ok()},error_callback:no}).requestAccessToken({prompt:silent?'':'select_account'});
+}))}
+async function gdFetch(url,o={}){
+  const go=()=>fetch(url,{...o,headers:{...(o.headers||{}),Authorization:'Bearer '+gdTok}});
+  let r=await go();if(r.status===401){await gdAuth(true);r=await go()}
+  if(!r.ok)throw new Error(r.status);return r;
+}
+async function gdFileId(){
+  if(gdId)return gdId;
+  const r=await(await gdFetch('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&fields=files(id)&q='+encodeURIComponent("name='"+GD_FILE+"'"))).json();
+  return gdId=(r.files&&r.files[0]&&r.files[0].id)||null;
+}
+async function gdDownload(){const id=await gdFileId();return id?(await gdFetch('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media')).json():null}
+async function gdUpload(){
+  try{
+    const d=JSON.parse(JSON.stringify(S));d.settings.key='';d.settings.skey='';d.settings.tkey='';d.savedAt=Date.now();
+    const body=JSON.stringify(d),id=await gdFileId();
+    if(id)await gdFetch('https://www.googleapis.com/upload/drive/v3/files/'+id+'?uploadType=media',{method:'PATCH',headers:{'Content-Type':'application/json'},body});
+    else{const b='mizu'+Date.now(),meta=JSON.stringify({name:GD_FILE,parents:['appDataFolder']});
+      const r=await(await gdFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+b},
+        body:'--'+b+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+meta+'\r\n--'+b+'\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--'+b+'--'})).json();gdId=r.id}
+    gdLS('gdAt',String(d.savedAt));gdNote='✓ '+t('gdSaved')+' '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});gdUI();
+  }catch(e){gdNote='⚠️';gdUI()}
+}
+function gdQueue(){if(!gdTok||gdSkip)return;clearTimeout(gdTimer);gdTimer=setTimeout(gdUpload,3000)}
+function applyRemote(d){
+  const k=S.settings;S=d;S.settings=Object.assign(defaultState().settings,d.settings||{},{key:k.key,skey:k.skey,tkey:k.tkey});
+  S.profile=Object.assign({img:'',bg:'',hue:207,tone:'soft',sm:1,mode:'light'},S.profile||{});
+  if(!S.chars)S.chars=defaultChars();if(!S.chats.length)newChat(null,true);
+  if(!S.chats.some(c=>c.id===S.activeId))S.activeId=S.chats[0].id;
+  LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;applyLook();applyStatic();renderAll();
+}
+async function gdSync(){
+  const r=await gdDownload(),at=+gdLS('gdAt')||0,hasLocal=S.chats.some(c=>(c.messages||[]).length);
+  if(r&&r.chats&&r.savedAt>at&&(at||!hasLocal||confirm(t('gdAsk')))){gdSkip=true;applyRemote(r);gdSkip=false;gdLS('gdAt',String(r.savedAt));gdNote='✓ '+t('gdSaved');gdUI()}
+  else await gdUpload();
+}
+async function gdLogin(auto){
+  try{
+    await gdAuth(!!auto);
+    const u=await(await gdFetch('https://www.googleapis.com/oauth2/v3/userinfo')).json();
+    gdLS('gdOn','1');gdLS('gdEmail',u.email||'');gdUI();await gdSync();
+  }catch(e){gdTok=null;gdUI();if(!auto)toast(t('gdFail'))}
+}
+$('#gdBtn').onclick=()=>{if(gdTok){if(confirm(t('gdOut'))){gdTok=null;gdNote='';gdLS('gdOn',null);gdLS('gdEmail',null);gdUI()}}else gdLogin(false)};
+gdUI();if(gdLS('gdOn'))gdLogin(true);
 
 /* ---------- Navegación ---------- */
 function setView(v){
