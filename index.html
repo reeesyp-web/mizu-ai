@@ -363,6 +363,8 @@ textarea.field{resize:vertical;min-height:70px}
   </div>
   <div class="f"><label data-i18n="sKey"></label><input class="field" id="sKey" type="password" placeholder="sk-…"></div>
   <small data-i18n="keyNote" style="display:block;color:var(--muted);margin:-4px 0 8px"></small>
+  <small data-i18n="spendNote" style="display:block;color:var(--muted);margin:0 0 8px"></small>
+  <button type="button" class="btn ghost small" id="clearKeys" data-i18n="clearKeys" style="margin-bottom:8px"></button>
   <div class="sec">🌐 <span data-i18n="sSecSearch"></span></div><small data-i18n="sSecSearchH"></small>
   <div class="f"><label data-i18n="sSUrl"></label><input class="field" id="sSUrl" placeholder="https://api.tavily.com/search"></div>
   <div class="f"><label data-i18n="sSKey"></label><input class="field" id="sSKey" type="password" placeholder="tvly-…"></div>
@@ -392,6 +394,7 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
 const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeImg=s=>typeof s==='string'&&s.startsWith('data:image/')&&!/["'<>\s]/.test(s)?s:'';
+const safeColor=c=>typeof c==='string'&&/^#[0-9a-f]{3,8}$/i.test(c.trim())?c.trim():'#cfe6f9';
 const avInner=(img,fb)=>safeImg(img)?`<img src="${img}" alt="">`:esc(fb);
 // Lee una imagen, la recorta a cuadrado y la reduce (para que quepa en el almacenamiento del navegador)
 function readImg(file,size,keep){return new Promise((res,rej)=>{
@@ -711,6 +714,14 @@ Object.assign(T.es,{tagline:'Software gratuito y de código abierto'});Object.as
 if(T.pt)Object.assign(T.pt,{tagline:'Software gratuito e de código aberto'});if(T.ru)Object.assign(T.ru,{tagline:'Бесплатное ПО с открытым исходным кодом'});if(T.fr)Object.assign(T.fr,{tagline:'Logiciel gratuit et open source'});
 Object.assign(T.es,{aboutContact:'Contacto'});Object.assign(T.en,{aboutContact:'Contact'});
 if(T.pt)Object.assign(T.pt,{aboutContact:'Contato'});if(T.ru)Object.assign(T.ru,{aboutContact:'Контакты'});if(T.fr)Object.assign(T.fr,{aboutContact:'Contact'});
+
+(()=>{const X={
+es:{spendNote:'💡 Al crear tu clave en tu proveedor (DeepSeek, OpenAI, OpenRouter…), ponle un límite mensual de gasto bajo, por ejemplo 1–2 USD.',clearKeys:'🗑️ Borrar mis claves de este navegador',clearKeysAsk:'¿Borrar todas las claves de API guardadas en este navegador?',clearKeysDone:'Claves borradas'},
+en:{spendNote:'💡 When you create your key with your provider (DeepSeek, OpenAI, OpenRouter…), set a low monthly spending limit, for example 1–2 USD.',clearKeys:'🗑️ Delete my keys from this browser',clearKeysAsk:'Delete all API keys stored in this browser?',clearKeysDone:'Keys deleted'},
+pt:{spendNote:'💡 Ao criar sua chave no seu provedor (DeepSeek, OpenAI, OpenRouter…), defina um limite mensal de gastos baixo, por exemplo 1–2 USD.',clearKeys:'🗑️ Apagar minhas chaves deste navegador',clearKeysAsk:'Apagar todas as chaves de API salvas neste navegador?',clearKeysDone:'Chaves apagadas'},
+ru:{spendNote:'💡 Создавая ключ у провайдера (DeepSeek, OpenAI, OpenRouter…), задайте низкий месячный лимит расходов, например 1–2 USD.',clearKeys:'🗑️ Удалить мои ключи из этого браузера',clearKeysAsk:'Удалить все API-ключи, сохранённые в этом браузере?',clearKeysDone:'Ключи удалены'},
+fr:{spendNote:'💡 Lorsque vous créez votre clé chez votre fournisseur (DeepSeek, OpenAI, OpenRouter…), fixez une limite de dépenses mensuelle basse, par exemple 1–2 USD.',clearKeys:'🗑️ Supprimer mes clés de ce navigateur',clearKeysAsk:'Supprimer toutes les clés API stockées dans ce navigateur ?',clearKeysDone:'Clés supprimées'}};
+for(const k in X)if(T[k])Object.assign(T[k],X[k])})();
 function t(k,o){let v=(T[LANG]&&T[LANG][k])??T.en[k]??k;if(o)for(const x in o)v=v.split('{'+x+'}').join(o[x]);return v}
 const sameChar=(c,d)=>d&&c.name===d.name&&c.tagline===d.tagline&&c.desc===d.desc&&c.greet===d.greet&&c.scene===d.scene&&(c.tags||[]).join()===d.tags.join();
 const fromDef=(k,l)=>({...DEF[l][k],tags:[...DEF[l][k].tags]});
@@ -1077,7 +1088,7 @@ function renderChars(){
   n.innerHTML='<div><div class="plus">＋</div>'+t('newCard')+'</div>';n.onclick=()=>openChar();g.appendChild(n);
   S.chars.forEach(c=>{
     const d=document.createElement('div');d.className='card';
-    d.innerHTML=`<div class="card-top"><div class="cav" style="background:${c.color}">${avInner(c.img,c.emoji)}</div>
+    d.innerHTML=`<div class="card-top"><div class="cav" style="background:${safeColor(c.color)}">${avInner(c.img,c.emoji)}</div>
       <div><h3>${esc(c.name)}</h3><div class="tag">${esc(c.tagline||'')}</div></div></div>
       <div class="desc">${esc(c.desc||'')}</div>
       <div class="chips">${(c.tags||[]).map(t=>`<span class="chip">#${esc(t)}</span>`).join('')}</div>
@@ -1099,7 +1110,7 @@ function openChar(id){
   $('#cName').value=c?c.name:'';$('#cTag').value=c?c.tagline:'';$('#cDesc').value=c?c.desc:'';
   $('#cGreet').value=c?c.greet:'';$('#cScene').value=c?c.scene:'';$('#cExample').value=c?c.example:'';
   $('#cTags').value=c?(c.tags||[]).join(', '):'';
-  selEmoji=c?c.emoji:EMOJIS[0];selColor=c?c.color:COLORS[0];selImg=c?safeImg(c.img):'';drawPickers();
+  selEmoji=c?c.emoji:EMOJIS[0];selColor=c?safeColor(c.color):COLORS[0];selImg=c?safeImg(c.img):'';drawPickers();
   $('#charModal').classList.add('on');$('#cName').focus();
 }
 function drawImg(){
@@ -1114,7 +1125,7 @@ $('#cImgFile').onchange=async e=>{
 $('#cImgDel').onclick=()=>{selImg='';drawImg()};
 function drawPickers(){drawImg();
   $('#cEmojis').innerHTML=EMOJIS.map(e=>`<button type="button" class="em ${e===selEmoji?'on':''}" data-e="${e}">${e}</button>`).join('');
-  $('#cColors').innerHTML=COLORS.map(c=>`<button type="button" class="co ${c===selColor?'on':''}" data-c="${c}" style="background:${c}"></button>`).join('');
+  $('#cColors').innerHTML=COLORS.map(c=>`<button type="button" class="co ${c===selColor?'on':''}" data-c="${c}" style="background:${safeColor(c)}"></button>`).join('');
 }
 $('#cEmojis').onclick=e=>{const b=e.target.closest('[data-e]');if(b){selEmoji=b.dataset.e;drawPickers()}};
 $('#cColors').onclick=e=>{const b=e.target.closest('[data-c]');if(b){selColor=b.dataset.c;drawPickers()}};
@@ -1183,6 +1194,12 @@ $('#openSettings').onclick=()=>{
   $('#sTemp').value=s.temp;$('#tVal').textContent=s.temp;$('#sSys').value=s.sys;$('#setModal').classList.add('on');
 };
 $('#sTemp').oninput=e=>$('#tVal').textContent=e.target.value;
+$('#clearKeys').onclick=()=>{
+  if(!confirm(t('clearKeysAsk')))return;
+  Object.assign(S.settings,{key:'',skey:'',tkey:''});
+  $('#sKey').value='';$('#sSKey').value='';$('#sTKey').value='';
+  save();renderAll();toast(t('clearKeysDone'));
+};
 $('#saveSet').onclick=()=>{
   Object.assign(S.settings,{url:$('#sUrl').value.trim(),model:$('#sModel').value.trim(),key:$('#sKey').value.trim(),surl:$('#sSUrl').value.trim(),skey:$('#sSKey').value.trim(),shead:$('#sSHead').value.trim(),sbody:$('#sSBody').value.trim(),turl:$('#sTUrl').value.trim(),tkey:$('#sTKey').value.trim(),think:$('#sThink').value.trim(),vision:$('#sVision').value.trim(),temp:+$('#sTemp').value,sys:$('#sSys').value});
   $('#setModal').classList.remove('on');renderAll();toast(t('setSaved'));
