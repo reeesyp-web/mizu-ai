@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mizu.AI · Privacy</title>
+<style>
+:root{--bg:#f6faff;--card:#fff;--ink:#1d2b3a;--muted:#5b6b7b;--accent:#2f7fc1;--line:#d8e6f3}
+@media (prefers-color-scheme:dark){:root{--bg:#151517;--card:#1f2024;--ink:#e8eef4;--muted:#9aa8b6;--accent:#7ab8e8;--line:#33363d}}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:780px;margin:0 auto;padding:22px 16px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.langs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.langs button{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:5px 13px;font:inherit;font-size:.9rem;cursor:pointer}
+.langs button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+h1{margin:0 0 4px;font-size:1.55rem}h2{margin:1.5em 0 .3em;font-size:1.1rem;color:var(--accent)}
+.muted{color:var(--muted);font-size:.92rem}ul{padding-left:1.2em}li{margin:.35em 0}a{color:var(--accent)}code{font-size:.9em}
+</style>
+</head>
+<body>
+<main>
+<div class="langs" id="langs"></div>
+<div class="card"><h1 id="t"></h1><p class="muted" id="u"></p><div id="body"></div>
+<p class="muted"><a href="./">← Mizu.AI</a></p></div>
+</main>
+<script>
+const A=(u,t)=>"<a href='"+u+"'>"+t+"</a>",U=(...i)=>"<ul>"+i.map(x=>"<li>"+x+"</li>").join("")+"</ul>";
+const PERM=A("https://myaccount.google.com/permissions","myaccount.google.com/permissions"),MAIL=A("mailto:mizuaisupport@gmail.com","mizuaisupport@gmail.com"),POL="https://developers.google.com/terms/api-services-user-data-policy";
+const L={
+es:{n:"Español",t:"Política de privacidad de Mizu.AI",u:"Última actualización: 19 de noviembre de 2026",s:[
+["1. Qué es Mizu.AI","Mizu.AI es una página web de chat y personajes que funciona en tu navegador. No tiene servidor, cuentas ni base de datos propios: nosotros no recibimos tus conversaciones."],
+["2. Qué datos usa la página",U("<b>Chats, personajes, perfil y ajustes:</b> se guardan en el almacenamiento local de tu navegador.","<b>Archivos e imágenes que adjuntas:</b> se leen en tu navegador y se envían a la IA que configuraste cuando pides una respuesta; las imágenes se reducen de tamaño antes de guardarse en el chat.","<b>Claves de API:</b> se guardan solo en tu navegador y nunca se suben a Drive ni a ningún servidor nuestro.","<b>Si inicias sesión con Google:</b> la página recibe tu correo (para mostrar qué cuenta está conectada) y un permiso para usar una carpeta oculta de tu Google Drive creada solo para esta app (<code>drive.appdata</code>). No puede ver ni modificar tus otros archivos de Drive.")],
+["3. Qué hacemos con esos datos","Los datos de Google se usan únicamente para guardar y cargar una copia de tus chats, personajes y ajustes (sin tus claves de API) en tu propio Drive, para que puedas recuperarlos en otros dispositivos. No los usamos para publicidad, análisis ni entrenamiento de modelos, y no los vendemos, compartimos ni transferimos. Nadie del equipo de Mizu.AI puede leerlos."],
+["4. Servicios de terceros",U("<b>Servicio de IA y de búsqueda que tú configuras:</b> tus mensajes (y archivos adjuntos) salen directamente de tu navegador hacia ese servicio con tu propia clave. Se rigen por la política de privacidad de ese proveedor, así que elígelo con cuidado.","<b>Google:</b> el inicio de sesión y Drive los gestiona Google según su política de privacidad; puede usar sus propias cookies al iniciar sesión.","<b>GitHub Pages:</b> aloja esta página y puede registrar datos técnicos de acceso (como la dirección IP) según su política. Mizu.AI no accede a esos registros.")+"<p>Mizu.AI no usa cookies propias de publicidad ni de seguimiento.</p>"],
+["5. Uso limitado de datos de Google","El uso y la transferencia a cualquier otra app de la información recibida de las APIs de Google se ajustarán a la "+A(POL,"Política de datos de usuario de los servicios de las APIs de Google")+", incluidos los requisitos de uso limitado."],
+["6. Conservación y cómo borrar tus datos",U("Los datos se conservan hasta que los borres.","<b>Cerrar sesión:</b> usa el botón de Google de la barra lateral.","<b>Revocar el acceso:</b> en "+PERM+".","<b>Borrar la copia de Drive:</b> Google Drive → Configuración → Administrar aplicaciones → Mizu AI → eliminar los datos ocultos de la aplicación (los menús pueden variar).","<b>Borrar los datos locales:</b> borra los datos del sitio en la configuración de tu navegador.")],
+["7. Seguridad","Los datos viajan cifrados (HTTPS) entre tu navegador, Google y los servicios que configures. Como las claves de API se guardan en tu navegador, no las compartas ni uses la página en dispositivos ajenos sin cerrar sesión y borrar los datos del sitio."],
+["8. Menores","Mizu.AI no está dirigido a menores de 13 años. Si eres menor, usa la página con el permiso de una persona adulta."],
+["9. Cambios","Podemos actualizar esta política; cuando ocurra, cambiaremos la fecha de arriba."],
+["10. Contacto","Para dudas o solicitudes sobre tus datos escribe a "+MAIL+"."]]},
+en:{n:"English",t:"Mizu.AI Privacy Policy",u:"Last updated: November 19, 2026",s:[
+["1. What Mizu.AI is","Mizu.AI is a chat-and-characters web page that runs in your browser. It has no server, accounts or database of its own: we do not receive your conversations."],
+["2. What data the page uses",U("<b>Chats, characters, profile and settings:</b> stored in your browser’s local storage.","<b>Files and images you attach:</b> read in your browser and sent to the AI service you configured when you ask for a reply; images are downscaled before being saved in the chat.","<b>API keys:</b> kept only in your browser and never uploaded to Drive or to any server of ours.","<b>If you sign in with Google:</b> the page receives your email address (to show which account is connected) and permission to use a hidden folder in your Google Drive created only for this app (<code>drive.appdata</code>). It cannot see or modify your other Drive files.")],
+["3. What we do with this data","Google data is used only to save and load a copy of your chats, characters and settings (without your API keys) in your own Drive, so you can restore them on other devices. We do not use it for advertising, analytics or model training, and we do not sell, share or transfer it. Nobody on the Mizu.AI team can read it."],
+["4. Third-party services",U("<b>AI and search services you configure:</b> your messages (and attachments) go straight from your browser to that service using your own key. They are governed by that provider’s privacy policy, so choose carefully.","<b>Google:</b> sign-in and Drive are operated by Google under its privacy policy; Google may use its own cookies when you sign in.","<b>GitHub Pages:</b> hosts this page and may log technical access data (such as IP address) under its policy. Mizu.AI has no access to those logs.")+"<p>Mizu.AI does not use its own advertising or tracking cookies.</p>"],
+["5. Google API limited use","Use and transfer to any other app of information received from Google APIs will adhere to the "+A(POL,"Google API Services User Data Policy")+", including the Limited Use requirements."],
+["6. Retention and deleting your data",U("Data is kept until you delete it.","<b>Sign out:</b> use the Google button in the sidebar.","<b>Revoke access:</b> at "+PERM+".","<b>Delete the copy in Drive:</b> Google Drive → Settings → Manage apps → Mizu AI → delete hidden app data (menus may vary).","<b>Delete local data:</b> clear the site’s data in your browser settings.")],
+["7. Security","Data travels encrypted (HTTPS) between your browser, Google and the services you configure. Because API keys are stored in your browser, do not share them, and do not use the page on someone else’s device without signing out and clearing the site’s data."],
+["8. Children","Mizu.AI is not directed to children under 13. If you are a minor, use the page with an adult’s permission."],
+["9. Changes","We may update this policy; when we do, we will change the date above."],
+["10. Contact","For questions or requests about your data, write to "+MAIL+"."]]},
+pt:{n:"Português",t:"Política de privacidade do Mizu.AI",u:"Última atualização: 19 de novembro de 2026",s:[
+["1. O que é o Mizu.AI","O Mizu.AI é uma página web de chat e personagens que funciona no seu navegador. Não tem servidor, contas nem banco de dados próprios: nós não recebemos as suas conversas."],
+["2. Que dados a página usa",U("<b>Chats, personagens, perfil e configurações:</b> ficam guardados no armazenamento local do seu navegador.","<b>Arquivos e imagens que você anexa:</b> são lidos no seu navegador e enviados à IA que você configurou quando pede uma resposta; as imagens são reduzidas antes de ficarem salvas no chat.","<b>Chaves de API:</b> ficam apenas no seu navegador e nunca são enviadas ao Drive nem a nenhum servidor nosso.","<b>Se você entrar com o Google:</b> a página recebe o seu e-mail (para mostrar qual conta está conectada) e uma permissão para usar uma pasta oculta do seu Google Drive criada só para este app (<code>drive.appdata</code>). Ela não pode ver nem modificar os seus outros arquivos do Drive.")],
+["3. O que fazemos com esses dados","Os dados do Google são usados apenas para salvar e carregar uma cópia dos seus chats, personagens e configurações (sem as suas chaves de API) no seu próprio Drive, para que você possa recuperá-los em outros dispositivos. Não os usamos para publicidade, análises nem treinamento de modelos, e não os vendemos, compartilhamos nem transferimos. Ninguém da equipe do Mizu.AI consegue lê-los."],
+["4. Serviços de terceiros",U("<b>Serviço de IA e de busca que você configura:</b> as suas mensagens (e anexos) saem diretamente do seu navegador para esse serviço, com a sua própria chave. Elas seguem a política de privacidade desse provedor, então escolha-o com cuidado.","<b>Google:</b> o login e o Drive são operados pelo Google, conforme a política de privacidade dele; ele pode usar cookies próprios ao fazer login.","<b>GitHub Pages:</b> hospeda esta página e pode registrar dados técnicos de acesso (como o endereço IP), conforme a política dele. O Mizu.AI não tem acesso a esses registros.")+"<p>O Mizu.AI não usa cookies próprios de publicidade nem de rastreamento.</p>"],
+["5. Uso limitado de dados do Google","O uso e a transferência para qualquer outro app das informações recebidas das APIs do Google seguirão a "+A(POL,"Política de dados do usuário dos serviços de API do Google")+", incluindo os requisitos de uso limitado."],
+["6. Retenção e como apagar seus dados",U("Os dados são mantidos até que você os apague.","<b>Sair da conta:</b> use o botão do Google na barra lateral.","<b>Revogar o acesso:</b> em "+PERM+".","<b>Apagar a cópia no Drive:</b> Google Drive → Configurações → Gerenciar apps → Mizu AI → excluir os dados ocultos do app (os menus podem variar).","<b>Apagar os dados locais:</b> apague os dados do site nas configurações do navegador.")],
+["7. Segurança","Os dados trafegam criptografados (HTTPS) entre o seu navegador, o Google e os serviços que você configurar. Como as chaves de API ficam no navegador, não as compartilhe nem use a página em dispositivos de outras pessoas sem sair da conta e apagar os dados do site."],
+["8. Menores","O Mizu.AI não é destinado a menores de 13 anos. Se você é menor, use a página com a permissão de um adulto."],
+["9. Alterações","Podemos atualizar esta política; quando isso acontecer, mudaremos a data acima."],
+["10. Contato","Para dúvidas ou solicitações sobre os seus dados, escreva para "+MAIL+"."]]},
+ru:{n:"Русский",t:"Политика конфиденциальности Mizu.AI",u:"Последнее обновление: 19 ноября 2026 г.",s:[
+["1. Что такое Mizu.AI","Mizu.AI — это веб-страница с чатом и персонажами, которая работает в вашем браузере. У неё нет собственного сервера, учётных записей или базы данных: мы не получаем ваши разговоры."],
+["2. Какие данные использует страница",U("<b>Чаты, персонажи, профиль и настройки:</b> хранятся в локальном хранилище вашего браузера.","<b>Прикреплённые файлы и изображения:</b> читаются в вашем браузере и отправляются настроенному вами ИИ-сервису, когда вы запрашиваете ответ; изображения уменьшаются перед сохранением в чате.","<b>API-ключи:</b> хранятся только в вашем браузере и никогда не загружаются в Drive или на наши серверы.","<b>Если вы входите через Google:</b> страница получает ваш адрес электронной почты (чтобы показать подключённый аккаунт) и разрешение использовать скрытую папку в вашем Google Drive, созданную только для этого приложения (<code>drive.appdata</code>). Она не видит и не изменяет другие ваши файлы в Drive.")],
+["3. Что мы делаем с этими данными","Данные Google используются только для сохранения и загрузки копии ваших чатов, персонажей и настроек (без API-ключей) в вашем собственном Drive, чтобы вы могли восстановить их на других устройствах. Мы не используем их для рекламы, аналитики или обучения моделей, не продаём, не передаём и не раскрываем их. Никто из команды Mizu.AI не может их прочитать."],
+["4. Сторонние сервисы",U("<b>ИИ- и поисковый сервис, который вы настраиваете:</b> ваши сообщения (и вложения) отправляются напрямую из браузера этому сервису с вашим ключом. На них распространяется политика конфиденциальности этого провайдера, поэтому выбирайте его внимательно.","<b>Google:</b> вход и Drive обеспечивает Google в соответствии со своей политикой конфиденциальности; при входе Google может использовать собственные файлы cookie.","<b>GitHub Pages:</b> размещает эту страницу и может фиксировать технические данные о доступе (например, IP-адрес) согласно своей политике. Mizu.AI не имеет доступа к этим журналам.")+"<p>Mizu.AI не использует собственные рекламные или отслеживающие файлы cookie.</p>"],
+["5. Ограниченное использование данных Google","Использование и передача любому другому приложению информации, полученной из API Google, будут соответствовать "+A(POL,"Политике в отношении пользовательских данных в API-сервисах Google")+", включая требования об ограниченном использовании."],
+["6. Хранение и удаление данных",U("Данные хранятся, пока вы их не удалите.","<b>Выйти из аккаунта:</b> кнопка Google в боковой панели.","<b>Отозвать доступ:</b> на "+PERM+".","<b>Удалить копию в Drive:</b> Google Drive → Настройки → Управление приложениями → Mizu AI → удалить скрытые данные приложения (названия меню могут отличаться).","<b>Удалить локальные данные:</b> очистите данные сайта в настройках браузера.")],
+["7. Безопасность","Данные передаются в зашифрованном виде (HTTPS) между вашим браузером, Google и настроенными вами сервисами. Поскольку API-ключи хранятся в браузере, не делитесь ими и не используйте страницу на чужих устройствах, не выйдя из аккаунта и не очистив данные сайта."],
+["8. Дети","Mizu.AI не предназначен для детей младше 13 лет. Если вы несовершеннолетний, пользуйтесь страницей с разрешения взрослого."],
+["9. Изменения","Мы можем обновлять эту политику; в этом случае мы изменим дату вверху."],
+["10. Контакты","По вопросам и запросам, связанным с вашими данными, пишите на "+MAIL+"."]]},
+fr:{n:"Français",t:"Politique de confidentialité de Mizu.AI",u:"Dernière mise à jour : 19 novembre 2026",s:[
+["1. Qu’est-ce que Mizu.AI","Mizu.AI est une page web de chat et de personnages qui fonctionne dans votre navigateur. Elle n’a ni serveur, ni comptes, ni base de données propres : nous ne recevons pas vos conversations."],
+["2. Quelles données la page utilise",U("<b>Chats, personnages, profil et réglages :</b> enregistrés dans le stockage local de votre navigateur.","<b>Fichiers et images joints :</b> lus dans votre navigateur et envoyés à l’IA que vous avez configurée lorsque vous demandez une réponse ; les images sont réduites avant d’être enregistrées dans le chat.","<b>Clés d’API :</b> conservées uniquement dans votre navigateur, jamais envoyées vers Drive ni vers un serveur à nous.","<b>Si vous vous connectez avec Google :</b> la page reçoit votre adresse e-mail (pour afficher le compte connecté) et l’autorisation d’utiliser un dossier masqué de votre Google Drive créé uniquement pour cette application (<code>drive.appdata</code>). Elle ne peut ni voir ni modifier vos autres fichiers Drive.")],
+["3. Ce que nous faisons de ces données","Les données Google servent uniquement à enregistrer et charger une copie de vos chats, personnages et réglages (sans vos clés d’API) dans votre propre Drive, afin de les retrouver sur d’autres appareils. Nous ne les utilisons ni pour la publicité, ni pour des analyses, ni pour entraîner des modèles, et nous ne les vendons, partageons ni transférons. Personne dans l’équipe de Mizu.AI ne peut les lire."],
+["4. Services tiers",U("<b>Service d’IA et de recherche que vous configurez :</b> vos messages (et pièces jointes) partent directement de votre navigateur vers ce service, avec votre propre clé. Ils sont soumis à la politique de confidentialité de ce fournisseur ; choisissez-le avec soin.","<b>Google :</b> la connexion et Drive sont gérés par Google selon sa politique de confidentialité ; il peut utiliser ses propres cookies lors de la connexion.","<b>GitHub Pages :</b> héberge cette page et peut enregistrer des données techniques d’accès (comme l’adresse IP) selon sa politique. Mizu.AI n’a pas accès à ces journaux.")+"<p>Mizu.AI n’utilise pas de cookies publicitaires ni de suivi qui lui soient propres.</p>"],
+["5. Utilisation limitée des données Google","L’utilisation et le transfert vers toute autre application des informations reçues des API Google respecteront la "+A(POL,"Politique relative aux données utilisateur des services d’API Google")+", y compris les exigences d’utilisation limitée."],
+["6. Conservation et suppression de vos données",U("Les données sont conservées jusqu’à ce que vous les supprimiez.","<b>Se déconnecter :</b> utilisez le bouton Google de la barre latérale.","<b>Révoquer l’accès :</b> sur "+PERM+".","<b>Supprimer la copie dans Drive :</b> Google Drive → Paramètres → Gérer les applications → Mizu AI → supprimer les données masquées de l’application (les menus peuvent varier).","<b>Supprimer les données locales :</b> effacez les données du site dans les paramètres de votre navigateur.")],
+["7. Sécurité","Les données circulent de façon chiffrée (HTTPS) entre votre navigateur, Google et les services que vous configurez. Comme les clés d’API sont stockées dans votre navigateur, ne les partagez pas et n’utilisez pas la page sur l’appareil d’autrui sans vous déconnecter et effacer les données du site."],
+["8. Mineurs","Mizu.AI ne s’adresse pas aux moins de 13 ans. Si vous êtes mineur, utilisez la page avec l’accord d’un adulte."],
+["9. Modifications","Nous pouvons mettre à jour cette politique ; le cas échéant, nous modifierons la date ci-dessus."],
+["10. Contact","Pour toute question ou demande concernant vos données, écrivez à "+MAIL+"."]]}
+};
+function show(k){
+  const d=L[k];document.documentElement.lang=k;document.title="Mizu.AI · "+d.t;
+  document.getElementById("t").textContent=d.t;document.getElementById("u").textContent=d.u;
+  document.getElementById("body").innerHTML=d.s.map(x=>"<h2>"+x[0]+"</h2>"+(x[1].startsWith("<")?x[1]:"<p>"+x[1]+"</p>")).join("");
+  document.querySelectorAll("#langs button").forEach(b=>b.classList.toggle("on",b.dataset.k===k));
+  try{history.replaceState(null,"","#"+k)}catch(_){}
+}
+const bar=document.getElementById("langs");
+["en","es","pt","ru","fr"].forEach(k=>{const b=document.createElement("button");b.dataset.k=k;b.textContent=L[k].n;b.onclick=()=>show(k);bar.appendChild(b)});
+const h=location.hash.slice(1);
+show(L[h]?h:"en");
+</script>
+</body>
+</html>
