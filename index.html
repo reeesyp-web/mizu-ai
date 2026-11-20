@@ -237,7 +237,11 @@ textarea.field{resize:vertical;min-height:70px}
     <button class="btn ghost small" id="aboutBtn" style="text-align:left" data-i18n="aboutBtn"></button>
     <dialog id="aboutDlg" style="max-width:520px;border:1px solid var(--line);border-radius:16px;background:var(--white);color:var(--ink);padding:20px"><div id="aboutBody"></div>
       <p><a href="https://github.com/reeesyp-web/mizu-ai" target="_blank" rel="noopener">GitHub · reeesyp-web/mizu-ai</a></p><button class="btn ghost small" id="aboutClose" type="button">✕</button></dialog>
+    <dialog id="termsDlg" style="max-width:480px;border:1px solid var(--line);border-radius:16px;background:var(--white);color:var(--ink);padding:20px">
+      <label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer"><input type="checkbox" id="termsChk" style="margin-top:4px;width:18px;height:18px;flex:none"><span id="termsTxt"></span></label>
+      <div style="margin-top:14px;display:flex;gap:8px"><button class="btn small" id="termsGo" type="button" disabled data-i18n="termsGo"></button><button class="btn ghost small" id="termsNo" type="button">✕</button></div></dialog>
     <a class="btn ghost small" id="privLink" href="privacidad.html" target="_blank" rel="noopener" data-i18n="privacy" style="text-align:left;text-decoration:none"></a>
+    <a class="btn ghost small" id="termsLink" href="terminos.html" target="_blank" rel="noopener" data-i18n="terms" style="text-align:left;text-decoration:none"></a>
     <div class="side-foot">
       <button class="btn ghost small" id="openSettings" style="flex:1" data-i18n="settingsBtn"></button>
       <button class="btn ghost small" id="exportBtn" data-i18n-title="exportT">⬇️</button>
@@ -368,6 +372,11 @@ textarea.field{resize:vertical;min-height:70px}
     <div class="f"><label data-i18n="sModel"></label><input class="field" id="sModel" placeholder="deepseek-flash"></div>
     <div class="f"><label><span data-i18n="sTemp"></span> <small id="tVal"></small></label><input type="range" id="sTemp" min="0" max="1.5" step="0.1" style="width:100%"></div>
   </div>
+  <div class="two">
+    <div class="f"><label data-i18n="sMaxChar"></label><select class="field" id="sMaxChar"><option value="200">200</option><option value="300">300</option><option value="400">400</option><option value="500">500</option><option value="800">800</option><option value="1000">1000</option><option value="0" data-i18n="noLimit"></option></select></div>
+    <div class="f"><label data-i18n="sMaxGen"></label><select class="field" id="sMaxGen"><option value="200">200</option><option value="300">300</option><option value="400">400</option><option value="500">500</option><option value="800">800</option><option value="1000">1000</option><option value="0" data-i18n="noLimit"></option></select></div>
+  </div>
+  <small data-i18n="maxHint" style="display:block;color:var(--muted);margin:-4px 0 8px"></small>
   <div class="f"><label data-i18n="sKey"></label><input class="field" id="sKey" type="password" placeholder="sk-…"></div>
   <small data-i18n="keyNote" style="display:block;color:var(--muted);margin:-4px 0 8px"></small>
   <small data-i18n="spendNote" style="display:block;color:var(--muted);margin:0 0 8px"></small>
@@ -758,6 +767,15 @@ pt:{sFmt:'Formato da API',fmtHint:'OpenAI serve para quase todos. Escolha Anthro
 ru:{sFmt:'Формат API',fmtHint:'OpenAI подходит почти всем. Выбирайте Anthropic или Gemini, только если используете их нативный API (URL подставится сам).'},
 fr:{sFmt:'Format de l’API',fmtHint:'OpenAI convient à presque tout le monde. Choisissez Anthropic ou Gemini seulement si vous utilisez leur API native (l’URL se remplit toute seule).'}};
 for(const k in X)if(T[k])Object.assign(T[k],X[k])})();
+Object.assign(T.es,{sMaxChar:'Límite de respuesta · chats de personajes',sMaxGen:'Límite de respuesta · chat general',noLimit:'Sin límite',maxHint:'✂️ Tokens máximos que la IA puede escribir por respuesta (≈ ¾ de palabra cada uno). No se aplica en el modo de pensamiento profundo.'});
+Object.assign(T.en,{sMaxChar:'Reply limit · character chats',sMaxGen:'Reply limit · general chat',noLimit:'No limit',maxHint:'✂️ Maximum tokens the AI can write per reply (≈ ¾ of a word each). Not applied in deep-thinking mode.'});
+if(T.pt)Object.assign(T.pt,{sMaxChar:'Limite de resposta · chats de personagens',sMaxGen:'Limite de resposta · chat geral',noLimit:'Sem limite',maxHint:'✂️ Máximo de tokens que a IA pode escrever por resposta (≈ ¾ de palavra cada). Não se aplica no modo de pensamento profundo.'});
+if(T.ru)Object.assign(T.ru,{sMaxChar:'Лимит ответа · чаты с персонажами',sMaxGen:'Лимит ответа · общий чат',noLimit:'Без ограничений',maxHint:'✂️ Максимум токенов в одном ответе ИИ (≈ ¾ слова каждый). Не применяется в режиме глубокого мышления.'});
+if(T.fr)Object.assign(T.fr,{sMaxChar:'Limite de réponse · chats de personnages',sMaxGen:'Limite de réponse · chat général',noLimit:'Sans limite',maxHint:'✂️ Nombre maximal de tokens que l’IA peut écrire par réponse (≈ ¾ de mot chacun). Non appliqué en mode réflexion approfondie.'});
+Object.assign(T.es,{terms:'Términos del servicio'});Object.assign(T.en,{terms:'Terms of service'});
+if(T.pt)Object.assign(T.pt,{terms:'Termos de serviço'});if(T.ru)Object.assign(T.ru,{terms:'Условия использования'});if(T.fr)Object.assign(T.fr,{terms:'Conditions d’utilisation'});
+Object.assign(T.es,{termsAcc:'He leído y acepto los {t} y la {p}.',termsGo:'Continuar con Google'});Object.assign(T.en,{termsAcc:'I have read and accept the {t} and the {p}.',termsGo:'Continue with Google'});
+if(T.pt)Object.assign(T.pt,{termsAcc:'Li e aceito os {t} e a {p}.',termsGo:'Continuar com o Google'});if(T.ru)Object.assign(T.ru,{termsAcc:'Я прочитал(а) и принимаю: {t}, {p}.',termsGo:'Продолжить с Google'});if(T.fr)Object.assign(T.fr,{termsAcc:'J’ai lu et j’accepte les {t} et la {p}.',termsGo:'Continuer avec Google'});
 function t(k,o){let v=(T[LANG]&&T[LANG][k])??T.en[k]??k;if(o)for(const x in o)v=v.split('{'+x+'}').join(o[x]);return v}
 const sameChar=(c,d)=>d&&c.name===d.name&&c.tagline===d.tagline&&c.desc===d.desc&&c.greet===d.greet&&c.scene===d.scene&&(c.tags||[]).join()===d.tags.join();
 const fromDef=(k,l)=>({...DEF[l][k],tags:[...DEF[l][k].tags]});
@@ -959,13 +977,13 @@ function mergeTurns(h){ // alterna roles, empieza y termina con usuario (lo pide
   if(out[out.length-1].role!=='user')out.push({role:'user',text:'(…)',imgs:[]});
   return out;
 }
-function buildNative(fmt,base,key,model,sys,hist,temp){
+function buildNative(fmt,base,key,model,sys,hist,temp,cap){
   base=base.replace(/\/+$/,'');const turns=mergeTurns(hist);
   if(fmt==='anthropic'){
     base=base.replace(/\/v1$/,'');
     return{url:base+'/v1/messages',
       headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:{model,max_tokens:4096,temperature:Math.min(1,Math.max(0,temp)),stream:true,system:sys,
+      body:{model,max_tokens:cap||4096,temperature:Math.min(1,Math.max(0,temp)),stream:true,system:sys,
         messages:turns.map(m=>({role:m.role,content:[...m.imgs.map(u=>{const p=dataParts(u);return p&&{type:'image',source:{type:'base64',media_type:p.mt,data:p.d}}}).filter(Boolean),{type:'text',text:m.text||'.'}]}))}};
   }
   base=base.replace(/\/v1(beta)?(\/openai)?$/,'');
@@ -1027,6 +1045,8 @@ async function ask(chat,reuse){
       if(hasImg&&st.vision)model=st.vision;
       else if(useThink){if(st.turl)fmt='openai';apiUrl=st.turl||st.url;apiKey=st.tkey||st.key;model=st.think||(/deepseek/i.test(apiUrl)?'deepseek-flash':st.model)}
       let sys=systemPrompt(chat);
+      const capN=+(chat.charId?(st.maxChar??'500'):(st.maxGen??'0')),cap=useThink?0:(capN||0);
+      if(cap)sys+='\n\nLength rule: keep every reply under about '+Math.round(cap*0.55)+' words and always finish your last sentence.';
       if(useSearch){
         const q=([...chat.messages].reverse().find(m=>m.role==='user')||{content:''}).content.trim();
         if(!st.surl||!st.skey)toast(t('srcNoKey'));
@@ -1044,8 +1064,8 @@ async function ask(chat,reuse){
       }
       let rq;
       if(fmt==='openai')rq={url:apiUrl.replace(/\/$/,'')+'/chat/completions',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
-        body:{model,temperature:+st.temp,stream:true,messages:[{role:'system',content:sys},...history]}};
-      else rq=buildNative(fmt,apiUrl,apiKey,model,sys,hist,+st.temp);
+        body:{model,temperature:+st.temp,stream:true,...(cap?{max_tokens:cap}:{}),messages:[{role:'system',content:sys},...history]}};
+      else rq=buildNative(fmt,apiUrl,apiKey,model,sys,hist,+st.temp,cap);
       const r=await fetch(rq.url,{method:'POST',signal:abortCtl.signal,headers:rq.headers,body:JSON.stringify(rq.body)});
       if(!r.ok)throw new Error('Error '+r.status+': '+(await r.text()).slice(0,300));
       const rd=r.body.getReader(),dec=new TextDecoder();let buf='';
@@ -1278,7 +1298,7 @@ $('#saveProf').onclick=()=>{
 };
 $('#openSettings').onclick=()=>{
   drawProf();const s=S.settings;$('#sFmt').value=s.fmt||'openai';$('#sUrl').value=s.url;$('#sModel').value=s.model;$('#sKey').value=s.key;$('#sSUrl').value=s.surl||'';$('#sSKey').value=s.skey||'';$('#sSHead').value=s.shead||'';$('#sSBody').value=s.sbody||'';$('#sTUrl').value=s.turl||'';$('#sTKey').value=s.tkey||'';$('#sThink').value=s.think||'';$('#sVision').value=s.vision||'';
-  $('#sTemp').value=s.temp;$('#tVal').textContent=s.temp;$('#sSys').value=s.sys;$('#setModal').classList.add('on');
+  $('#sTemp').value=s.temp;$('#sMaxChar').value=s.maxChar??'500';$('#sMaxGen').value=s.maxGen??'0';$('#tVal').textContent=s.temp;$('#sSys').value=s.sys;$('#setModal').classList.add('on');
 };
 $('#sFmt').onchange=e=>{
   const f=e.target.value,u=$('#sUrl'),v=u.value.trim();
@@ -1294,7 +1314,7 @@ $('#clearKeys').onclick=()=>{
   save();renderAll();toast(t('clearKeysDone'));
 };
 $('#saveSet').onclick=()=>{
-  Object.assign(S.settings,{fmt:$('#sFmt').value,url:$('#sUrl').value.trim(),model:$('#sModel').value.trim(),key:$('#sKey').value.trim(),surl:$('#sSUrl').value.trim(),skey:$('#sSKey').value.trim(),shead:$('#sSHead').value.trim(),sbody:$('#sSBody').value.trim(),turl:$('#sTUrl').value.trim(),tkey:$('#sTKey').value.trim(),think:$('#sThink').value.trim(),vision:$('#sVision').value.trim(),temp:+$('#sTemp').value,sys:$('#sSys').value});
+  Object.assign(S.settings,{fmt:$('#sFmt').value,maxChar:$('#sMaxChar').value,maxGen:$('#sMaxGen').value,url:$('#sUrl').value.trim(),model:$('#sModel').value.trim(),key:$('#sKey').value.trim(),surl:$('#sSUrl').value.trim(),skey:$('#sSKey').value.trim(),shead:$('#sSHead').value.trim(),sbody:$('#sSBody').value.trim(),turl:$('#sTUrl').value.trim(),tkey:$('#sTKey').value.trim(),think:$('#sThink').value.trim(),vision:$('#sVision').value.trim(),temp:+$('#sTemp').value,sys:$('#sSys').value});
   $('#setModal').classList.remove('on');renderAll();toast(t('setSaved'));
 };
 $$('[data-close]').forEach(b=>b.onclick=()=>b.closest('.modal-bg').classList.remove('on'));
@@ -1316,16 +1336,25 @@ $('#importFile').onchange=e=>{
 
 /* ---------- Cuenta de Google + guardado en Drive ---------- */
 var GD_CLIENT='1060785017392-epmfufbf64gp63ut7qvu2ihbkjsd7req.apps.googleusercontent.com',GD_SCOPE='openid email https://www.googleapis.com/auth/drive.appdata',GD_FILE='mizu-ai-data.json';
-var gdTok=null,gdId=null,gdTimer=0,gdSkip=false,gdNote='';
+var gdTok=null,gdId=null,gdTimer=0,gdSkip=false,gdNote='',gdArmed=false;
+function gdSaveTok(sec){try{sessionStorage.setItem('gdTok',JSON.stringify({t:gdTok,e:Date.now()+(sec||3600)*1000-60000}))}catch(_){}}
+function gdDropTok(){gdTok=null;try{sessionStorage.removeItem('gdTok')}catch(_){}}
+function gdRestore(){try{const o=JSON.parse(sessionStorage.getItem('gdTok'));if(o&&o.e>Date.now()){gdTok=o.t;return true}}catch(_){}return false}
+function gdArm(){ // sin servidor: reconecta en el primer toque/tecla (el navegador exige un gesto del usuario)
+  if(gdArmed||!gdLS('gdOn'))return;gdArmed=true;gdLoad().catch(()=>{});
+  const ev=['pointerup','keydown'],re=()=>{ev.forEach(e=>document.removeEventListener(e,re,true));gdArmed=false;if(!gdTok)gdLogin(true)};
+  ev.forEach(e=>document.addEventListener(e,re,true));
+}
 const gdLS=(k,v)=>{try{return v===undefined?localStorage.getItem(k):v===null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(_){}};
 function gdUI(){const e=gdLS('gdEmail')||'';$('#gdBtn').textContent='☁️ '+(gdTok?(e+(gdNote?' · '+gdNote:'')):(gdLS('gdOn')?t('gdRe'):t('gdIn')))}
 function gdLoad(){return window.google&&google.accounts?Promise.resolve():new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
 function gdAuth(silent){return gdLoad().then(()=>new Promise((ok,no)=>{
-  google.accounts.oauth2.initTokenClient({client_id:GD_CLIENT,scope:GD_SCOPE,callback:r=>{if(r.error)return no(r);gdTok=r.access_token;ok()},error_callback:no}).requestAccessToken({prompt:silent?'':'select_account'});
+  google.accounts.oauth2.initTokenClient({client_id:GD_CLIENT,scope:GD_SCOPE,hint:gdLS('gdEmail')||undefined,callback:r=>{if(r.error)return no(r);gdTok=r.access_token;gdSaveTok(+r.expires_in);ok()},error_callback:no}).requestAccessToken({prompt:silent?'':'select_account'});
 }))}
 async function gdFetch(url,o={}){
   const go=()=>fetch(url,{...o,headers:{...(o.headers||{}),Authorization:'Bearer '+gdTok}});
-  let r=await go();if(r.status===401){await gdAuth(true);r=await go()}
+  let r=await go();
+  if(r.status===401){try{await gdAuth(true);r=await go()}catch(_){gdDropTok();gdUI();gdArm();throw new Error('401')}}
   if(!r.ok)throw new Error(r.status);return r;
 }
 async function gdFileId(){
@@ -1367,8 +1396,18 @@ async function gdLogin(auto){
 }
 $('#aboutBtn').onclick=()=>{$('#aboutBody').innerHTML='<h3 style="margin:0 0 8px">'+esc(t('tagline'))+'</h3><p>'+esc(t('aboutTxt'))+'</p><p>'+esc(t('aboutLogo'))+' <a href="https://picrew.me/en/image_maker/3157" target="_blank" rel="noopener">ぷにぷにほっぺメーカー</a> (Picrew)</p><p><b>'+esc(t('aboutContact'))+':</b> <a href="mailto:mizuaisupport@gmail.com">mizuaisupport@gmail.com</a></p>';$('#aboutDlg').showModal()};
 $('#aboutClose').onclick=()=>$('#aboutDlg').close();
-$('#gdBtn').onclick=()=>{if(gdTok){if(confirm(t('gdOut'))){gdTok=null;gdNote='';gdLS('gdOn',null);gdLS('gdEmail',null);gdUI()}}else gdLogin(false)};
-gdUI();if(gdLS('gdOn'))gdLogin(true);
+$('#gdBtn').onclick=()=>{if(gdTok){if(confirm(t('gdOut'))){gdTok=null;gdNote='';gdDropTok();gdLS('gdOn',null);gdLS('gdEmail',null);gdUI()}}else gdConsent()};
+function gdConsent(){ // casilla sin marcar antes de iniciar sesión con Google (clickwrap)
+  if(gdLS('gdTerms')){gdLogin(false);return}
+  const a=(u,x)=>'<a href="'+u+'" target="_blank" rel="noopener">'+esc(x)+'</a>';
+  $('#termsTxt').innerHTML=t('termsAcc').replace('{t}',a('terminos.html',t('terms'))).replace('{p}',a('privacidad.html',t('privacy')));
+  $('#termsChk').checked=false;$('#termsGo').disabled=true;$('#termsDlg').showModal();
+}
+$('#termsChk').onchange=e=>{$('#termsGo').disabled=!e.target.checked};
+$('#termsGo').onclick=()=>{if(!$('#termsChk').checked)return;gdLS('gdTerms',new Date().toISOString());$('#termsDlg').close();gdLogin(false)};
+$('#termsNo').onclick=()=>$('#termsDlg').close();
+gdUI();
+if(gdLS('gdOn')){if(gdRestore()){gdUI();gdSync().catch(()=>{})}else gdArm()}
 
 /* ---------- Navegación ---------- */
 function setView(v){
