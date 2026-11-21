@@ -338,6 +338,24 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 .lore-foot{grid-template-columns:1fr 1fr;justify-content:stretch}
 .lore-foot .btn{padding:11px 8px}
 }
+
+/* ---- Lorebook por libros ---- */
+[hidden]{display:none!important}
+.lore-bg{background:rgba(30,42,56,.96)}
+.lore-bk{display:flex;align-items:center;gap:8px;min-width:0}
+.lore-bk .btn{flex:none;white-space:nowrap}
+.lore-bt{flex:1;min-width:0;font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bk{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:8px 10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:14px;margin:0 0 10px;background:var(--white)}
+.bk.off .bk-cv,.bk.off .bk-main{opacity:.5}
+.bk-cv{width:56px;height:56px;border-radius:12px;border:1px solid var(--line);background:var(--blue-100);font-size:26px;display:grid;place-items:center;padding:0;overflow:hidden;cursor:pointer}
+.bk-cv img{width:100%;height:100%;object-fit:cover;display:block}
+.bk-main{min-width:0}
+.bk-name{width:100%;min-width:0;border:1px solid transparent;background:transparent;border-radius:8px;padding:4px 6px;margin-left:-6px;font:inherit;font-size:16px;font-weight:700;color:var(--ink)}
+.bk-name:focus{border-color:var(--blue-300);background:var(--white);outline:none}
+.bk-meta{font-size:12.5px;color:var(--muted)}
+.bk-act{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end}
+.bk-act .btn{white-space:nowrap}
+.bk-new{border-style:dashed;border-color:var(--blue-300)}
 </style>
 </head>
 <body>
@@ -626,16 +644,18 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
   <div class="lore-head"><h2 data-i18n="loreTitle"></h2><button type="button" class="btn ghost small" data-close data-i18n-title="close" aria-label="Close">✕</button></div>
   <div class="lore-bar">
     <div class="lore-row"><div class="f" style="flex:1;min-width:0;margin:0"><label data-i18n="loreScope"></label><select class="field" id="loreScope"></select></div><span class="lore-count" id="loreCount"></span></div>
-    <input class="field" id="loreSearch" type="search" data-i18n-ph="loreSearchPh" autocomplete="off" enterkeyhint="search">
+    <div class="lore-bk" id="loreBkBar" hidden><button type="button" class="btn ghost small" id="loreBack"></button><div class="lore-bt" id="loreBkTitle"></div><span class="lore-count" id="loreBkCount"></span></div>
+    <input class="field" id="loreSearch" type="search" data-i18n-ph="loreSearchPh" autocomplete="off" enterkeyhint="search" hidden>
   </div>
-  <div class="lore-body"><p class="lore-hint" data-i18n="loreHint"></p><div id="loreList"></div></div>
+  <div class="lore-body"><p class="lore-hint" id="loreHintP"></p><div id="loreList"></div></div>
   <div class="lore-foot">
-    <button class="btn primary small" id="loreAdd" type="button" data-i18n="loreAdd"></button>
+    <button class="btn primary small" id="loreAdd" type="button"></button>
     <button class="btn ghost small" id="loreImp" type="button" data-i18n="loreImp"></button>
     <button class="btn ghost small" id="loreExp" type="button" data-i18n="loreExp"></button>
     <button class="btn ghost small" type="button" data-close data-i18n="close"></button>
   </div>
   <input type="file" id="loreFile" accept=".json,application/json" hidden>
+  <input type="file" id="loreCoverFile" accept="image/*" hidden>
 </div></div>
 
 <div class="modal-bg" id="grpModal"><div class="modal">
@@ -1908,18 +1928,52 @@ function loreEntry(e,i){
     <div class="le-actions"><button type="button" class="btn ghost small" data-ldel="${i}">🗑 ${esc(t('loreDel'))}</button></div>
   </div>`:''}
 </div>`}
+/* ---------- Lorebook por Libros: estantería + explorador paginado ---------- */
+const bkOn=(o,e)=>{const b=((o&&o.books)||[]).find(x=>x.id===(e.bk||'gen'));return !(b&&b.off)}; // interruptor maestro del libro
+const bkName=b=>b.name||(b.id==='gen'?t('loreGen'):t('loreNewDef'));
+const bkOwner=()=>{const sc=$('#loreScope').value;return sc==='_g'?S:getChar(sc)};
+function bkList(o){o=o||bkOwner();if(!o)return [];o.books=o.books||[];
+  if(!o.books.some(b=>b.id==='gen'))o.books.unshift({id:'gen',name:'',img:'',off:false}); // "Entradas generales": no se borra, solo se vacía
+  o.lore=o.lore||[];o.lore.forEach(e=>{if(!e.id)e.id=uid();if(!e.bk||!o.books.some(b=>b.id===e.bk))e.bk='gen'}); // entradas antiguas -> libro general
+  return o.books}
+function bookWord(n){let k='loreB5';if(LANG==='ru'){const a=n%10,b=n%100;k=(a===1&&b!==11)?'loreB1':(a>=2&&a<=4&&(b<10||b>=20))?'loreB2':'loreB5'}else if(LANG==='fr')k=n<2?'loreB1':'loreB5';else k=n===1?'loreB1':'loreB5';return t(k)}
+const LORE_PAGE=30;let coverTarget=null,loreBook=null,loreShown=LORE_PAGE,loreNewOpen=false,loreNewName='',loreNewImg='';
+function bkCard(b,o){
+  const n=o.lore.filter(e=>e.bk===b.id).length,id=esc(b.id),def=b.id==='gen';
+  return `<div class="bk${b.off?' off':''}">
+  <button type="button" class="bk-cv" data-bcv="${id}" title="${esc(t('loreCover'))}" aria-label="${esc(t('loreCover'))}">${safeImg(b.img)?`<img src="${esc(b.img)}" alt="">`:'📖'}</button>
+  <div class="bk-main"><input class="bk-name" data-bn="${id}" value="${esc(bkName(b))}" maxlength="60" placeholder="${esc(t('loreBookName'))}" aria-label="${esc(t('loreBookName'))}"><div class="bk-meta">${n} ${esc(loreWord(n))}</div></div>
+  <label class="sw" title="${esc(t('loreBookOn'))}"><input type="checkbox" data-bon="${id}" aria-label="${esc(t('loreBookOn'))}" ${b.off?'':'checked'}><span></span></label>
+  <div class="bk-act"><button type="button" class="btn ghost small" data-bdel="${id}" title="${esc(t(def?'loreBookClearT':'loreBookDelT'))}" aria-label="${esc(t(def?'loreBookClearT':'loreBookDelT'))}">${def?'🧹':'🗑'}</button><button type="button" class="btn primary small" data-bopen="${id}">${esc(t('loreOpen'))} ▸</button></div>
+</div>`}
+const newBookForm=()=>`<div class="bk bk-new">
+  <button type="button" class="bk-cv" id="loreNewCv" title="${esc(t('loreCover'))}" aria-label="${esc(t('loreCover'))}">${safeImg(loreNewImg)?`<img src="${esc(loreNewImg)}" alt="">`:'📖'}</button>
+  <div class="bk-main" style="grid-column:2/-1"><input class="bk-name" id="loreNewName" value="${esc(loreNewName)}" maxlength="60" placeholder="${esc(t('loreBookName'))}" style="border-color:var(--line)"></div>
+  <div class="bk-act"><button type="button" class="btn ghost small" id="loreNewCancel">${esc(t('cancel'))}</button><button type="button" class="btn primary small" id="loreNewOk">${esc(t('loreCreate'))}</button></div>
+</div>`;
 function renderLore(){
-  const arr=loreArr();arr.forEach(e=>{if(!e.id)e.id=uid()});
-  const q=loreQ,idx=[];
-  arr.forEach((e,i)=>{if(!q||(e.keys||'').toLowerCase().includes(q)||(e.content||'').toLowerCase().includes(q))idx.push(i)});
-  $('#loreCount').textContent=q?idx.length+t('loreOf')+arr.length+' '+loreWord(arr.length):arr.length+' '+loreWord(arr.length);
-  $('#loreList').innerHTML=idx.length?idx.map(i=>loreEntry(arr[i],i)).join(''):'<p style="color:var(--muted);text-align:center;margin:24px 0">'+esc(arr.length?t('loreNoMatch'):t('loreEmpty'))+'</p>';
+  const o=bkOwner();if(!o)return;const bs=bkList(o),arr=o.lore;
+  if(loreBook&&!bs.some(b=>b.id===loreBook))loreBook=null;
+  const shelf=!loreBook;
+  $('#loreBkBar').hidden=shelf;$('#loreSearch').hidden=shelf;$('#loreExp').hidden=shelf;
+  $('#loreHintP').textContent=t(shelf?'loreShelfHint':'loreHint');
+  $('#loreAdd').textContent=t(shelf?'loreNewBook':'loreAdd');
+  $('#loreCount').textContent=bs.length+' '+bookWord(bs.length);
+  if(shelf){$('#loreList').innerHTML=(loreNewOpen?newBookForm():'')+bs.map(b=>bkCard(b,o)).join('');return}
+  const b=bs.find(x=>x.id===loreBook),all=[];arr.forEach((e,i)=>{if(e.bk===b.id)all.push([e,i])});
+  const q=loreQ,hit=q?all.filter(([e])=>(e.keys||'').toLowerCase().includes(q)||(e.content||'').toLowerCase().includes(q)):all;
+  $('#loreBkTitle').textContent=bkName(b);
+  $('#loreBkCount').textContent=q?hit.length+t('loreOf')+all.length+' '+loreWord(all.length):all.length+' '+loreWord(all.length);
+  const part=hit.slice(0,loreShown);
+  $('#loreList').innerHTML=part.length
+    ?part.map(([e,i])=>loreEntry(e,i)).join('')+(hit.length>part.length?`<button type="button" class="btn ghost" id="loreMore" style="width:100%;margin-top:6px">${esc(t('loreMore'))} (${hit.length-part.length})</button>`:'')
+    :'<p style="color:var(--muted);text-align:center;margin:24px 0">'+esc(all.length?t('loreNoMatch'):t('loreEmpty'))+'</p>';
 }
-function loreFor(chat,spk){ // entradas activas: palabras clave en los últimos 8 mensajes, o "siempre activa"
+function loreFor(chat,spk){ // solo entradas activas de libros encendidos: palabras clave en los últimos 8 mensajes, o "siempre activa"
   const ms=chat.group?chat.group.map(getChar).filter(Boolean):[chat.charId&&getChar(chat.charId)].filter(Boolean);
   const sp=(spk&&getChar(spk))||ms[0],me=((persOf(chat).name)||'').trim()||'User';
   const sub=(x,ch)=>String(x||'').replace(/\{\{\s*char\s*\}\}|<BOT>/gi,ch?ch.name:t('roleAI')).replace(/\{\{\s*user\s*\}\}|<USER>/gi,me);
-  const all=[...(S.lore||[]).map(e=>({e,o:sp})),...ms.flatMap(c=>(c.lore||[]).map(e=>({e,o:c})))].filter(x=>!x.e.off&&(x.e.content||'').trim());
+  const all=[...(S.lore||[]).map(e=>({e,o:sp,b:S})),...ms.flatMap(c=>(c.lore||[]).map(e=>({e,o:c,b:c})))].filter(x=>!x.e.off&&(x.e.content||'').trim()&&bkOn(x.b,x.e));
   if(!all.length)return '';
   const scan=chat.messages.filter(m=>!m.error&&!m.pending).slice(-8).map(m=>m.content||'').join('\n').toLowerCase();
   const out=[];let n=0;
@@ -1930,44 +1984,66 @@ function loreFor(chat,spk){ // entradas activas: palabras clave en los últimos 
   }
   return out.length?'\n\n[World info / Lorebook — use when relevant]\n'+out.join('\n'):'';
 }
+const loreReset=()=>{loreBook=null;loreNewOpen=false;loreQ='';$('#loreSearch').value='';loreShown=LORE_PAGE;loreOpen.clear()};
+const loreTop=()=>{$('#loreModal .lore-body').scrollTop=0};
 $('#loreBtn').onclick=()=>{
   const c0=cur(),sel=$('#loreScope');
   sel.innerHTML='<option value="_g">'+esc(t('loreGlobal'))+'</option>'+S.chars.map(c=>'<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>').join('');
   sel.value=(c0&&c0.charId&&getChar(c0.charId))?c0.charId:'_g';
-  loreQ='';$('#loreSearch').value='';loreOpen.clear();
-  renderLore();$('#loreModal').classList.add('on');$('#loreModal .lore-body').scrollTop=0;
+  loreReset();renderLore();$('#loreModal').classList.add('on');loreTop();
 };
-$('#loreScope').onchange=()=>{loreOpen.clear();renderLore();$('#loreModal .lore-body').scrollTop=0};
-$('#loreSearch').addEventListener('input',e=>{clearTimeout(loreTm);const v=e.target.value.trim().toLowerCase();loreTm=setTimeout(()=>{loreQ=v;renderLore()},120)});
+$('#loreScope').onchange=()=>{loreReset();renderLore();loreTop()};
+$('#loreBack').onclick=()=>{loreReset();renderLore();loreTop()};
+$('#loreSearch').addEventListener('input',e=>{clearTimeout(loreTm);const v=e.target.value.trim().toLowerCase();loreTm=setTimeout(()=>{loreQ=v;loreShown=LORE_PAGE;renderLore()},120)});
 $('#loreAdd').onclick=()=>{
-  const e={id:uid(),keys:'',content:'',always:false,off:false};loreArr().push(e);
-  loreQ='';$('#loreSearch').value='';loreOpen.add(e.id);renderLore();save();
-  const l=$('#loreList').lastElementChild;if(l){l.scrollIntoView({block:'center'});const k=l.querySelector('[data-lf=keys]');if(k)k.focus({preventScroll:true})}
+  if(!loreBook){loreNewOpen=true;loreNewName='';loreNewImg='';renderLore();loreTop();const n=$('#loreNewName');if(n)n.focus();return}
+  const e={id:uid(),keys:'',content:'',always:false,off:false,bk:loreBook};loreArr().unshift(e); // la nueva entrada aparece arriba
+  loreQ='';$('#loreSearch').value='';loreOpen.add(e.id);renderLore();save();loreTop();
+  const k=$('#loreList').querySelector('[data-lf=keys]');if(k)k.focus({preventScroll:true});
 };
 $('#loreList').addEventListener('input',e=>{
-  const f=e.target.dataset.lf;if(!f||f==='on')return;
-  const o=loreArr()[+e.target.dataset.i];if(!o)return;o[f]=e.target.value;save();
-  const el=e.target.closest('.le'),ti=el&&el.querySelector('.le-title');
+  const t0=e.target;
+  if(t0.id==='loreNewName'){loreNewName=t0.value;return}
+  if(t0.dataset.bn){const b=bkList().find(x=>x.id===t0.dataset.bn);if(b){const v=t0.value;b.name=(b.id==='gen'&&(!v.trim()||v.trim()===t('loreGen')))?'':v;save()}return}
+  const f=t0.dataset.lf;if(!f||f==='on')return;
+  const o=loreArr()[+t0.dataset.i];if(!o)return;o[f]=t0.value;save();
+  const el=t0.closest('.le'),ti=el&&el.querySelector('.le-title');
   if(ti){const sm=loreSum(o);ti.textContent=sm.t;ti.classList.toggle('dim',sm.dim)}
 });
 $('#loreList').addEventListener('change',e=>{
-  if(e.target.dataset.lf!=='on')return;
-  const o=loreArr()[+e.target.dataset.i];if(!o)return;o.off=!e.target.checked;save();
-  const el=e.target.closest('.le');if(el)el.classList.toggle('off',o.off);
+  const t0=e.target;
+  if(t0.dataset.bon){const b=bkList().find(x=>x.id===t0.dataset.bon);if(b){b.off=!t0.checked;const c=t0.closest('.bk');if(c)c.classList.toggle('off',b.off);save()}return}
+  if(t0.dataset.lf!=='on')return;
+  const o=loreArr()[+t0.dataset.i];if(!o)return;o.off=!t0.checked;save();
+  const el=t0.closest('.le');if(el)el.classList.toggle('off',o.off);
 });
+$('#loreCoverFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{const d=await readImg(f,120); // miniatura ligera 120x120 (JPEG)
+    if(coverTarget==='_new'){loreNewImg=d;renderLore()}
+    else{const b=bkList().find(x=>x.id===coverTarget);if(b){b.img=d;renderLore();save()}}
+  }catch(_){toast(t('invalid'))}};
 $('#loreList').addEventListener('click',e=>{
-  const arr=loreArr();
-  const d=e.target.closest('[data-ldel]');
-  if(d){const i=+d.dataset.ldel;if(!confirm(t('loreDelConfirm')))return;loreOpen.delete((arr[i]||{}).id);arr.splice(i,1);renderLore();save();return}
-  const p=e.target.closest('[data-lpin]');
-  if(p){const o=arr[+p.dataset.lpin];o.always=!o.always;p.classList.toggle('on',o.always);save();return}
-  if(e.target.closest('.sw,.le-form'))return;
-  const h=e.target.closest('[data-lt]');
-  if(h){const i=+h.dataset.lt,o=arr[i],el=h.closest('.le');if(!o||!el)return;
-    if(loreOpen.has(o.id))loreOpen.delete(o.id);else loreOpen.add(o.id);
-    el.outerHTML=loreEntry(o,i);
-    if(loreOpen.has(o.id)){const n=$('#loreList').querySelector('.le[data-i="'+i+'"]');if(n)n.scrollIntoView({block:'nearest',behavior:'smooth'})}}
+  const o=bkOwner(),arr=loreArr(),g=s=>e.target.closest(s);
+  let x;
+  if(x=g('[data-bopen]')){loreBook=x.dataset.bopen;loreQ='';$('#loreSearch').value='';loreShown=LORE_PAGE;loreOpen.clear();renderLore();loreTop();return}
+  if(x=g('[data-bcv]')){coverTarget=x.dataset.bcv;$('#loreCoverFile').click();return}
+  if(g('#loreNewCv')){coverTarget='_new';$('#loreCoverFile').click();return}
+  if(g('#loreNewCancel')){loreNewOpen=false;renderLore();return}
+  if(g('#loreNewOk')){bkList(o);o.books.push({id:uid(),name:(loreNewName||'').trim()||t('loreNewDef'),img:loreNewImg,off:false});loreNewOpen=false;loreNewName='';loreNewImg='';renderLore();save();return}
+  if(x=g('[data-bdel]')){const id=x.dataset.bdel,b=bkList(o).find(k=>k.id===id);if(!b)return;
+    if(id==='gen'){if(!confirm(t('loreGenClear')))return;o.lore=o.lore.filter(k=>k.bk!=='gen')}
+    else{if(!confirm(t('loreBDelConfirm',{n:bkName(b)})))return;o.lore=o.lore.filter(k=>k.bk!==id);o.books=o.books.filter(k=>k.id!==id)}
+    renderLore();save();return}
+  if(g('#loreMore')){loreShown+=LORE_PAGE;renderLore();return}
+  if(x=g('[data-ldel]')){const i=+x.dataset.ldel;if(!confirm(t('loreDelConfirm')))return;loreOpen.delete((arr[i]||{}).id);arr.splice(i,1);renderLore();save();return}
+  if(x=g('[data-lpin]')){const en=arr[+x.dataset.lpin];en.always=!en.always;x.classList.toggle('on',en.always);save();return}
+  if(g('.sw,.le-form,.bk-name'))return;
+  if(x=g('[data-lt]')){const i=+x.dataset.lt,en=arr[i],el=x.closest('.le');if(!en||!el)return;
+    if(loreOpen.has(en.id))loreOpen.delete(en.id);else loreOpen.add(en.id);
+    el.outerHTML=loreEntry(en,i);
+    if(loreOpen.has(en.id)){const n=$('#loreList').querySelector('.le[data-i="'+i+'"]');if(n)n.scrollIntoView({block:'nearest',behavior:'smooth'})}}
 });
+
 /* ---------- Lorebook: entrada / salida ---------- */
 function loreIn(o){ // acepta V2 (character_book), SillyTavern World Info y arrays simples
   let es=o&&o.entries;if(!es)return [];if(!Array.isArray(es))es=Object.values(es);
@@ -1980,9 +2056,12 @@ function loreOut(arr,name){ // formato World Info de SillyTavern
 }
 $('#loreImp').onclick=()=>$('#loreFile').click();
 $('#loreFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
-  try{const r=JSON.parse(await f.text()),es=loreIn((r.data&&r.data.character_book)||r.character_book||r);if(!es.length)throw 0;loreArr().push(...es);renderLore();save();toast(t('loreImpOk',{n:es.length}))}catch(_){toast(t('invalid'))}};
-$('#loreExp').onclick=()=>{const sc=$('#loreScope').value,c=sc==='_g'?null:getChar(sc);
-  dl(JSON.stringify(loreOut(loreArr(),c?c.name+' Lorebook':'Mizu Lorebook'),null,2),(c?fname(c)+'-':'')+'lorebook.json','application/json')};
+  try{const r=JSON.parse(await f.text()),cb=(r.data&&r.data.character_book)||r.character_book||r,es=loreIn(cb);if(!es.length)throw 0;
+    const o=bkOwner();bkList(o);const id=uid(),nm=String(cb.name||r.name||f.name.replace(/\.json$/i,'')).trim().slice(0,60)||t('loreNewDef');
+    o.books.push({id,name:nm,img:'',off:false});es.forEach(x=>x.bk=id);o.lore.push(...es); // el .json importado queda como un libro propio
+    loreBook=null;loreNewOpen=false;renderLore();save();loreTop();toast(t('loreImpOk',{n:es.length}))}catch(_){toast(t('invalid'))}};
+$('#loreExp').onclick=()=>{const o=bkOwner(),b=bkList(o).find(x=>x.id===loreBook);if(!b)return;
+  dl(JSON.stringify(loreOut(o.lore.filter(e=>e.bk===b.id),bkName(b)),null,2),fname({name:bkName(b)})+'-lorebook.json','application/json')};
 
 /* ---------- Tarjetas de personaje: leer ---------- */
 function pngMeta(buf){ // busca el chunk tEXt/iTXt con "ccv3" o "chara"
@@ -2012,7 +2091,7 @@ function cardToChar(raw){ // V1 / V2 / V3 -> personaje de Mizu
   const c={name:s(d.name).slice(0,40),tagline:s(d.creator_notes).split('\n')[0].replace(/<[^>]*>/g,'').trim().slice(0,70),emoji:EMOJIS[0],color:COLORS[Math.floor(Math.random()*COLORS.length)],img:'',
     desc:desc||s(d.name),greet:s(d.first_mes),scene:s(d.scenario),example:s(d.mes_example),tags:arr(d.tags).map(String).slice(0,12),
     altGreets:arr(d.alternate_greetings).map(s).filter(Boolean),sysp:s(d.system_prompt),phi:s(d.post_history_instructions)};
-  if(d.character_book)c.lore=loreIn(d.character_book);
+  if(d.character_book){const es=loreIn(d.character_book);if(es.length){const id=uid();c.lore=es.map(x=>({...x,bk:id}));c.books=[{id:'gen',name:'',img:'',off:false},{id,name:String(d.character_book.name||(c.name+' Lorebook')).slice(0,60),img:'',off:false}]}}
   return c;
 }
 async function importCards(files){
@@ -2040,7 +2119,7 @@ function cardOf(c){
   const lore=c.lore||[];
   return{spec:'chara_card_v2',spec_version:'2.0',data:{name:c.name,description:c.desc||'',personality:'',scenario:c.scene||'',first_mes:c.greet||'',mes_example:c.example||'',creator_notes:c.tagline||'',
     system_prompt:c.sysp||'',post_history_instructions:c.phi||'',alternate_greetings:c.altGreets||[],tags:c.tags||[],creator:'',character_version:'1',extensions:{},
-    ...(lore.length?{character_book:{name:c.name+' Lorebook',extensions:{},entries:lore.map((e,i)=>({id:i,keys:splitK(e.keys),secondary_keys:[],comment:'',content:e.content||'',enabled:!e.off,insertion_order:i,case_sensitive:false,constant:!!e.always,selective:false,position:'before_char',extensions:{}}))}}:{})}};
+    ...(lore.length?{character_book:{name:c.name+' Lorebook',extensions:{},entries:lore.map((e,i)=>({id:i,keys:splitK(e.keys),secondary_keys:[],comment:'',content:e.content||'',enabled:!e.off&&bkOn(c,e),insertion_order:i,case_sensitive:false,constant:!!e.always,selective:false,position:'before_char',extensions:{}}))}}:{})}};
 }
 const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
 const crc32=u=>{let c=0xffffffff;for(let i=0;i<u.length;i++)c=CRC[(c^u[i])&255]^(c>>>8);return(c^0xffffffff)>>>0};
@@ -2264,6 +2343,14 @@ Object.assign(T.es,{impCard:'📥 Importar tarjeta',expPng:'Exportar como tarjet
 Object.assign(T.en,{impCard:'📥 Import card',expPng:'Export as PNG card',expJson:'Export as JSON',cardOk:'Cards imported: {n}',cardBad:'Not a valid card: {f}',cardLore:'That file is a lorebook: import it from 📚',
  loreImp:'⬆️ Import .json',loreExp:'⬇️ Export .json',loreImpOk:'Entries imported: {n}',grpNew:'👥 New group',grpTitle:'👥 New group chat',grpName:'Group name (optional)',grpPick:'Pick at least 2 characters',grpCreate:'Create group',grpMin:'Pick at least 2 characters',grpAuto:'🎲 Auto',grpAll:'👥 Everyone',
  grpRule:'This is a group chat. Characters present: {l}. You are ONLY {n}: write only {n}\'s turn, never speak or act for the user or the others, and do not start with your name. In the history every message from someone else is prefixed with "Name: ". The other characters: {o}\n'});
+
+const LB={
+es:{loreGen:'Entradas generales',loreNewBook:'＋ Nuevo libro',loreBack:'← Volver a libros',loreOpen:'Abrir',loreBookName:'Nombre del libro',loreCover:'Cambiar portada',loreCreate:'Crear libro',loreBDelConfirm:'¿Eliminar el libro «{n}» y todas sus entradas?',loreGenClear:'¿Vaciar «Entradas generales»? Se borrarán todas sus entradas (el libro se conserva).',loreMore:'Cargar más',loreBookOn:'Libro activo',loreShelfHint:'Cada libro agrupa entradas. Si apagas el interruptor de un libro, ninguna de sus entradas se envía a la IA.',loreNewDef:'Libro nuevo',loreBookDelT:'Eliminar libro',loreBookClearT:'Vaciar libro',loreB1:'libro',loreB2:'libros',loreB5:'libros'},
+en:{loreGen:'General entries',loreNewBook:'＋ New book',loreBack:'← Back to books',loreOpen:'Open',loreBookName:'Book name',loreCover:'Change cover',loreCreate:'Create book',loreBDelConfirm:'Delete the book "{n}" and all its entries?',loreGenClear:'Empty "General entries"? All its entries will be deleted (the book stays).',loreMore:'Load more',loreBookOn:'Book enabled',loreShelfHint:'Each book groups entries. If you turn a book off, none of its entries are sent to the AI.',loreNewDef:'New book',loreBookDelT:'Delete book',loreBookClearT:'Empty book',loreB1:'book',loreB2:'books',loreB5:'books'},
+pt:{loreGen:'Entradas gerais',loreNewBook:'＋ Novo livro',loreBack:'← Voltar aos livros',loreOpen:'Abrir',loreBookName:'Nome do livro',loreCover:'Alterar capa',loreCreate:'Criar livro',loreBDelConfirm:'Excluir o livro "{n}" e todas as suas entradas?',loreGenClear:'Esvaziar "Entradas gerais"? Todas as entradas serão excluídas (o livro permanece).',loreMore:'Carregar mais',loreBookOn:'Livro ativo',loreShelfHint:'Cada livro agrupa entradas. Se você desligar um livro, nenhuma das suas entradas é enviada à IA.',loreNewDef:'Novo livro',loreBookDelT:'Excluir livro',loreBookClearT:'Esvaziar livro',loreB1:'livro',loreB2:'livros',loreB5:'livros'},
+ru:{loreGen:'Общие записи',loreNewBook:'＋ Новая книга',loreBack:'← Назад к книгам',loreOpen:'Открыть',loreBookName:'Название книги',loreCover:'Сменить обложку',loreCreate:'Создать книгу',loreBDelConfirm:'Удалить книгу «{n}» и все её записи?',loreGenClear:'Очистить «Общие записи»? Все записи будут удалены (книга останется).',loreMore:'Показать ещё',loreBookOn:'Книга включена',loreShelfHint:'Каждая книга объединяет записи. Если выключить книгу, ни одна её запись не отправляется ИИ.',loreNewDef:'Новая книга',loreBookDelT:'Удалить книгу',loreBookClearT:'Очистить книгу',loreB1:'книга',loreB2:'книги',loreB5:'книг'},
+fr:{loreGen:'Entrées générales',loreNewBook:'＋ Nouveau livre',loreBack:'← Retour aux livres',loreOpen:'Ouvrir',loreBookName:'Nom du livre',loreCover:'Changer la couverture',loreCreate:'Créer le livre',loreBDelConfirm:'Supprimer le livre « {n} » et toutes ses entrées ?',loreGenClear:'Vider « Entrées générales » ? Toutes ses entrées seront supprimées (le livre reste).',loreMore:'Charger plus',loreBookOn:'Livre activé',loreShelfHint:'Chaque livre regroupe des entrées. Si vous désactivez un livre, aucune de ses entrées n’est envoyée à l’IA.',loreNewDef:'Nouveau livre',loreBookDelT:'Supprimer le livre',loreBookClearT:'Vider le livre',loreB1:'livre',loreB2:'livres',loreB5:'livres'}};
+for(const k in LB)Object.assign(T[k],LB[k]);
 
 applyLook();
 applyStatic();
