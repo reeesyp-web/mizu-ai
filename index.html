@@ -247,7 +247,7 @@ textarea.field{resize:vertical;min-height:70px}
 #selBar .selHead{display:flex;align-items:center;justify-content:center;font-weight:700;position:relative}
 #selBar .selX{position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:22px;color:var(--ink);padding:4px 8px}
 #selBar .selActs{display:flex;justify-content:space-around;gap:8px}
-#selBar .selAct{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;color:var(--ink);font:inherit;font-weight:600;font-size:14px;min-width:84px}
+#selBar .selAct{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;color:var(--ink);font:inherit;font-weight:600;font-size:13px;min-width:70px}
 #selBar .selAct .ic{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:var(--blue-200);color:var(--blue-700)}
 #selBar .selAct.main .ic{background:var(--blue-600);color:#fff}
 #selBar .selAct:disabled{opacity:.45}
@@ -433,6 +433,8 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
     <a class="btn ghost small legalA" id="termsLink" data-p="terminos.html" href="terminos.html" target="_blank" rel="noopener" data-i18n="terms" style="text-align:left;text-decoration:none"></a>
     <button class="btn ghost small" id="exportBtn" style="text-align:left" data-i18n="expAllBtn" data-i18n-title="exportT"></button>
     <a href="#" id="bakInfo" role="button" data-i18n="bakInfoLink" style="display:block;color:#2563eb;text-decoration:underline;font-size:13px;margin:-2px 0 4px 10px"></a>
+    <button class="btn ghost small" id="sideImpChat" style="text-align:left" data-i18n="impCharBtn"></button>
+    <a href="#" id="impChatInfo" role="button" data-info="imp" style="display:block;color:#2563eb;text-decoration:underline;font-size:13px;margin:-2px 0 4px 10px"></a>
     <button class="btn ghost small" id="importBtn" style="text-align:left" data-i18n="impAllBtn" data-i18n-title="importT"></button>
     <div class="side-foot">
       <button class="btn ghost small" id="openSettings" style="flex:1" data-i18n="settingsBtn"></button>
@@ -464,6 +466,7 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
         <div class="selActs">
           <button type="button" class="selAct" id="selImg"><span class="ic">🖼️</span><span data-i18n="mkImg"></span></button>
           <button type="button" class="selAct main" id="selLink"><span class="ic">🔗</span><span data-i18n="cpLink"></span></button>
+          <button type="button" class="selAct" id="selExp"><span class="ic">📦</span><span data-i18n="expChatShort"></span></button>
           <button type="button" class="selAct" id="selMore"><span class="ic">⋯</span><span data-i18n="more"></span></button>
         </div></div>
       <div class="composer" data-cs="0">
@@ -552,7 +555,8 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
   <div class="f"><label data-i18n="styleLbl"></label><select class="field" id="optStyle"></select></div>
   <div class="modal-foot"><button class="btn ghost" data-close data-i18n="close"></button><button class="btn primary" id="optSave" data-i18n="save"></button></div>
 </div></div>
-<button id="optBtn" type="button" hidden style="display:none"></button><button id="expTxt" type="button" hidden style="display:none"></button><button id="expMd" type="button" hidden style="display:none"></button>
+<button id="optBtn" type="button" hidden style="display:none"></button><button id="expTxt" type="button" hidden style="display:none"></button><button id="expMd" type="button" hidden style="display:none"></button><button id="expChatBtn" type="button" hidden style="display:none"></button><button id="impChatBtn" type="button" hidden style="display:none"></button><input type="file" id="chatFile" accept=".json" hidden>
+<dialog id="chatInfoDlg" style="max-width:520px;border:1px solid var(--line);border-radius:16px;background:var(--white);color:var(--ink);padding:20px"><div id="chatInfoBody"></div><div style="margin-top:14px;display:flex;gap:8px"><button class="btn small" id="chatInfoGo" type="button" data-i18n="chatInfoGo"></button><button class="btn ghost small" id="chatInfoNo" type="button">✕</button></div></dialog>
 <!-- Modal perfil -->
 <div class="modal-bg" id="profModal"><div class="modal">
   <h2 data-i18n="profTitle"></h2>
@@ -1163,8 +1167,29 @@ if(T.ru)Object.assign(T.ru,{"loreW1": "запись", "loreW2": "записи", 
 if(T.fr)Object.assign(T.fr,{"loreW1": "entrée", "loreW2": "entrées", "loreW5": "entrées", "loreOf": " sur ", "loreSearchPh": "Rechercher par mot-clé ou contenu…", "loreNoKeys": "(aucun mot-clé)", "loreNoMatch": "Aucun résultat", "loreEditT": "Déplier / modifier", "loreDelConfirm": "Supprimer cette entrée ?", "loreDel": "Supprimer", "loreVars": "Vous pouvez utiliser {{char}} et {{user}} : ils sont remplacés par le nom du personnage et de l’utilisateur à l’envoi à l’IA."});
 (()=>{const K=["gdBak", "gdBakAsk", "gdBakNone"],X={"es": ["Restaurar copia anterior de Drive", "Se encontró una copia de {n} mensajes ({d}). ¿Restaurarla en este dispositivo?", "No hay copia anterior en Drive"], "en": ["Restore previous Drive copy", "Found a copy with {n} messages ({d}). Restore it on this device?", "No previous copy in Drive"], "pt": ["Restaurar cópia anterior do Drive", "Encontrada uma cópia com {n} mensagens ({d}). Restaurá-la neste dispositivo?", "Não há cópia anterior no Drive"], "ru": ["Восстановить прежнюю копию из Drive", "Найдена копия с {n} сообщениями ({d}). Восстановить её на этом устройстве?", "Предыдущей копии в Drive нет"], "fr": ["Restaurer la copie précédente de Drive", "Copie trouvée avec {n} messages ({d}). La restaurer sur cet appareil ?", "Aucune copie précédente dans Drive"]};for(const l in X)if(T[l])Object.assign(T[l],Object.fromEntries(K.map((k,i)=>[k,X[l][i]])))})();
 (()=>{const K=["aboutBak"],X0={"es": "💾 Copia de seguridad: usa «Descargar todos mis datos ahora» para guardar tus chats, personajes, lorebooks, perfil y ajustes en un archivo. Así no los pierdes y puedes usar la página en otro navegador o dispositivo.\n🔒 NINGUNA API se guarda en ese archivo: ni claves, ni direcciones, ni modelos. Tus APIs se quedan solo en este dispositivo y tendrás que ponerlas de nuevo en el otro.", "en": "💾 Backup: use “Download all my data now” to save your chats, characters, lorebooks, profile and settings to a file. That way you don’t lose them and you can use the page in another browser or device.\n🔒 NO API is saved in that file: no keys, no addresses, no models. Your APIs stay only on this device and you will need to enter them again on the other one.", "pt": "💾 Cópia de segurança: use «Baixar todos os meus dados agora» para salvar seus chats, personagens, lorebooks, perfil e ajustes em um arquivo. Assim você não os perde e pode usar a página em outro navegador ou dispositivo.\n🔒 NENHUMA API é salva nesse arquivo: nem chaves, nem endereços, nem modelos. Suas APIs ficam somente neste dispositivo e você precisará inseri-las de novo no outro.", "ru": "💾 Резервная копия: нажмите «Скачать все мои данные сейчас», чтобы сохранить чаты, персонажей, лорбуки, профиль и настройки в файл. Так вы ничего не потеряете и сможете открыть страницу в другом браузере или на другом устройстве.\n🔒 НИКАКИЕ API в этот файл не попадают: ни ключи, ни адреса, ни модели. API остаются только на этом устройстве, на другом их нужно ввести заново.", "fr": "💾 Sauvegarde : utilisez « Télécharger toutes mes données maintenant » pour enregistrer vos chats, personnages, lorebooks, profil et réglages dans un fichier. Vous ne les perdez pas et vous pouvez utiliser la page sur un autre navigateur ou appareil.\n🔒 AUCUNE API n’est enregistrée dans ce fichier : ni clés, ni adresses, ni modèles. Vos API restent uniquement sur cet appareil et vous devrez les saisir de nouveau sur l’autre."};for(const l in X0)if(T[l])T[l].aboutBak=X0[l];})();
+(()=>{const K=["expChatShort","mnuExpChat","mnuImpChat","chatInfoTitle","chatInfoBody","chatInfoGo","chatImpAsk","chatImpNew","chatImpHave","chatImpNone","chatImpOk","chatImpBad","chatExpOk"],X={"es": ["Exportar chat", "Exportar chat y personaje", "Importar chat", "Qué se exporta", "✅ Solo los mensajes que elegiste (o este chat completo si lo exportas desde el menú ⋯), en texto.\n✅ El personaje de este chat: nombre, descripción, saludo, su lorebook y su imagen comprimida. Así se crea en la otra cuenta o navegador si no lo tiene.\n❌ No se exporta: tus APIs, tu perfil y persona, tus otros chats, tus ajustes ni nada de Google Drive.\n⚠️ Todo lo escrito en esos mensajes y en la tarjeta del personaje va dentro del archivo: revísalo antes de compartirlo.\n🛡️ No tenemos ningún servidor: el archivo se crea en tu dispositivo y solo tú decides con quién compartirlo. Quien lo reciba lo abre con «Importar chat».", "Exportar", "Este archivo trae:\n• Chat: {t}\n• {n} mensajes\n• Personaje: {p}\n\n¿Importarlo como un chat nuevo? No cambia tus otros chats, tus personajes que ya existen ni tus APIs.", "nuevo, se agregará", "ya lo tienes", "ninguno (chat general)", "Chat importado: {n} mensajes", "Ese archivo no es un chat de Mizu.AI", "Chat exportado"], "en": ["Export chat", "Export chat and character", "Import chat", "What is exported", "✅ Only the messages you picked (or this whole chat if you export it from the ⋯ menu), as text.\n✅ This chat’s character: name, description, greeting, its lorebook and its compressed image. That way it is created on the other account or browser if it is missing.\n❌ Not exported: your APIs, your profile and persona, your other chats, your settings or anything from Google Drive.\n⚠️ Everything written in those messages and in the character card goes inside the file: check it before sharing.\n🛡️ We have no server: the file is created on your device and only you decide who gets it. Whoever receives it opens it with “Import chat”.", "Export", "This file contains:\n• Chat: {t}\n• {n} messages\n• Character: {p}\n\nImport it as a new chat? It does not change your other chats, your existing characters or your APIs.", "new, will be added", "you already have it", "none (general chat)", "Chat imported: {n} messages", "That file is not a Mizu.AI chat", "Chat exported"], "pt": ["Exportar chat", "Exportar chat e personagem", "Importar chat", "O que é exportado", "✅ Somente as mensagens que você escolheu (ou este chat inteiro se exportar pelo menu ⋯), em texto.\n✅ O personagem deste chat: nome, descrição, saudação, seu lorebook e sua imagem comprimida. Assim ele é criado na outra conta ou navegador se não existir.\n❌ Não é exportado: suas APIs, seu perfil e persona, seus outros chats, seus ajustes nem nada do Google Drive.\n⚠️ Tudo o que estiver escrito nessas mensagens e no cartão do personagem vai dentro do arquivo: revise antes de compartilhar.\n🛡️ Não temos nenhum servidor: o arquivo é criado no seu dispositivo e só você decide com quem compartilhar. Quem receber abre com «Importar chat».", "Exportar", "Este arquivo contém:\n• Chat: {t}\n• {n} mensagens\n• Personagem: {p}\n\nImportar como um chat novo? Não altera seus outros chats, seus personagens existentes nem suas APIs.", "novo, será adicionado", "você já tem", "nenhum (chat geral)", "Chat importado: {n} mensagens", "Esse arquivo não é um chat do Mizu.AI", "Chat exportado"], "ru": ["Экспорт чата", "Экспорт чата и персонажа", "Импорт чата", "Что экспортируется", "✅ Только выбранные вами сообщения (или весь чат, если экспортируете из меню ⋯), в виде текста.\n✅ Персонаж этого чата: имя, описание, приветствие, его лорбук и сжатое изображение. Так он появится в другом аккаунте или браузере, если его там нет.\n❌ Не экспортируется: ваши API, профиль и персона, другие чаты, настройки и всё из Google Диска.\n⚠️ Всё, что написано в этих сообщениях и в карточке персонажа, попадёт в файл: проверьте перед отправкой.\n🛡️ У нас нет сервера: файл создаётся на вашем устройстве, и только вы решаете, кому его передать. Получатель открывает его через «Импорт чата».", "Экспортировать", "В этом файле:\n• Чат: {t}\n• сообщений: {n}\n• Персонаж: {p}\n\nИмпортировать как новый чат? Другие чаты, уже существующие персонажи и API не изменятся.", "новый, будет добавлен", "уже есть", "нет (общий чат)", "Чат импортирован: сообщений {n}", "Этот файл не является чатом Mizu.AI", "Чат экспортирован"], "fr": ["Exporter le chat", "Exporter le chat et le personnage", "Importer un chat", "Ce qui est exporté", "✅ Seulement les messages choisis (ou tout ce chat si vous l’exportez depuis le menu ⋯), en texte.\n✅ Le personnage de ce chat : nom, description, message d’accueil, son lorebook et son image compressée. Il sera créé sur l’autre compte ou navigateur s’il n’y est pas.\n❌ Non exporté : vos API, votre profil et persona, vos autres chats, vos réglages ni rien de Google Drive.\n⚠️ Tout ce qui est écrit dans ces messages et dans la fiche du personnage est dans le fichier : vérifiez avant de le partager.\n🛡️ Nous n’avons aucun serveur : le fichier est créé sur votre appareil et vous seul décidez à qui le donner. Le destinataire l’ouvre avec « Importer un chat ».", "Exporter", "Ce fichier contient :\n• Chat : {t}\n• {n} messages\n• Personnage : {p}\n\nL’importer comme nouveau chat ? Vos autres chats, vos personnages existants et vos API ne changent pas.", "nouveau, sera ajouté", "vous l’avez déjà", "aucun (chat général)", "Chat importé : {n} messages", "Ce fichier n’est pas un chat Mizu.AI", "Chat exporté"]};for(const l in X)if(T[l])Object.assign(T[l],Object.fromEntries(K.map((k,i)=>[k,X[l][i]])))})();
 (()=>{const K=["bakInfoLink","bakTitle","bakNoSrv"],X={"es": ["ℹ️ ¿Qué información se descarga?", "Información que descargas", "🛡️ No tenemos ningún servidor: Mizu.AI no recibe ni guarda tus datos. Todo sale de tu propio navegador y el archivo queda solo en tu dispositivo. Si inicias sesión con Google, tus chats se guardan únicamente en tu propio Google Drive."], "en": ["ℹ️ What information is downloaded?", "Information you download", "🛡️ We have no server: Mizu.AI does not receive or store your data. Everything comes from your own browser and the file stays only on your device. If you sign in with Google, your chats are saved only in your own Google Drive."], "pt": ["ℹ️ Que informações são baixadas?", "Informações que você baixa", "🛡️ Não temos nenhum servidor: o Mizu.AI não recebe nem guarda seus dados. Tudo sai do seu próprio navegador e o arquivo fica somente no seu dispositivo. Se você entrar com o Google, seus chats são salvos apenas no seu próprio Google Drive."], "ru": ["ℹ️ Какие данные скачиваются?", "Какие данные вы скачиваете", "🛡️ У нас нет сервера: Mizu.AI не получает и не хранит ваши данные. Всё берётся из вашего браузера, а файл остаётся только на вашем устройстве. Если вы входите через Google, чаты сохраняются только в вашем собственном Google Диске."], "fr": ["ℹ️ Quelles informations sont téléchargées ?", "Informations que vous téléchargez", "🛡️ Nous n’avons aucun serveur : Mizu.AI ne reçoit ni ne stocke vos données. Tout vient de votre propre navigateur et le fichier reste uniquement sur votre appareil. Si vous vous connectez avec Google, vos chats sont enregistrés uniquement dans votre propre Google Drive."]};for(const l in X)if(T[l])Object.assign(T[l],Object.fromEntries(K.map((k,i)=>[k,X[l][i]])))})();
-(()=>{const K=["gdSaveNow","gdUnsaved","gdLoaded","expAllBtn","impAllBtn","impSummary","impDone"],X={"es": ["💾 Guardar en Drive ahora", "sin guardar", "cargado de Drive", "⬇️ Descargar todos mis datos ahora", "⬆️ Subir copia de mis datos", "Esta copia trae:\\n• {c} chats ({m} mensajes)\\n• {p} personajes ({i} con imagen)\\n• {l} entradas de lorebook\\n• Guardada: {d}\\n\\n¿Cargarla? Reemplaza lo que hay ahora en este dispositivo (tus claves de API no cambian).", "Copia cargada: {c} chats, {p} personajes"], "en": ["💾 Save to Drive now", "not saved", "loaded from Drive", "⬇️ Download all my data now", "⬆️ Upload a copy of my data", "This copy contains:\\n• {c} chats ({m} messages)\\n• {p} characters ({i} with image)\\n• {l} lorebook entries\\n• Saved: {d}\\n\\nLoad it? It replaces what is on this device now (your API keys stay as they are).", "Copy loaded: {c} chats, {p} characters"], "pt": ["💾 Salvar no Drive agora", "não salvo", "carregado do Drive", "⬇️ Baixar todos os meus dados agora", "⬆️ Enviar uma cópia dos meus dados", "Esta cópia contém:\\n• {c} chats ({m} mensagens)\\n• {p} personagens ({i} com imagem)\\n• {l} entradas de lorebook\\n• Salva em: {d}\\n\\nCarregar? Substitui o que está agora neste dispositivo (suas chaves de API não mudam).", "Cópia carregada: {c} chats, {p} personagens"], "ru": ["💾 Сохранить в Drive", "не сохранено", "загружено из Drive", "⬇️ Скачать все мои данные сейчас", "⬆️ Загрузить копию моих данных", "В этой копии:\\n• чатов: {c} (сообщений: {m})\\n• персонажей: {p} (с изображением: {i})\\n• записей лорбука: {l}\\n• Сохранена: {d}\\n\\nЗагрузить? Это заменит данные на этом устройстве (ключи API не изменятся).", "Копия загружена: чатов {c}, персонажей {p}"], "fr": ["💾 Enregistrer dans Drive", "non enregistré", "chargé depuis Drive", "⬇️ Télécharger toutes mes données maintenant", "⬆️ Importer une copie de mes données", "Cette copie contient :\\n• {c} chats ({m} messages)\\n• {p} personnages ({i} avec image)\\n• {l} entrées de lorebook\\n• Enregistrée : {d}\\n\\nLa charger ? Elle remplace ce qui est sur cet appareil (vos clés d’API ne changent pas).", "Copie chargée : {c} chats, {p} personnages"]};for(const l in X)if(T[l])Object.assign(T[l],Object.fromEntries(K.map((k,i)=>[k,X[l][i]])))})();
+(()=>{const K=["gdSaveNow","gdUnsaved","gdLoaded","expAllBtn","impAllBtn","impSummary","bakImpDone"],X={"es": ["💾 Guardar en Drive ahora", "sin guardar", "cargado de Drive", "⬇️ Descargar todos mis datos ahora", "⬆️ Subir copia de mis datos", "Esta copia trae:\\n• {c} chats ({m} mensajes)\\n• {p} personajes ({i} con imagen)\\n• {l} entradas de lorebook\\n• Guardada: {d}\\n\\n¿Cargarla? Reemplaza lo que hay ahora en este dispositivo (tus claves de API no cambian).", "Copia cargada: {c} chats, {p} personajes"], "en": ["💾 Save to Drive now", "not saved", "loaded from Drive", "⬇️ Download all my data now", "⬆️ Upload a copy of my data", "This copy contains:\\n• {c} chats ({m} messages)\\n• {p} characters ({i} with image)\\n• {l} lorebook entries\\n• Saved: {d}\\n\\nLoad it? It replaces what is on this device now (your API keys stay as they are).", "Copy loaded: {c} chats, {p} characters"], "pt": ["💾 Salvar no Drive agora", "não salvo", "carregado do Drive", "⬇️ Baixar todos os meus dados agora", "⬆️ Enviar uma cópia dos meus dados", "Esta cópia contém:\\n• {c} chats ({m} mensagens)\\n• {p} personagens ({i} com imagem)\\n• {l} entradas de lorebook\\n• Salva em: {d}\\n\\nCarregar? Substitui o que está agora neste dispositivo (suas chaves de API não mudam).", "Cópia carregada: {c} chats, {p} personagens"], "ru": ["💾 Сохранить в Drive", "не сохранено", "загружено из Drive", "⬇️ Скачать все мои данные сейчас", "⬆️ Загрузить копию моих данных", "В этой копии:\\n• чатов: {c} (сообщений: {m})\\n• персонажей: {p} (с изображением: {i})\\n• записей лорбука: {l}\\n• Сохранена: {d}\\n\\nЗагрузить? Это заменит данные на этом устройстве (ключи API не изменятся).", "Копия загружена: чатов {c}, персонажей {p}"], "fr": ["💾 Enregistrer dans Drive", "non enregistré", "chargé depuis Drive", "⬇️ Télécharger toutes mes données maintenant", "⬆️ Importer une copie de mes données", "Cette copie contient :\\n• {c} chats ({m} messages)\\n• {p} personnages ({i} avec image)\\n• {l} entrées de lorebook\\n• Enregistrée : {d}\\n\\nLa charger ? Elle remplace ce qui est sur cet appareil (vos clés d’API ne changent pas).", "Copie chargée : {c} chats, {p} personnages"]};for(const l in X)if(T[l])Object.assign(T[l],Object.fromEntries(K.map((k,i)=>[k,X[l][i]])))})();
+
+(()=>{const X={
+es:{selBtn:'Compartir chat',shareInfoLink:'¿Qué se comparte?',impInfoLink:'¿Qué se importa?',expInfoLink:'¿Qué información se exporta?',
+ shareInfoTitle:'Compartir chat',shareInfoBody:'Eliges los turnos que quieres compartir y puedes crear una imagen, copiar un enlace, exportar o copiar el texto.\n📦 «Exportar chat» descarga un archivo con los turnos elegidos. Si estás en el chat de un personaje, el personaje (nombre, descripción, saludo, lorebook e imagen comprimida) siempre se descarga junto con el chat.\n❌ Nunca se incluyen tus APIs, tu perfil, tus otros chats ni tus ajustes.\n🛡️ No tenemos servidor: el archivo se crea en tu dispositivo y tú decides con quién compartirlo.',
+ impInfoTitle:'Importar chat',impInfoBody:'Abre un archivo creado con «Exportar chat» o «Compartir chat».\n✅ Se agrega como un chat nuevo; si trae un personaje que no tienes, también se crea.\n🔒 No cambia tus otros chats, tus personajes ya existentes ni tus APIs.\n⚠️ Antes de importar verás un resumen para confirmar. Importa solo archivos de personas de confianza.'},
+en:{selBtn:'Share chat',shareInfoLink:'What is shared?',impInfoLink:'What is imported?',expInfoLink:'What information is exported?',
+ shareInfoTitle:'Share chat',shareInfoBody:'You pick the turns you want to share and can create an image, copy a link, export or copy the text.\n📦 “Export chat” downloads a file with the chosen turns. If you are in a character chat, the character (name, description, greeting, lorebook and compressed image) is always downloaded together with the chat.\n❌ Your APIs, profile, other chats and settings are never included.\n🛡️ We have no server: the file is created on your device and you decide who gets it.',
+ impInfoTitle:'Import chat',impInfoBody:'Opens a file created with “Export chat” or “Share chat”.\n✅ It is added as a new chat; if it contains a character you do not have, it is created too.\n🔒 It does not change your other chats, existing characters or APIs.\n⚠️ You will see a summary to confirm before importing. Only import files from people you trust.'},
+pt:{selBtn:'Compartilhar chat',shareInfoLink:'O que é compartilhado?',impInfoLink:'O que é importado?',expInfoLink:'Que informações são exportadas?',
+ shareInfoTitle:'Compartilhar chat',shareInfoBody:'Você escolhe os turnos que quer compartilhar e pode criar uma imagem, copiar um link, exportar ou copiar o texto.\n📦 «Exportar chat» baixa um arquivo com os turnos escolhidos. Se estiver no chat de um personagem, o personagem (nome, descrição, saudação, lorebook e imagem comprimida) sempre é baixado junto com o chat.\n❌ Suas APIs, perfil, outros chats e ajustes nunca são incluídos.\n🛡️ Não temos servidor: o arquivo é criado no seu dispositivo e você decide com quem compartilhar.',
+ impInfoTitle:'Importar chat',impInfoBody:'Abre um arquivo criado com «Exportar chat» ou «Compartilhar chat».\n✅ É adicionado como um chat novo; se trouxer um personagem que você não tem, ele também é criado.\n🔒 Não altera seus outros chats, personagens existentes nem suas APIs.\n⚠️ Antes de importar você verá um resumo para confirmar. Importe apenas arquivos de pessoas de confiança.'},
+ru:{selBtn:'Поделиться чатом',shareInfoLink:'Что передаётся?',impInfoLink:'Что импортируется?',expInfoLink:'Какие данные экспортируются?',
+ shareInfoTitle:'Поделиться чатом',shareInfoBody:'Вы выбираете реплики, которыми хотите поделиться, и можете создать изображение, скопировать ссылку, экспортировать или скопировать текст.\n📦 «Экспорт чата» скачивает файл с выбранными репликами. В чате с персонажем персонаж (имя, описание, приветствие, лорбук и сжатое изображение) всегда скачивается вместе с чатом.\n❌ Ваши API, профиль, другие чаты и настройки никогда не включаются.\n🛡️ У нас нет сервера: файл создаётся на вашем устройстве, и вы решаете, кому его передать.',
+ impInfoTitle:'Импорт чата',impInfoBody:'Открывает файл, созданный через «Экспорт чата» или «Поделиться чатом».\n✅ Добавляется как новый чат; если в файле есть персонаж, которого у вас нет, он тоже создаётся.\n🔒 Другие чаты, существующие персонажи и API не меняются.\n⚠️ Перед импортом вы увидите сводку для подтверждения. Импортируйте файлы только от надёжных людей.'},
+fr:{selBtn:'Partager le chat',shareInfoLink:'Qu’est-ce qui est partagé ?',impInfoLink:'Qu’est-ce qui est importé ?',expInfoLink:'Quelles informations sont exportées ?',
+ shareInfoTitle:'Partager le chat',shareInfoBody:'Vous choisissez les tours à partager et pouvez créer une image, copier un lien, exporter ou copier le texte.\n📦 « Exporter le chat » télécharge un fichier avec les tours choisis. Dans le chat d’un personnage, le personnage (nom, description, message d’accueil, lorebook et image compressée) est toujours téléchargé avec le chat.\n❌ Vos API, profil, autres chats et réglages ne sont jamais inclus.\n🛡️ Nous n’avons aucun serveur : le fichier est créé sur votre appareil et vous décidez à qui le donner.',
+ impInfoTitle:'Importer un chat',impInfoBody:'Ouvre un fichier créé avec « Exporter le chat » ou « Partager le chat ».\n✅ Il est ajouté comme nouveau chat ; s’il contient un personnage que vous n’avez pas, il est aussi créé.\n🔒 Vos autres chats, personnages existants et API ne changent pas.\n⚠️ Avant l’import, un résumé s’affiche pour confirmation. N’importez que des fichiers de personnes de confiance.'}};
+for(const k in X)if(T[k])Object.assign(T[k],X[k]);
+for(const k in T)if(T[k].chatInfoBody)T[k].chatInfoBody=T[k].chatInfoBody.replace('⋯','☰');})();
+(()=>{const IC={es:'📥 Importar chat y personaje',en:'📥 Import chat and character',pt:'📥 Importar chat e personagem',ru:'📥 Импорт чата и персонажа',fr:'📥 Importer chat et personnage'};for(const k in IC)if(T[k])T[k].impCharBtn=IC[k]})();
 function t(k,o){let v=(T[LANG]&&T[LANG][k])??T.en[k]??k;if(o)for(const x in o)v=v.split('{'+x+'}').join(o[x]);return v}
 const sameChar=(c,d)=>d&&c.name===d.name&&c.tagline===d.tagline&&c.desc===d.desc&&c.greet===d.greet&&c.scene===d.scene&&(c.tags||[]).join()===d.tags.join();
 const fromDef=(k,l)=>({...DEF[l][k],tags:[...DEF[l][k].tags]});
@@ -1181,7 +1206,7 @@ function dispTitle(c){
   }
   return c.title;
 }
-function applyStatic(){
+function applyStatic(){try{$('#impChatInfo').innerHTML='ℹ️ '+esc(t('impInfoLink'))}catch(_){}
   document.documentElement.lang=LANG;
   $$('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
   $$('[data-i18n-html]').forEach(e=>e.innerHTML=t(e.dataset.i18nHtml));
@@ -1968,12 +1993,12 @@ $('#importBtn').onclick=()=>$('#importFile').click();
 $('#importFile').onchange=e=>{
   const f=e.target.files[0];if(!f)return;
   f.text().then(txt=>{try{
-    const d=JSON.parse(txt);if(!d.chats)throw 0;
+    const d=JSON.parse(txt);if(d&&d.mizuChat){importChatFile(d);return}if(!d.chats)throw 0;
     const ch=d.chars||[],lore=ch.reduce((n,c)=>n+((c.lore||[]).length),0)+((d.lore||[]).length||0);
     const when=d.exportedAt||d.savedAt;
     if(!confirm(t('impSummary',{c:d.chats.length,m:d.chats.reduce((n,c)=>n+((c.messages||[]).length),0),p:ch.length,i:ch.filter(c=>c.img).length,l:lore,d:when?new Date(when).toLocaleString(LANG):'—'})))return;
     const k=apiOnly(S.settings);S=d;S.settings=Object.assign(defaultState().settings,d.settings||{},k);S.profile=Object.assign({img:'',bg:'',hue:207,tone:'soft',sm:1,mode:'light'},d.profile||{});
-    if(!S.chars)S.chars=defaultChars();if(!S.seed8){const L0=DEF[S.lang]?S.lang:LANG;Object.keys(DEF.es).forEach(k=>{if(!S.chars.some(c=>c.bk===k))S.chars.push({id:uid(),bk:k,...fromDef(k,L0)})});S.seed8=1}if(!S.chats.length)newChat(null,true);S.activeId=S.chats[0].id;LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;applyLook();applyStatic();renderAll();save();toast(t('impDone',{c:S.chats.length,p:S.chars.length}))
+    if(!S.chars)S.chars=defaultChars();if(!S.seed8){const L0=DEF[S.lang]?S.lang:LANG;Object.keys(DEF.es).forEach(k=>{if(!S.chars.some(c=>c.bk===k))S.chars.push({id:uid(),bk:k,...fromDef(k,L0)})});S.seed8=1}if(!S.chats.length)newChat(null,true);S.activeId=S.chats[0].id;LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;applyLook();applyStatic();renderAll();save();toast(t('bakImpDone',{c:S.chats.length,p:S.chars.length}))
   }catch(_){toast(t('invalid'))}});
   e.target.value='';
 };
@@ -2278,6 +2303,10 @@ $('#aboutBtn').onclick=()=>{$('#aboutBody').innerHTML='<h3 style="margin:0 0 8px
 $('#aboutClose').onclick=()=>$('#aboutDlg').close();
 $('#bakInfo').onclick=e=>{e.preventDefault();$('#bakBody').innerHTML='<h3 style="margin:0 0 10px;color:#2563eb">'+esc(t('bakTitle'))+'</h3>'+t('aboutBak').split('\n').map(x=>'<p>'+esc(x)+'</p>').join('')+'<p>'+esc(t('bakNoSrv'))+'</p>';$('#bakDlg').showModal()};
 $('#bakClose').onclick=()=>$('#bakDlg').close();
+function showInfo(k){const T0={share:['shareInfoTitle','shareInfoBody'],imp:['impInfoTitle','impInfoBody'],exp:['chatInfoTitle','chatInfoBody']}[k];if(!T0)return;
+  $('#bakBody').innerHTML='<h3 style="margin:0 0 10px;color:#2563eb">'+esc(t(T0[0]))+'</h3>'+t(T0[1]).split('\n').map(x=>'<p>'+esc(x)+'</p>').join('');$('#bakDlg').showModal()}
+$('#impChatInfo').innerHTML='ℹ️ '+esc(t('impInfoLink'));$('#impChatInfo').onclick=e=>{e.preventDefault();showInfo('imp')};
+$('#sideImpChat').onclick=()=>{closeMenu();$('#impChatBtn').click()};
 $('#gdBtn').onclick=async()=>{
   if(!gdTok){gdConsent();return}
   if(!confirm(t('gdOut')))return;
@@ -2333,7 +2362,7 @@ function selUI(){
   $('#selCount').textContent=t('selN',{n});
   const full=all.length>0&&all.every(m=>selSet.has(m.id));
   const b=$('#selAllBox');b.className='selbox'+(full?' on':'');b.textContent=full?'✓':'';
-  ['selImg','selLink','selMore'].forEach(id=>$('#'+id).disabled=!n);
+  ['selImg','selLink','selExp','selMore'].forEach(id=>$('#'+id).disabled=!n);
 }
 const keepScroll=fn=>{const b=$('#messages'),y=b.scrollTop;fn();b.scrollTop=y};
 function enterSel(){selMode=true;selSet=new Set();document.body.classList.add('selmode');$('#selMenu').style.display='none';selUI();keepScroll(renderChat)}
@@ -2452,6 +2481,74 @@ $('#selCopyTxt').onclick=async()=>{
 $('#selDel').onclick=()=>{
   const n=selSet.size;$('#selMenu').style.display='none';if(!n||!confirm(t('delSelAsk',{n})))return;
   const chat=cur();chat.messages=chat.messages.filter(m=>!selSet.has(m.id));chat.updated=Date.now();exitSel();renderAll()};
+/* ---------- Exportar / importar un chat con su personaje (sin servidor, sin APIs) ---------- */
+async function smallImg(src,max){ // reduce la imagen a como máximo {max}px (JPEG) para que el archivo pese poco
+  src=safeImg(src);if(!src)return '';
+  try{return await new Promise((ok,no)=>{const im=new Image();im.onerror=no;im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.7))};im.src=src})}catch(_){return src}
+}
+async function charOut(c){ // solo los datos del personaje: nada de voz, ajustes ni APIs
+  const o={_id:c.id,name:c.name||'',tagline:c.tagline||'',emoji:c.emoji||'',color:c.color||'',img:await smallImg(c.img,256),desc:c.desc||'',greet:c.greet||'',scene:c.scene||'',example:c.example||'',sysp:c.sysp||'',phi:c.phi||'',tags:c.tags||[],altGreets:c.altGreets||[]};
+  if(c.bk)o.bk=c.bk;
+  if((c.lore||[]).length){o.lore=c.lore.map(e=>({keys:e.keys||'',content:e.content||'',always:!!e.always,off:!!e.off,bk:e.bk||''}));o.books=await Promise.all((c.books||[]).map(async b=>({id:b.id,name:b.name||'',img:await smallImg(b.img,128),off:!!b.off})))}
+  return o;
+}
+async function buildChatFile(chat,msgs){
+  const ids=new Set();if(chat.charId)ids.add(chat.charId);(chat.group||[]).forEach(i=>ids.add(i));msgs.forEach(m=>{if(m.cid)ids.add(m.cid)});
+  const chars=[];for(const id of ids){const c=getChar(id);if(c)chars.push(await charOut(c))}
+  return{mizuChat:1,app:'Mizu.AI',exportedAt:Date.now(),title:dispTitle(chat),
+    charId:(chat.charId&&getChar(chat.charId))?chat.charId:null,group:chat.group?chat.group.filter(i=>getChar(i)):null,chars,
+    msgs:msgs.map(m=>({r:m.role==='user'?'u':'a',c:selTxt(m),...((m.cid&&getChar(m.cid))?{cid:m.cid}:{})}))};
+}
+var pendExp=null;
+function askExport(chat,msgs){
+  if(!msgs.length){toast(t('selNone'));return}
+  pendExp={chat,msgs};
+  $('#chatInfoBody').innerHTML='<h3 style="margin:0 0 10px;color:#2563eb">'+esc(t('chatInfoTitle'))+'</h3>'+t('chatInfoBody').split('\n').map(x=>'<p>'+esc(x)+'</p>').join('');
+  $('#chatInfoDlg').showModal();
+}
+$('#chatInfoNo').onclick=()=>{pendExp=null;$('#chatInfoDlg').close()};
+$('#chatInfoGo').onclick=async()=>{
+  if(!pendExp)return;const {chat,msgs}=pendExp;pendExp=null;$('#chatInfoDlg').close();
+  try{
+    const d=await buildChatFile(chat,msgs),nm=String(d.title||'chat').replace(/[\\\/:*?"<>|\s]+/g,'_').slice(0,40)||'chat';
+    dl(JSON.stringify(d),'mizu-chat-'+nm+'-'+new Date().toISOString().slice(0,10)+'.json','application/json');
+    toast(t('chatExpOk'));if(selMode)exitSel();
+  }catch(e){toast(t('imgFail'))}
+};
+$('#selExp').onclick=()=>askExport(cur(),selList().filter(m=>selTxt(m)));
+$('#expChatBtn').onclick=()=>askExport(cur(),cur().messages.filter(m=>!m.pending&&!m.error&&selTxt(m)));
+$('#impChatBtn').onclick=()=>$('#chatFile').click();
+$('#chatFile').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;f.text().then(x=>importChatFile(JSON.parse(x))).catch(()=>toast(t('chatImpBad')))};
+const sStr=(x,n)=>typeof x==='string'?x.slice(0,n):'';
+function cleanChar(c){
+  const arr=x=>Array.isArray(x)?x:[];
+  const o={name:sStr(c.name,40)||'?',tagline:sStr(c.tagline,70),emoji:sStr(c.emoji,8)||EMOJIS[0],color:safeColor(c.color),img:safeImg(c.img),desc:sStr(c.desc,20000),greet:sStr(c.greet,20000),scene:sStr(c.scene,20000),example:sStr(c.example,20000),sysp:sStr(c.sysp,20000),phi:sStr(c.phi,20000),
+    tags:arr(c.tags).map(x=>sStr(x,40)).filter(Boolean).slice(0,12),altGreets:arr(c.altGreets).map(x=>sStr(x,20000)).filter(Boolean).slice(0,20)};
+  if(arr(c.lore).length){o.lore=c.lore.slice(0,300).map(e=>({id:uid(),keys:sStr(e.keys,500),content:sStr(e.content,20000),always:!!e.always,off:!!e.off,bk:sStr(e.bk,40)}));o.books=arr(c.books).slice(0,20).map(b=>({id:sStr(b.id,40),name:sStr(b.name,60),img:safeImg(b.img),off:!!b.off}))}
+  return o;
+}
+function importChatFile(d){
+  try{
+    if(!d||d.mizuChat!==1||!Array.isArray(d.msgs)||!d.msgs.length)throw 0;
+    const files=Array.isArray(d.chars)?d.chars.slice(0,12).filter(c=>c&&typeof c==='object'):[],map={},plan=[];
+    files.forEach(fc=>{
+      const cc=cleanChar(fc);
+      const have=S.chars.find(x=>(fc.bk&&x.bk===fc.bk)||(x.name===cc.name&&(x.desc||'')===cc.desc&&(x.greet||'')===cc.greet));
+      plan.push({fid:fc._id,cc,have});
+    });
+    const names=plan.map(p=>p.cc.name+' ('+t(p.have?'chatImpHave':'chatImpNew')+')').join(', ')||t('chatImpNone');
+    const title=sStr(d.title,120)||t('newChatTitle');
+    if(!confirm(t('chatImpAsk',{t:title,n:d.msgs.length,p:names})))return;
+    plan.forEach(p=>{if(p.have){map[p.fid]=p.have.id}else{const id=uid();S.chars.unshift({id,...p.cc});map[p.fid]=id}});
+    const grp=Array.isArray(d.group)?d.group.map(i=>map[i]).filter(Boolean):[];
+    const ch={id:uid(),title,charId:(!grp.length&&d.charId&&map[d.charId])||null,updated:Date.now(),
+      messages:d.msgs.slice(0,5000).map(x=>{const m={id:uid(),role:x&&x.r==='u'?'user':'assistant',content:sStr(x&&x.c,200000)};if(x&&x.cid&&map[x.cid])m.cid=map[x.cid];return m}).filter(m=>m.content)};
+    if(grp.length>1)ch.group=grp;
+    S.chats.unshift(ch);S.activeId=ch.id;
+    if(typeof setView==='function')setView('chat');
+    renderAll();toast(t('chatImpOk',{n:ch.messages.length}));
+  }catch(e){toast(t('chatImpBad'))}
+}
 // importar un chat compartido: si hay sesión de Google, se espera a que termine la sincronización para no perderlo
 if(/^#[zj]=/.test(location.hash)){if(gdLS('gdOn')){pendingImport=true;toast(t('impWait'),3500)}else runImport()}
 if(gdLS('gdOn')){if(gdRestore()){gdUI();gdSync().catch(()=>{})}else gdArm()}
@@ -2701,9 +2798,9 @@ Object.assign(T.fr,{voiceNone:'Aucune voix pour cette langue sur votre appareil.
 $('#moreBtn').onclick=e=>{e.stopPropagation();const m=$('#moreMenu');
   if(m.style.display==='block'){m.style.display='none';return}
   const _c=cur(),_ch=_c&&!_c.group&&_c.charId&&getChar(_c.charId);
-  m.innerHTML=[...(_ch?[['🕘',t('histBtn'),'tbHist']]:[]),['📝',t('memBtn'),'memBtn'],['☑',t('selBtn'),'selBtn'],['A−','','fsDown'],['A+','','fsUp'],['🎭',t('optBtn'),'optBtn'],['📖',t('expTxt'),'expTxt'],['📄',t('expMd'),'expMd'],['🧹',t('clearT'),'clearChat']].map(x=>`<button type="button" data-t="${x[2]}">${x[0]} ${esc(x[1])}</button>`).join('');
+  m.innerHTML=[...(_ch?[['🕘',t('histBtn'),'tbHist']]:[]),['📝',t('memBtn'),'memBtn'],['☑',t('selBtn'),'selBtn','share'],['A−','','fsDown'],['A+','','fsUp'],['🎭',t('optBtn'),'optBtn'],['📖',t('expTxt'),'expTxt'],['📄',t('expMd'),'expMd'],['📥',t('mnuImpChat'),'impChatBtn','imp'],['🧹',t('clearT'),'clearChat']].map(x=>`<button type="button" data-t="${x[2]}">${x[0]} ${esc(x[1])}</button>`+(x[3]?`<a href="#" data-info="${x[3]}" style="display:block;color:#2563eb;text-decoration:underline;font-size:12.5px;padding:0 12px 6px 38px">ℹ️ ${esc(t(x[3]==='share'?'shareInfoLink':'impInfoLink'))}</a>`:'')).join('');
   m.style.display='block'};
-$('#moreMenu').onclick=e=>{const b=e.target.closest('[data-t]');if(!b)return;if(!/^fs/.test(b.dataset.t))$('#moreMenu').style.display='none';$('#'+b.dataset.t).click()};
+$('#moreMenu').onclick=e=>{const ia=e.target.closest('[data-info]');if(ia){e.preventDefault();$('#moreMenu').style.display='none';showInfo(ia.dataset.info);return}const b=e.target.closest('[data-t]');if(!b)return;if(!/^fs/.test(b.dataset.t))$('#moreMenu').style.display='none';$('#'+b.dataset.t).click()};
 document.addEventListener('click',e=>{if(!e.target.closest('#moreMenu'))$('#moreMenu').style.display='none'});
 const isDesk=()=>innerWidth>800;
 try{if(localStorage.getItem('sideOff')==='1')$('.app').classList.add('sideoff')}catch(_){}
