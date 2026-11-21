@@ -176,8 +176,7 @@ textarea.field{resize:vertical;min-height:70px}
 
 /* Imágenes / avatares */
 .av,.cav{overflow:hidden}
-.bgimg{display:none}
-.av img,.cav img,.img-prev img,.mini img{width:100%;height:100%;object-fit:cover;object-position:50% 0%;display:block}
+.av img,.cav img,.img-prev img,.mini img{width:100%;height:100%;object-fit:cover;display:block}
 .img-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .img-prev{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-size:30px;overflow:hidden;background:var(--blue-100);flex-shrink:0}
 .mini{display:inline-grid;width:20px;height:20px;border-radius:7px;overflow:hidden;place-items:center;vertical-align:middle;font-size:14px}
@@ -284,7 +283,7 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 .pinTag{float:right;font-size:12px;margin:0 0 2px 8px;opacity:.85}
 /* ---- Historial por personaje (estilo Character.AI) ---- */
 .ci-av{width:30px;height:30px;border-radius:50%;overflow:hidden;display:grid;place-items:center;flex:none;background:var(--blue-100);font-size:16px}
-.ci-av img{width:100%;height:100%;object-fit:cover;object-position:50% 0%}
+.ci-av img{width:100%;height:100%;object-fit:cover}
 .tb-ico{flex:none;padding:6px 9px;font-size:15px;line-height:1;white-space:nowrap}
 .lbl-s{display:none}
 @media(max-width:520px){.lbl-l{display:none}.lbl-s{display:inline}}
@@ -313,9 +312,7 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 #charGrid .card{padding:0;gap:0;border-radius:18px;overflow:hidden;cursor:pointer}
 #charGrid .card:hover{transform:none}
 #charGrid .card-top{flex-direction:column;align-items:stretch;gap:0}
-#charGrid .cav{width:100%;height:auto;aspect-ratio:4/5;border-radius:0;font-size:56px;position:relative;overflow:hidden}
-#charGrid .cav .bgimg{display:block;position:absolute;left:-12px;top:-12px;width:calc(100% + 24px);height:calc(100% + 24px);object-fit:cover;filter:blur(16px) brightness(.88)}
-#charGrid .cav img:not(.bgimg){position:relative;width:100%;height:100%;object-fit:contain}
+#charGrid .cav{width:100%;height:auto;aspect-ratio:4/3;border-radius:0;font-size:56px}
 #charGrid .card-top>div:last-child{padding:10px 12px 0;min-width:0}
 #charGrid .card h3{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #charGrid .card .tag{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12px}
@@ -423,18 +420,22 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
     <button class="btn ghost small" id="openProfile" style="text-align:left"></button>
     <button class="btn ghost small" id="loreBtn" style="text-align:left" data-i18n="loreBtn"></button>
     <button class="btn ghost small" id="gdBtn" style="text-align:left"></button>
+    <button class="btn ghost small" id="gdSaveBtn" style="text-align:left;display:none" data-i18n="gdSaveNow"></button>
+    <button class="btn ghost small" id="gdBakBtn" style="text-align:left;display:none" data-i18n="gdBak"></button>
     <button class="btn ghost small" id="aboutBtn" style="text-align:left" data-i18n="aboutBtn"></button>
     <dialog id="aboutDlg" style="max-width:520px;border:1px solid var(--line);border-radius:16px;background:var(--white);color:var(--ink);padding:20px"><div id="aboutBody"></div>
       <p><a href="https://github.com/reeesyp-web/mizu-ai" target="_blank" rel="noopener">GitHub · reeesyp-web/mizu-ai</a></p><button class="btn ghost small" id="aboutClose" type="button">✕</button></dialog>
+    <dialog id="bakDlg" style="max-width:520px;border:1px solid var(--line);border-radius:16px;background:var(--white);color:var(--ink);padding:20px"><div id="bakBody"></div><button class="btn ghost small" id="bakClose" type="button">✕</button></dialog>
     <dialog id="termsDlg" style="max-width:480px;border:1px solid var(--line);border-radius:16px;background:var(--white);color:var(--ink);padding:20px">
       <label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer"><input type="checkbox" id="termsChk" style="margin-top:4px;width:18px;height:18px;flex:none"><span id="termsTxt"></span></label>
       <div style="margin-top:14px;display:flex;gap:8px"><button class="btn small" id="termsGo" type="button" disabled data-i18n="termsGo"></button><button class="btn ghost small" id="termsNo" type="button">✕</button></div></dialog>
     <a class="btn ghost small legalA" id="privLink" data-p="privacidad.html" href="privacidad.html" target="_blank" rel="noopener" data-i18n="privacy" style="text-align:left;text-decoration:none"></a>
     <a class="btn ghost small legalA" id="termsLink" data-p="terminos.html" href="terminos.html" target="_blank" rel="noopener" data-i18n="terms" style="text-align:left;text-decoration:none"></a>
+    <button class="btn ghost small" id="exportBtn" style="text-align:left" data-i18n="expAllBtn" data-i18n-title="exportT"></button>
+    <a href="#" id="bakInfo" role="button" data-i18n="bakInfoLink" style="display:block;color:#2563eb;text-decoration:underline;font-size:13px;margin:-2px 0 4px 10px"></a>
+    <button class="btn ghost small" id="importBtn" style="text-align:left" data-i18n="impAllBtn" data-i18n-title="importT"></button>
     <div class="side-foot">
       <button class="btn ghost small" id="openSettings" style="flex:1" data-i18n="settingsBtn"></button>
-      <button class="btn ghost small" id="exportBtn" data-i18n-title="exportT">⬇️</button>
-      <button class="btn ghost small" id="importBtn" data-i18n-title="importT">⬆️</button>
       <input type="file" id="importFile" accept=".json" hidden>
     </div>
   </aside>
@@ -738,7 +739,7 @@ function readImg(file,size,keep){return new Promise((res,rej)=>{
     }
     const side=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=size;
     const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,size,size);
-    x.drawImage(im,(im.width-side)/2,0,side,side,0,0,size,size); // si es vertical, conserva la parte de ARRIBA (la cara)
+    x.drawImage(im,(im.width-side)/2,(im.height-side)/2,side,side,0,0,size,size);
     res(c.toDataURL('image/jpeg',.85));
   };im.src=r.result};
   r.readAsDataURL(file);
@@ -1155,14 +1156,15 @@ Object.assign(T.en,{histBtn:'Chat history',histBtnS:'Chat history',histSearchPh:
 Object.assign(T.pt,{histBtn:'Histórico de chats',histBtnS:'Histórico de chats',histSearchPh:'Buscar neste histórico…',histNone:'Sem resultados'});
 Object.assign(T.ru,{histBtn:'История чатов',histBtnS:'История чатов',histSearchPh:'Поиск по истории…',histNone:'Ничего не найдено'});
 Object.assign(T.fr,{histBtn:'Historique des chats',histBtnS:'Historique des chats',histSearchPh:'Rechercher dans l’historique…',histNone:'Aucun résultat'});
-Object.assign(T.pt,{sTavily:'Tavily API key (busca na web)',sProv:'Serviço'});
-Object.assign(T.ru,{sTavily:'Tavily API key (веб-поиск)',sProv:'Сервис'});
-Object.assign(T.fr,{sTavily:'Tavily API key (recherche web)',sProv:'Service'});
 if(T.es)Object.assign(T.es,{"loreW1": "entrada", "loreW2": "entradas", "loreW5": "entradas", "loreOf": " de ", "loreSearchPh": "Buscar por palabra clave o contenido…", "loreNoKeys": "(sin palabras clave)", "loreNoMatch": "Sin resultados", "loreEditT": "Expandir / editar", "loreDelConfirm": "¿Eliminar esta entrada?", "loreDel": "Eliminar", "loreVars": "Puedes usar {{char}} y {{user}}: se reemplazan por el nombre del personaje y del usuario al enviarse a la IA."});
 if(T.en)Object.assign(T.en,{"loreW1": "entry", "loreW2": "entries", "loreW5": "entries", "loreOf": " of ", "loreSearchPh": "Search by keyword or content…", "loreNoKeys": "(no keywords)", "loreNoMatch": "No results", "loreEditT": "Expand / edit", "loreDelConfirm": "Delete this entry?", "loreDel": "Delete", "loreVars": "You can use {{char}} and {{user}}: they are replaced with the character’s and the user’s names when sent to the AI."});
 if(T.pt)Object.assign(T.pt,{"loreW1": "entrada", "loreW2": "entradas", "loreW5": "entradas", "loreOf": " de ", "loreSearchPh": "Buscar por palavra-chave ou conteúdo…", "loreNoKeys": "(sem palavras-chave)", "loreNoMatch": "Sem resultados", "loreEditT": "Expandir / editar", "loreDelConfirm": "Excluir esta entrada?", "loreDel": "Excluir", "loreVars": "Você pode usar {{char}} e {{user}}: são substituídos pelo nome do personagem e do usuário ao enviar à IA."});
 if(T.ru)Object.assign(T.ru,{"loreW1": "запись", "loreW2": "записи", "loreW5": "записей", "loreOf": " из ", "loreSearchPh": "Поиск по ключевому слову или тексту…", "loreNoKeys": "(нет ключевых слов)", "loreNoMatch": "Ничего не найдено", "loreEditT": "Развернуть / изменить", "loreDelConfirm": "Удалить эту запись?", "loreDel": "Удалить", "loreVars": "Можно использовать {{char}} и {{user}}: они заменяются именем персонажа и пользователя при отправке ИИ."});
 if(T.fr)Object.assign(T.fr,{"loreW1": "entrée", "loreW2": "entrées", "loreW5": "entrées", "loreOf": " sur ", "loreSearchPh": "Rechercher par mot-clé ou contenu…", "loreNoKeys": "(aucun mot-clé)", "loreNoMatch": "Aucun résultat", "loreEditT": "Déplier / modifier", "loreDelConfirm": "Supprimer cette entrée ?", "loreDel": "Supprimer", "loreVars": "Vous pouvez utiliser {{char}} et {{user}} : ils sont remplacés par le nom du personnage et de l’utilisateur à l’envoi à l’IA."});
+(()=>{const K=["gdBak", "gdBakAsk", "gdBakNone"],X={"es": ["Restaurar copia anterior de Drive", "Se encontró una copia de {n} mensajes ({d}). ¿Restaurarla en este dispositivo?", "No hay copia anterior en Drive"], "en": ["Restore previous Drive copy", "Found a copy with {n} messages ({d}). Restore it on this device?", "No previous copy in Drive"], "pt": ["Restaurar cópia anterior do Drive", "Encontrada uma cópia com {n} mensagens ({d}). Restaurá-la neste dispositivo?", "Não há cópia anterior no Drive"], "ru": ["Восстановить прежнюю копию из Drive", "Найдена копия с {n} сообщениями ({d}). Восстановить её на этом устройстве?", "Предыдущей копии в Drive нет"], "fr": ["Restaurer la copie précédente de Drive", "Copie trouvée avec {n} messages ({d}). La restaurer sur cet appareil ?", "Aucune copie précédente dans Drive"]};for(const l in X)if(T[l])Object.assign(T[l],Object.fromEntries(K.map((k,i)=>[k,X[l][i]])))})();
+(()=>{const K=["aboutBak"],X0={"es": "💾 Copia de seguridad: usa «Descargar todos mis datos ahora» para guardar tus chats, personajes, lorebooks, perfil y ajustes en un archivo. Así no los pierdes y puedes usar la página en otro navegador o dispositivo.\n🔒 NINGUNA API se guarda en ese archivo: ni claves, ni direcciones, ni modelos. Tus APIs se quedan solo en este dispositivo y tendrás que ponerlas de nuevo en el otro.", "en": "💾 Backup: use “Download all my data now” to save your chats, characters, lorebooks, profile and settings to a file. That way you don’t lose them and you can use the page in another browser or device.\n🔒 NO API is saved in that file: no keys, no addresses, no models. Your APIs stay only on this device and you will need to enter them again on the other one.", "pt": "💾 Cópia de segurança: use «Baixar todos os meus dados agora» para salvar seus chats, personagens, lorebooks, perfil e ajustes em um arquivo. Assim você não os perde e pode usar a página em outro navegador ou dispositivo.\n🔒 NENHUMA API é salva nesse arquivo: nem chaves, nem endereços, nem modelos. Suas APIs ficam somente neste dispositivo e você precisará inseri-las de novo no outro.", "ru": "💾 Резервная копия: нажмите «Скачать все мои данные сейчас», чтобы сохранить чаты, персонажей, лорбуки, профиль и настройки в файл. Так вы ничего не потеряете и сможете открыть страницу в другом браузере или на другом устройстве.\n🔒 НИКАКИЕ API в этот файл не попадают: ни ключи, ни адреса, ни модели. API остаются только на этом устройстве, на другом их нужно ввести заново.", "fr": "💾 Sauvegarde : utilisez « Télécharger toutes mes données maintenant » pour enregistrer vos chats, personnages, lorebooks, profil et réglages dans un fichier. Vous ne les perdez pas et vous pouvez utiliser la page sur un autre navigateur ou appareil.\n🔒 AUCUNE API n’est enregistrée dans ce fichier : ni clés, ni adresses, ni modèles. Vos API restent uniquement sur cet appareil et vous devrez les saisir de nouveau sur l’autre."};for(const l in X0)if(T[l])T[l].aboutBak=X0[l];})();
+(()=>{const K=["bakInfoLink","bakTitle","bakNoSrv"],X={"es": ["ℹ️ ¿Qué información se descarga?", "Información que descargas", "🛡️ No tenemos ningún servidor: Mizu.AI no recibe ni guarda tus datos. Todo sale de tu propio navegador y el archivo queda solo en tu dispositivo. Si inicias sesión con Google, tus chats se guardan únicamente en tu propio Google Drive."], "en": ["ℹ️ What information is downloaded?", "Information you download", "🛡️ We have no server: Mizu.AI does not receive or store your data. Everything comes from your own browser and the file stays only on your device. If you sign in with Google, your chats are saved only in your own Google Drive."], "pt": ["ℹ️ Que informações são baixadas?", "Informações que você baixa", "🛡️ Não temos nenhum servidor: o Mizu.AI não recebe nem guarda seus dados. Tudo sai do seu próprio navegador e o arquivo fica somente no seu dispositivo. Se você entrar com o Google, seus chats são salvos apenas no seu próprio Google Drive."], "ru": ["ℹ️ Какие данные скачиваются?", "Какие данные вы скачиваете", "🛡️ У нас нет сервера: Mizu.AI не получает и не хранит ваши данные. Всё берётся из вашего браузера, а файл остаётся только на вашем устройстве. Если вы входите через Google, чаты сохраняются только в вашем собственном Google Диске."], "fr": ["ℹ️ Quelles informations sont téléchargées ?", "Informations que vous téléchargez", "🛡️ Nous n’avons aucun serveur : Mizu.AI ne reçoit ni ne stocke vos données. Tout vient de votre propre navigateur et le fichier reste uniquement sur votre appareil. Si vous vous connectez avec Google, vos chats sont enregistrés uniquement dans votre propre Google Drive."]};for(const l in X)if(T[l])Object.assign(T[l],Object.fromEntries(K.map((k,i)=>[k,X[l][i]])))})();
+(()=>{const K=["gdSaveNow","gdUnsaved","gdLoaded","expAllBtn","impAllBtn","impSummary","impDone"],X={"es": ["💾 Guardar en Drive ahora", "sin guardar", "cargado de Drive", "⬇️ Descargar todos mis datos ahora", "⬆️ Subir copia de mis datos", "Esta copia trae:\\n• {c} chats ({m} mensajes)\\n• {p} personajes ({i} con imagen)\\n• {l} entradas de lorebook\\n• Guardada: {d}\\n\\n¿Cargarla? Reemplaza lo que hay ahora en este dispositivo (tus claves de API no cambian).", "Copia cargada: {c} chats, {p} personajes"], "en": ["💾 Save to Drive now", "not saved", "loaded from Drive", "⬇️ Download all my data now", "⬆️ Upload a copy of my data", "This copy contains:\\n• {c} chats ({m} messages)\\n• {p} characters ({i} with image)\\n• {l} lorebook entries\\n• Saved: {d}\\n\\nLoad it? It replaces what is on this device now (your API keys stay as they are).", "Copy loaded: {c} chats, {p} characters"], "pt": ["💾 Salvar no Drive agora", "não salvo", "carregado do Drive", "⬇️ Baixar todos os meus dados agora", "⬆️ Enviar uma cópia dos meus dados", "Esta cópia contém:\\n• {c} chats ({m} mensagens)\\n• {p} personagens ({i} com imagem)\\n• {l} entradas de lorebook\\n• Salva em: {d}\\n\\nCarregar? Substitui o que está agora neste dispositivo (suas chaves de API não mudam).", "Cópia carregada: {c} chats, {p} personagens"], "ru": ["💾 Сохранить в Drive", "не сохранено", "загружено из Drive", "⬇️ Скачать все мои данные сейчас", "⬆️ Загрузить копию моих данных", "В этой копии:\\n• чатов: {c} (сообщений: {m})\\n• персонажей: {p} (с изображением: {i})\\n• записей лорбука: {l}\\n• Сохранена: {d}\\n\\nЗагрузить? Это заменит данные на этом устройстве (ключи API не изменятся).", "Копия загружена: чатов {c}, персонажей {p}"], "fr": ["💾 Enregistrer dans Drive", "non enregistré", "chargé depuis Drive", "⬇️ Télécharger toutes mes données maintenant", "⬆️ Importer une copie de mes données", "Cette copie contient :\\n• {c} chats ({m} messages)\\n• {p} personnages ({i} avec image)\\n• {l} entrées de lorebook\\n• Enregistrée : {d}\\n\\nLa charger ? Elle remplace ce qui est sur cet appareil (vos clés d’API ne changent pas).", "Copie chargée : {c} chats, {p} personnages"]};for(const l in X)if(T[l])Object.assign(T[l],Object.fromEntries(K.map((k,i)=>[k,X[l][i]])))})();
 function t(k,o){let v=(T[LANG]&&T[LANG][k])??T.en[k]??k;if(o)for(const x in o)v=v.split('{'+x+'}').join(o[x]);return v}
 const sameChar=(c,d)=>d&&c.name===d.name&&c.tagline===d.tagline&&c.desc===d.desc&&c.greet===d.greet&&c.scene===d.scene&&(c.tags||[]).join()===d.tags.join();
 const fromDef=(k,l)=>({...DEF[l][k],tags:[...DEF[l][k].tags]});
@@ -1288,7 +1290,7 @@ function renderSide(){
       d.innerHTML=`<span class="num">${gn}</span>
       <span class="ci-title">${c.pin?'<span class="mini">📌</span> ':''}${c.group?'<span class="mini">👥</span> ':''}${esc(dispTitle(c))}<small>${t('msgs',{n:c.messages.length})} · ${ago(c.updated)}</small></span>
       <span class="ci-actions">
-        <button class="icon-btn" data-a="pin" title="${c.pin?t('unpinBtn'):t('pinBtn')}">${c.pin?'📍':'📌'}</button>
+        <button class="icon-btn" data-a="pin" title="${c.pin?'Desfijar / Unpin':'Fijar / Pin'}">${c.pin?'📍':'📌'}</button>
         <button class="icon-btn" data-a="up" title="${t('up')}">↑</button>
         <button class="icon-btn" data-a="down" title="${t('down')}">↓</button>
         <button class="icon-btn" data-a="ren" title="${t('ren')}">✎</button>
@@ -1763,7 +1765,7 @@ function renderChars(){
   n.innerHTML='<div><div class="plus">＋</div>'+t('newCard')+'</div>';n.onclick=()=>openChar();g.appendChild(n);
   S.chars.forEach(c=>{
     const d=document.createElement('div');d.className='card';
-    d.innerHTML=`<div class="card-top"><div class="cav" style="background:${safeColor(c.color)}">${safeImg(c.img)?`<img class="bgimg" src="${c.img}" alt="" aria-hidden="true">`:''}${avInner(c.img,c.emoji)}</div>
+    d.innerHTML=`<div class="card-top"><div class="cav" style="background:${safeColor(c.color)}">${avInner(c.img,c.emoji)}</div>
       <div><h3>${esc(c.name)}</h3><div class="tag">${esc(c.tagline||'')}</div></div></div>
       <div class="desc">${esc(c.desc||'')}</div>
       <div class="chips">${(c.tags||[]).map(t=>`<span class="chip">#${esc(t)}</span>`).join('')}</div>
@@ -1799,7 +1801,7 @@ function drawImg(){
 $('#cImgBtn').onclick=()=>$('#cImgFile').click();
 $('#cImgFile').onchange=async e=>{
   const f=e.target.files[0];e.target.value='';if(!f)return;
-  try{selImg=await readImg(f,640,true);drawImg()}catch(_){toast(t('imgFail'))}
+  try{selImg=await readImg(f,256);drawImg()}catch(_){toast(t('imgFail'))}
 };
 $('#cImgDel').onclick=()=>{selImg='';drawImg()};
 function drawPickers(){drawImg();
@@ -1958,22 +1960,28 @@ $$('.modal-bg').forEach(m=>m.addEventListener('mousedown',e=>{if(e.target===m)m.
 
 /* ---------- Exportar / importar ---------- */
 $('#exportBtn').onclick=()=>{
-  const d=JSON.parse(JSON.stringify(S));d.settings.key='';d.settings.skey='';d.settings.tkey='';
+  const d=JSON.parse(JSON.stringify(S));d.settings.key='';d.settings.skey='';d.settings.tkey='';API_KEYS.forEach(k=>{delete d.settings[k]}); // ninguna API sale en el archivo
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));
-  a.download='mizu-ai-respaldo.json';a.click();toast(t('exported'));
+  d.exportedAt=Date.now();a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));a.download='mizu-ai-respaldo-'+new Date().toISOString().slice(0,10)+'.json';a.click();toast(t('exported'));
 };
 $('#importBtn').onclick=()=>$('#importFile').click();
 $('#importFile').onchange=e=>{
   const f=e.target.files[0];if(!f)return;
-  f.text().then(txt=>{try{const d=JSON.parse(txt);if(!d.chats)throw 0;const k=S.settings.key;S=d;S.settings=Object.assign(defaultState().settings,d.settings||{},{key:k});S.profile=Object.assign({img:'',bg:'',hue:207,tone:'soft',sm:1,mode:'light'},d.profile||{});
-    if(!S.chars)S.chars=defaultChars();if(!S.seed8){const L0=DEF[S.lang]?S.lang:LANG;Object.keys(DEF.es).forEach(k=>{if(!S.chars.some(c=>c.bk===k))S.chars.push({id:uid(),bk:k,...fromDef(k,L0)})});S.seed8=1}if(!S.chats.length)newChat(null,true);S.activeId=S.chats[0].id;LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;applyLook();applyStatic();renderAll();toast(t('imported'))}catch(_){toast(t('invalid'))}});
+  f.text().then(txt=>{try{
+    const d=JSON.parse(txt);if(!d.chats)throw 0;
+    const ch=d.chars||[],lore=ch.reduce((n,c)=>n+((c.lore||[]).length),0)+((d.lore||[]).length||0);
+    const when=d.exportedAt||d.savedAt;
+    if(!confirm(t('impSummary',{c:d.chats.length,m:d.chats.reduce((n,c)=>n+((c.messages||[]).length),0),p:ch.length,i:ch.filter(c=>c.img).length,l:lore,d:when?new Date(when).toLocaleString(LANG):'—'})))return;
+    const k=apiOnly(S.settings);S=d;S.settings=Object.assign(defaultState().settings,d.settings||{},k);S.profile=Object.assign({img:'',bg:'',hue:207,tone:'soft',sm:1,mode:'light'},d.profile||{});
+    if(!S.chars)S.chars=defaultChars();if(!S.seed8){const L0=DEF[S.lang]?S.lang:LANG;Object.keys(DEF.es).forEach(k=>{if(!S.chars.some(c=>c.bk===k))S.chars.push({id:uid(),bk:k,...fromDef(k,L0)})});S.seed8=1}if(!S.chats.length)newChat(null,true);S.activeId=S.chats[0].id;LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;applyLook();applyStatic();renderAll();save();toast(t('impDone',{c:S.chats.length,p:S.chars.length}))
+  }catch(_){toast(t('invalid'))}});
   e.target.value='';
 };
 
 /* ---------- Cuenta de Google + guardado en Drive ---------- */
 var GLOGO='data:image/png;base64,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';
 var GD_CLIENT='1060785017392-epmfufbf64gp63ut7qvu2ihbkjsd7req.apps.googleusercontent.com',GD_SCOPE='openid email https://www.googleapis.com/auth/drive.appdata',GD_FILE='mizu-ai-data.json';
-var gdTok=null,gdId=null,gdTimer=0,gdSkip=false,gdNote='',gdArmed=false,gdReady=false;
+var gdTok=null,gdId=null,gdTimer=0,gdSkip=false,gdNote='',gdArmed=false,gdReady=false,gdDirty=false;
 const API_KEYS=['fmt','url','model','key','surl','skey','shead','sbody','turl','tkey','think','vision']; // las APIs son del dispositivo: nunca se suben ni se pisan desde Drive
 const apiOnly=o=>{const r={};API_KEYS.forEach(k=>{if(o&&o[k]!==undefined)r[k]=o[k]});return r};
 function gdFresh(){ // pantalla nueva como Character.ai: se conservan solo las APIs de este dispositivo
@@ -1993,11 +2001,12 @@ function gdArm(){ // sin servidor: reconecta en el primer toque/tecla (el navega
 }
 const gdLS=(k,v)=>{try{return v===undefined?localStorage.getItem(k):v===null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(_){}};
 function gdNoteTxt(){ // texto del estado: se genera al dibujar para seguir el idioma activo
+  if(gdDirty)return '⚠️ '+t('gdUnsaved');
   if(!gdNote)return '';
   if(gdNote.err)return '⚠️';
-  return '✓ '+t('gdSaved')+(gdNote.ts?' '+new Date(gdNote.ts).toLocaleTimeString(LANG,{hour:'2-digit',minute:'2-digit'}):'');
+  return '✓ '+t(gdNote.ts?'gdSaved':'gdLoaded')+(gdNote.ts?' '+new Date(gdNote.ts).toLocaleTimeString(LANG,{hour:'2-digit',minute:'2-digit'}):'')+' · 💬'+gdRemoteN;
 }
-function gdUI(){const e=gdLS('gdEmail')||'';const nt=gdNoteTxt();$('#gdBtn').innerHTML='<img src="'+GLOGO+'" alt="" style="width:18px;height:18px;vertical-align:-4px;margin-right:8px">'+esc(gdTok?(e+(nt?' · '+nt:'')):(gdLS('gdOn')?t('gdRe'):t('gdIn')))}
+function gdUI(){const bb=$('#gdBakBtn');if(bb)bb.style.display=gdTok?'':'none';const sb=$('#gdSaveBtn');if(sb)sb.style.display=gdTok?'':'none';const e=gdLS('gdEmail')||'';const nt=gdNoteTxt();$('#gdBtn').innerHTML='<img src="'+GLOGO+'" alt="" style="width:18px;height:18px;vertical-align:-4px;margin-right:8px">'+esc(gdTok?(e+(nt?' · '+nt:'')):(gdLS('gdOn')?t('gdRe'):t('gdIn')))}
 function gdLoad(){return window.google&&google.accounts?Promise.resolve():new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
 function gdAuth(silent){return gdLoad().then(()=>new Promise((ok,no)=>{
   google.accounts.oauth2.initTokenClient({client_id:GD_CLIENT,scope:GD_SCOPE,hint:gdLS('gdEmail')||undefined,callback:r=>{if(r.error)return no(r);gdTok=r.access_token;gdSaveTok(+r.expires_in);ok()},error_callback:no}).requestAccessToken({prompt:silent?'':'select_account'});
@@ -2008,25 +2017,38 @@ async function gdFetch(url,o={}){
   if(r.status===401){try{await gdAuth(true);r=await go()}catch(_){gdDropTok();gdUI();gdArm();throw new Error('401')}}
   if(!r.ok)throw new Error(r.status);return r;
 }
+const GD_BAK='mizu-ai-backup.json';var gdRemoteN=0;
+const msgCount=d=>((d&&d.chats)||[]).reduce((n,c)=>n+((c.messages||[]).length),0);
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(_){} // pide al navegador no borrar los datos del sitio
+async function gdFind(name){const r=await(await gdFetch('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&orderBy=modifiedTime%20desc&pageSize=10&fields=files(id)&q='+encodeURIComponent("name='"+name+"'"))).json();return (r.files&&r.files[0]&&r.files[0].id)||null}
+async function gdPutBak(obj){
+  const body=JSON.stringify(obj),id=await gdFind(GD_BAK);
+  if(id)await gdFetch('https://www.googleapis.com/upload/drive/v3/files/'+id+'?uploadType=media',{method:'PATCH',headers:{'Content-Type':'application/json'},body});
+  else{const b='mizub'+Date.now(),meta=JSON.stringify({name:GD_BAK,parents:['appDataFolder']});
+    await gdFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+b},
+      body:'--'+b+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+meta+'\r\n--'+b+'\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--'+b+'--'})}
+}
 async function gdFileId(){
   if(gdId)return gdId;
-  const r=await(await gdFetch('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&fields=files(id)&q='+encodeURIComponent("name='"+GD_FILE+"'"))).json();
+  const r=await(await gdFetch('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&orderBy=modifiedTime%20desc&pageSize=10&fields=files(id)&q='+encodeURIComponent("name='"+GD_FILE+"'"))).json();
   return gdId=(r.files&&r.files[0]&&r.files[0].id)||null;
 }
 async function gdDownload(){const id=await gdFileId();return id?(await gdFetch('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media')).json():null}
 async function gdUpload(){
   try{
     if((gdLS('gdOwner')||'').toLowerCase()!==(gdLS('gdEmail')||'').toLowerCase())return false; // datos de otra cuenta: no se suben
+    if(msgCount(S)===0&&gdRemoteN>0)return false; // protección: no se sobrescribe Drive con un chat vacío
     const d=JSON.parse(JSON.stringify(S));API_KEYS.forEach(k=>{delete d.settings[k]});d.savedAt=Date.now();
     const body=JSON.stringify(d),id=await gdFileId();
+    if(!id&&msgCount(S)===0)return false; // protección: nunca crear un archivo nuevo en Drive a partir de un chat vacío
     if(id)await gdFetch('https://www.googleapis.com/upload/drive/v3/files/'+id+'?uploadType=media',{method:'PATCH',headers:{'Content-Type':'application/json'},body});
     else{const b='mizu'+Date.now(),meta=JSON.stringify({name:GD_FILE,parents:['appDataFolder']});
       const r=await(await gdFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+b},
         body:'--'+b+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+meta+'\r\n--'+b+'\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--'+b+'--'})).json();gdId=r.id}
-    gdLS('gdAt',String(d.savedAt));gdNote={ok:1,ts:Date.now()};gdUI();return true
+    gdLS('gdAt',String(d.savedAt));gdDirty=false;gdRemoteN=msgCount(d);gdNote={ok:1,ts:Date.now()};gdUI();return true
   }catch(e){gdNote={err:1};gdUI();return false}
 }
-function gdQueue(){if(!gdTok||gdSkip||!gdReady)return;clearTimeout(gdTimer);gdTimer=setTimeout(gdUpload,3000)}
+function gdQueue(){if(!gdTok||gdSkip||!gdReady)return;if(!gdDirty){gdDirty=true;gdUI()}} // ya no sube solo: espera al botón Guardar
 function applyRemote(d){
   const k=S.settings;S=d;S.settings=Object.assign(defaultState().settings,d.settings||{},apiOnly(k));
   S.profile=Object.assign({img:'',bg:'',hue:207,tone:'soft',sm:1,mode:'light'},S.profile||{});
@@ -2035,9 +2057,11 @@ function applyRemote(d){
   LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;applyLook();applyStatic();renderAll();
 }
 async function gdSync(){
-  const r=await gdDownload(),at=+gdLS('gdAt')||0,hasLocal=S.chats.some(c=>(c.messages||[]).length);
-  if(r&&r.chats&&r.savedAt>at&&(at||!hasLocal||confirm(t('gdAsk')))){gdSkip=true;applyRemote(r);gdSkip=false;gdLS('gdAt',String(r.savedAt));gdNote={ok:1};gdUI()}
-  else await gdUpload();
+  const r=await gdDownload(),at=+gdLS('gdAt')||0,lN=msgCount(S),rN=r&&r.chats?msgCount(r):0,hasLocal=lN>0;
+  gdRemoteN=rN;
+  if(rN>0&&Date.now()-(+gdLS('gdBakAt')||0)>6*36e5){gdPutBak(r).then(()=>gdLS('gdBakAt',String(Date.now()))).catch(()=>{})} // copia de seguridad antes de tocar nada
+  if(r&&r.chats&&!(rN===0&&lN>0)&&((r.savedAt>at&&(at||!hasLocal||confirm(t('gdAsk'))))||(!hasLocal&&rN>0))){gdSkip=true;applyRemote(r);gdSkip=false;gdLS('gdAt',String(r.savedAt));gdNote={ok:1};gdUI()}
+  else{gdDirty=lN>0&&(!r||rN!==lN);gdNote={ok:1};gdUI()} // no sube solo
   gdReady=true;
   if(pendingImport){pendingImport=false;runImport()}
 }
@@ -2252,15 +2276,40 @@ const legalUrl=p=>LEGAL+p+'#'+LANG;
 document.querySelectorAll('.legalA').forEach(a=>{a.href=LEGAL+a.dataset.p;a.addEventListener('click',()=>{a.href=legalUrl(a.dataset.p)})});
 $('#aboutBtn').onclick=()=>{$('#aboutBody').innerHTML='<h3 style="margin:0 0 8px">'+esc(t('tagline'))+'</h3><p>'+esc(t('aboutTxt'))+'</p><p>'+esc(t('aboutLogo'))+' <a href="https://picrew.me/en/image_maker/3157" target="_blank" rel="noopener">ぷにぷにほっぺメーカー</a> (Picrew)</p><p><b>'+esc(t('aboutContact'))+':</b> <a href="mailto:mizuaisupport@gmail.com">mizuaisupport@gmail.com</a></p>';$('#aboutDlg').showModal()};
 $('#aboutClose').onclick=()=>$('#aboutDlg').close();
+$('#bakInfo').onclick=e=>{e.preventDefault();$('#bakBody').innerHTML='<h3 style="margin:0 0 10px;color:#2563eb">'+esc(t('bakTitle'))+'</h3>'+t('aboutBak').split('\n').map(x=>'<p>'+esc(x)+'</p>').join('')+'<p>'+esc(t('bakNoSrv'))+'</p>';$('#bakDlg').showModal()};
+$('#bakClose').onclick=()=>$('#bakDlg').close();
 $('#gdBtn').onclick=async()=>{
   if(!gdTok){gdConsent();return}
   if(!confirm(t('gdOut')))return;
   clearTimeout(gdTimer);
-  const ok=gdReady?await gdUpload():true; // último guardado antes de limpiar
+  const ok=msgCount(S)===0?true:(gdReady?await gdUpload():false); // último guardado antes de limpiar; si no hubo sincronización, avisa
   if(!ok&&!confirm(t('gdOutFail')))return;
   gdTok=null;gdReady=false;gdNote='';gdDropTok();
   ['gdOn','gdEmail','gdOwner','gdAt'].forEach(k=>gdLS(k,null));
   gdFresh();gdUI();
+};
+async function gdBestCopy(){ // respaldo + versiones anteriores del archivo en Drive: elige la que tiene más mensajes
+  const c=[],base='https://www.googleapis.com/drive/v3/files/';
+  try{const id=await gdFind(GD_BAK);if(id)c.push(await(await gdFetch(base+id+'?alt=media')).json())}catch(_){}
+  try{const fid=await gdFileId();if(fid){
+    const L=await(await gdFetch(base+fid+'/revisions?pageSize=200&fields=revisions(id,size)')).json();
+    const rs=(L.revisions||[]).sort((a,b)=>(+b.size||0)-(+a.size||0)).slice(0,5);
+    for(const r of rs){try{c.push(await(await gdFetch(base+fid+'/revisions/'+r.id+'?alt=media')).json())}catch(_){}}
+  }}catch(_){}
+  return c.filter(d=>d&&d.chats).sort((a,b)=>msgCount(b)-msgCount(a))[0]||null;
+}
+$('#gdSaveBtn').onclick=async()=>{
+  if(!gdTok||!gdReady){toast(t('gdFail'));return}
+  const ok=await gdUpload();if(!ok)toast(t('gdFail'));gdUI();
+};
+addEventListener('beforeunload',e=>{if(gdTok&&gdDirty&&msgCount(S)>0){e.preventDefault();e.returnValue=''}});
+$('#gdBakBtn').onclick=async()=>{
+  try{
+    const d=await gdBestCopy();
+    if(!d||msgCount(d)===0){toast(t('gdBakNone'));return}
+    if(!confirm(t('gdBakAsk',{n:msgCount(d),d:new Date(d.savedAt||Date.now()).toLocaleString(LANG)})))return;
+    gdSkip=true;applyRemote(d);save();gdSkip=false;gdRemoteN=0;await gdUpload();
+  }catch(e){gdSkip=false;toast(t('gdFail'))}
 };
 function gdConsent(){ // casilla SIEMPRE visible y sin marcar en cada inicio de sesión con Google (clickwrap)
   if(typeof $('#termsDlg').showModal!=='function'){ // navegadores sin <dialog>
@@ -2490,7 +2539,7 @@ async function importCards(files){
     try{
       let raw,img='';
       if(/\.json$/i.test(f.name)||f.type==='application/json')raw=JSON.parse(await f.text());
-      else{const m=pngMeta(await f.arrayBuffer());if(!m)throw new Error('card');raw=JSON.parse(b64utf8(m));img=await readImg(f,640,true).catch(()=>'')}
+      else{const m=pngMeta(await f.arrayBuffer());if(!m)throw new Error('card');raw=JSON.parse(b64utf8(m));img=await readImg(f,320).catch(()=>'')}
       if(raw&&raw.chats)throw new Error('backup');
       if(raw&&raw.entries&&!raw.name&&!raw.data){toast(t('cardLore'),4000);continue}
       const c=cardToChar(raw);if(img)c.img=img;
@@ -2516,7 +2565,7 @@ const crc32=u=>{let c=0xffffffff;for(let i=0;i<u.length;i++)c=CRC[(c^u[i])&255]^
 async function exportPNG(c){
   const cv=document.createElement('canvas'),x=cv.getContext('2d');cv.width=cv.height=512;
   x.fillStyle=safeColor(c.color);x.fillRect(0,0,512,512);
-  if(safeImg(c.img)){const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=c.img});{const k=Math.min(512/im.width,512/im.height),w=im.width*k,h=im.height*k;x.drawImage(im,(512-w)/2,(512-h)/2,w,h)}}
+  if(safeImg(c.img)){const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=c.img});x.drawImage(im,0,0,512,512)}
   else{x.font='300px system-ui,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(c.emoji||'🙂',256,280)}
   const png=new Uint8Array(await(await new Promise(r=>cv.toBlob(r,'image/png'))).arrayBuffer());
   const u8=new TextEncoder().encode(JSON.stringify(cardOf(c)));let bin='';for(let i=0;i<u8.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));
@@ -2652,7 +2701,7 @@ Object.assign(T.fr,{voiceNone:'Aucune voix pour cette langue sur votre appareil.
 $('#moreBtn').onclick=e=>{e.stopPropagation();const m=$('#moreMenu');
   if(m.style.display==='block'){m.style.display='none';return}
   const _c=cur(),_ch=_c&&!_c.group&&_c.charId&&getChar(_c.charId);
-  m.innerHTML=[['＋',t('newTip'),'tbNew'],...(_ch?[['🕘',t('histBtn'),'tbHist']]:[]),['📝',t('memBtn'),'memBtn'],['☑',t('selBtn'),'selBtn'],['A−','','fsDown'],['A+','','fsUp'],['🎭',t('optBtn'),'optBtn'],['📖',t('expTxt'),'expTxt'],['📄',t('expMd'),'expMd'],['🧹',t('clearT'),'clearChat']].map(x=>`<button type="button" data-t="${x[2]}">${x[0]} ${esc(x[1])}</button>`).join('');
+  m.innerHTML=[...(_ch?[['🕘',t('histBtn'),'tbHist']]:[]),['📝',t('memBtn'),'memBtn'],['☑',t('selBtn'),'selBtn'],['A−','','fsDown'],['A+','','fsUp'],['🎭',t('optBtn'),'optBtn'],['📖',t('expTxt'),'expTxt'],['📄',t('expMd'),'expMd'],['🧹',t('clearT'),'clearChat']].map(x=>`<button type="button" data-t="${x[2]}">${x[0]} ${esc(x[1])}</button>`).join('');
   m.style.display='block'};
 $('#moreMenu').onclick=e=>{const b=e.target.closest('[data-t]');if(!b)return;if(!/^fs/.test(b.dataset.t))$('#moreMenu').style.display='none';$('#'+b.dataset.t).click()};
 document.addEventListener('click',e=>{if(!e.target.closest('#moreMenu'))$('#moreMenu').style.display='none'});
