@@ -384,6 +384,10 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
     <input class="field" id="cScene" data-i18n-ph="phScene"></div>
   <div class="f"><label><span data-i18n="fEx"></span> <small data-i18n="fOpt"></small></label>
     <textarea class="field" id="cExample" rows="3" data-i18n-ph="phEx"></textarea></div>
+  <div class="f"><label><span data-i18n="fSysp"></span> <small data-i18n="fSyspS"></small></label>
+    <textarea class="field" id="cSysp" rows="3" data-i18n-ph="phSysp"></textarea></div>
+  <div class="f"><label><span data-i18n="fPhi"></span> <small data-i18n="fPhiS"></small></label>
+    <textarea class="field" id="cPhi" rows="3" data-i18n-ph="phPhi"></textarea></div>
   <div class="f"><label><span data-i18n="fTags"></span> <small data-i18n="fTagsS"></small></label>
     <input class="field" id="cTags" data-i18n-ph="phTags"></div>
   <div class="f"><label data-i18n="voiceT"></label>
@@ -439,11 +443,20 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
       <option value="gemini">Google Gemini</option>
     </select>
     <small data-i18n="fmtHint" style="display:block;color:var(--muted);margin-top:4px"></small></div>
+  <div class="f"><label data-i18n="presetT"></label>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button type="button" class="btn ghost small" data-preset="http://localhost:11434/v1">Ollama (local)</button>
+      <button type="button" class="btn ghost small" data-preset="http://localhost:1234/v1">LM Studio (local)</button>
+      <button type="button" class="btn ghost small" data-preset="http://localhost:5001/v1">KoboldCpp (local)</button>
+    </div></div>
   <div class="f"><label data-i18n="sUrl"></label><input class="field" id="sUrl" placeholder="https://api.deepseek.com"></div>
+  <div id="localNote" hidden style="border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:-2px 0 10px;font-size:13px;line-height:1.45;color:var(--muted)"></div>
   <div class="two">
-    <div class="f"><label data-i18n="sModel"></label><input class="field" id="sModel" placeholder="deepseek-flash"></div>
+    <div class="f"><label data-i18n="sModel"></label><input class="field" id="sModel" placeholder="deepseek-flash">
+      <button type="button" class="btn ghost small" id="detectModels" data-i18n="detectBtn" style="width:100%;margin-top:6px"></button></div>
     <div class="f"><label><span data-i18n="sTemp"></span> <small id="tVal"></small></label><input type="range" id="sTemp" min="0" max="1.5" step="0.1" style="width:100%"></div>
   </div>
+  <div class="f" id="modelListWrap" hidden><label data-i18n="pickModel"></label><select class="field" id="modelList"></select></div>
   <div class="two">
     <div class="f"><label data-i18n="sMaxChar"></label><select class="field" id="sMaxChar"><option value="200">200</option><option value="300">300</option><option value="400">400</option><option value="500">500</option><option value="800">800</option><option value="1000">1000</option><option value="0" data-i18n="noLimit"></option></select></div>
     <div class="f"><label data-i18n="sMaxGen"></label><select class="field" id="sMaxGen"><option value="200">200</option><option value="300">300</option><option value="400">400</option><option value="500">500</option><option value="800">800</option><option value="1000">1000</option><option value="0" data-i18n="noLimit"></option></select></div>
@@ -452,6 +465,16 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
   </div>
   <small data-i18n="maxHint" style="display:block;color:var(--muted);margin:-4px 0 8px"></small>
   <div class="f"><label data-i18n="sMemOn"></label><select class="field" id="sMemOn"><option value="1" data-i18n="memOptOn"></option><option value="0" data-i18n="memOptOff"></option></select></div>
+  <div class="sec">🎛️ <span data-i18n="sSecSamp"></span></div><small data-i18n="sSampH" style="display:block;color:var(--muted);margin-bottom:6px"></small>
+  <div class="two">
+    <div class="f"><label data-i18n="sTopP"></label><input class="field" id="sTopP" type="number" min="0" max="1" step="0.05" inputmode="decimal" placeholder="1"></div>
+    <div class="f"><label data-i18n="sMinP"></label><input class="field" id="sMinP" type="number" min="0" max="1" step="0.01" inputmode="decimal" placeholder="0"></div>
+  </div>
+  <div class="two">
+    <div class="f"><label data-i18n="sTopK"></label><input class="field" id="sTopK" type="number" min="0" max="1000" step="1" inputmode="numeric" placeholder="0"></div>
+    <div class="f"><label data-i18n="sRep"></label><input class="field" id="sRep" type="number" min="0.5" max="2" step="0.05" inputmode="decimal" placeholder="1"></div>
+  </div>
+  <small data-i18n="sampHint" style="display:block;color:var(--muted);margin:-2px 0 8px"></small>
   <div class="f"><label data-i18n="sKey"></label><input class="field" id="sKey" type="password" placeholder="sk-…"></div>
   <small data-i18n="keyNote" style="display:block;color:var(--muted);margin:-4px 0 8px"></small>
   <small data-i18n="spendNote" style="display:block;color:var(--muted);margin:0 0 8px"></small>
@@ -478,6 +501,8 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
     </div></div>
   <div class="f"><label><span data-i18n="sSys"></span> <small data-i18n="sSysS"></small></label>
     <textarea class="field" id="sSys" rows="3"></textarea></div>
+  <div class="f"><label><span data-i18n="sPost"></span> <small data-i18n="sPostS"></small></label>
+    <textarea class="field" id="sPost" rows="3" data-i18n-ph="phPost"></textarea></div>
   <div class="modal-foot">
     <button class="btn ghost" data-close data-i18n="close"></button>
     <button class="btn primary" id="saveSet" data-i18n="save"></button>
@@ -490,6 +515,12 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
   <p style="margin-top:-6px;color:var(--muted);font-size:13.5px" data-i18n="memHint"></p>
   <textarea class="field" id="memText" rows="10"></textarea>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn ghost small" id="memNow" type="button" data-i18n="memNow"></button><button class="btn ghost small" id="memClear" type="button" data-i18n="memClear"></button></div>
+  <div class="sec" style="margin-top:14px" data-i18n="anTitle"></div>
+  <p style="margin:2px 0 8px;color:var(--muted);font-size:13.5px" data-i18n="anHint"></p>
+  <textarea class="field" id="anText" rows="3" data-i18n-ph="anPh"></textarea>
+  <div class="f" style="margin-top:8px"><label data-i18n="anDepth"></label>
+    <select class="field" id="anDepth"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="6">6</option><option value="8">8</option></select>
+    <small data-i18n="anDepthH" style="display:block;color:var(--muted);margin-top:4px"></small></div>
   <div class="modal-foot"><button class="btn ghost" data-close data-i18n="close"></button><button class="btn primary" id="memSave" data-i18n="save"></button></div>
 </div></div>
 
@@ -900,6 +931,18 @@ Object.assign(T.en,{sMemOn:'Auto-summary of old messages (long-term memory)',mem
 if(T.pt)Object.assign(T.pt,{sMemOn:'Resumo automático de mensagens antigas (memória de longo prazo)',memOptOn:'Ativado',memOptOff:'Desativado',memBtn:'Memória do chat',memTitle:'📝 Memória do chat',memHint:'Resumo do que já saiu da janela de mensagens. É enviado à IA junto com as mensagens recentes. Você pode corrigi-lo manualmente.',memNow:'Resumir agora',memClear:'Apagar memória',memWork:'Resumindo…',memFail:'Não foi possível resumir',memNone:'Ainda não há mensagens antigas para resumir.'});
 if(T.ru)Object.assign(T.ru,{sMemOn:'Автосводка старых сообщений (долгая память)',memOptOn:'Включено',memOptOff:'Выключено',memBtn:'Память чата',memTitle:'📝 Память чата',memHint:'Сводка того, что уже вышло за окно сообщений. Отправляется ИИ вместе с недавними сообщениями. Вы можете править её вручную.',memNow:'Свести сейчас',memClear:'Очистить память',memWork:'Составляю сводку…',memFail:'Не удалось составить сводку',memNone:'Пока нет старых сообщений для сводки.'});
 if(T.fr)Object.assign(T.fr,{sMemOn:'Résumé automatique des anciens messages (mémoire à long terme)',memOptOn:'Activé',memOptOff:'Désactivé',memBtn:'Mémoire du chat',memTitle:'📝 Mémoire du chat',memHint:'Résumé de ce qui est déjà sorti de la fenêtre de messages. Il est envoyé à l’IA avec les messages récents. Vous pouvez le corriger à la main.',memNow:'Résumer maintenant',memClear:'Effacer la mémoire',memWork:'Résumé en cours…',memFail:'Impossible de résumer',memNone:'Aucun ancien message à résumer pour l’instant.'});
+/* --- Nuevas funciones: prompt del personaje, muestreo, nota del autor --- */
+Object.assign(T.es,{"fSysp": "Prompt del sistema del personaje", "fSyspS": "(opcional — instrucciones base que siempre sigue)", "phSysp": "Ej.: Escribe en tercera persona, estilo novela, y nunca hables por el usuario.", "fPhi": "Instrucciones finales (post-history / jailbreak)", "fPhiS": "(opcional — se añaden al final del prompt)", "phPhi": "Ej.: Mantén siempre el personaje y no resumas la escena.", "sSecSamp": "Muestreo avanzado", "sSampH": "Déjalos vacíos para usar los valores por defecto del modelo. Solo se envían los que rellenes.", "sTopP": "Top-P (0–1)", "sMinP": "Min-P (0–1)", "sTopK": "Top-K (entero)", "sRep": "Penalización por repetición (1–2)", "sampHint": "Cada proveedor admite solo algunos: OpenAI-compatibles (OpenRouter, Ollama…) aceptan casi todos; Anthropic solo Top-P y Top-K (con Top-P se omite la temperatura); Gemini solo Top-P y Top-K. Si tu API da error, borra ese valor.", "sPost": "Instrucciones finales globales (jailbreak)", "sPostS": "(se añaden al final del prompt en TODOS los chats)", "phPost": "Ej.: Sigue el rol sin censurar ni salirte del personaje.", "anTitle": "📝 Nota del autor", "anHint": "Una instrucción corta que se inserta cerca del final del historial en cada respuesta (tono, ritmo, hacia dónde va la historia…). Solo para este chat.", "anPh": "Ej.: Escribe de forma lenta y descriptiva; no avances la trama sin que el usuario lo pida.", "anDepth": "Profundidad de la nota", "anDepthH": "Cuántos mensajes antes del final se inserta (0 = dentro del prompt del sistema). Un número menor influye más."});
+Object.assign(T.en,{"fSysp": "Character system prompt", "fSyspS": "(optional — base instructions it always follows)", "phSysp": "E.g.: Write in third person, novel style, and never speak for the user.", "fPhi": "Final instructions (post-history / jailbreak)", "fPhiS": "(optional — added at the end of the prompt)", "phPhi": "E.g.: Always stay in character and never summarize the scene.", "sSecSamp": "Advanced sampling", "sSampH": "Leave them empty to use the model defaults. Only the ones you fill in are sent.", "sTopP": "Top-P (0–1)", "sMinP": "Min-P (0–1)", "sTopK": "Top-K (integer)", "sRep": "Repetition penalty (1–2)", "sampHint": "Each provider supports only some of them: OpenAI-compatible APIs (OpenRouter, Ollama…) accept almost all; Anthropic only Top-P and Top-K (when Top-P is set, temperature is omitted); Gemini only Top-P and Top-K. If your API returns an error, clear that value.", "sPost": "Global final instructions (jailbreak)", "sPostS": "(added at the end of the prompt in ALL chats)", "phPost": "E.g.: Follow the roleplay without censoring or breaking character.", "anTitle": "📝 Author's Note", "anHint": "A short instruction inserted near the end of the history on every reply (tone, pacing, where the story is heading…). For this chat only.", "anPh": "E.g.: Write slowly and descriptively; do not advance the plot unless the user asks.", "anDepth": "Note depth", "anDepthH": "How many messages from the end it is inserted (0 = inside the system prompt). A lower number has more influence."});
+Object.assign(T.pt,{"fSysp": "Prompt de sistema do personagem", "fSyspS": "(opcional — instruções base que ele sempre segue)", "phSysp": "Ex.: Escreva em terceira pessoa, estilo romance, e nunca fale pelo usuário.", "fPhi": "Instruções finais (post-history / jailbreak)", "fPhiS": "(opcional — adicionadas ao final do prompt)", "phPhi": "Ex.: Mantenha sempre o personagem e não resuma a cena.", "sSecSamp": "Amostragem avançada", "sSampH": "Deixe vazio para usar os valores padrão do modelo. Só os campos preenchidos são enviados.", "sTopP": "Top-P (0–1)", "sMinP": "Min-P (0–1)", "sTopK": "Top-K (inteiro)", "sRep": "Penalidade de repetição (1–2)", "sampHint": "Cada provedor aceita apenas alguns: APIs compatíveis com OpenAI (OpenRouter, Ollama…) aceitam quase todos; Anthropic só Top-P e Top-K (com Top-P a temperatura é omitida); Gemini só Top-P e Top-K. Se a sua API der erro, apague esse valor.", "sPost": "Instruções finais globais (jailbreak)", "sPostS": "(adicionadas ao final do prompt em TODOS os chats)", "phPost": "Ex.: Siga o roleplay sem censurar nem sair do personagem.", "anTitle": "📝 Nota do autor", "anHint": "Uma instrução curta inserida perto do fim do histórico a cada resposta (tom, ritmo, para onde a história vai…). Somente para este chat.", "anPh": "Ex.: Escreva de forma lenta e descritiva; não avance a trama sem o usuário pedir.", "anDepth": "Profundidade da nota", "anDepthH": "Quantas mensagens antes do fim ela é inserida (0 = dentro do prompt de sistema). Um número menor influencia mais."});
+Object.assign(T.ru,{"fSysp": "Системный промпт персонажа", "fSyspS": "(необязательно — базовые инструкции, которым он всегда следует)", "phSysp": "Напр.: Пиши от третьего лица, в стиле романа, и никогда не говори за пользователя.", "fPhi": "Финальные инструкции (post-history / джейлбрейк)", "fPhiS": "(необязательно — добавляются в конец промпта)", "phPhi": "Напр.: Всегда оставайся в образе и не пересказывай сцену кратко.", "sSecSamp": "Расширенная выборка", "sSampH": "Оставьте пустыми, чтобы использовать значения модели по умолчанию. Отправляются только заполненные поля.", "sTopP": "Top-P (0–1)", "sMinP": "Min-P (0–1)", "sTopK": "Top-K (целое число)", "sRep": "Штраф за повторения (1–2)", "sampHint": "Каждый провайдер поддерживает лишь часть параметров: OpenAI-совместимые API (OpenRouter, Ollama…) принимают почти все; Anthropic — только Top-P и Top-K (при заданном Top-P температура не отправляется); Gemini — только Top-P и Top-K. Если API возвращает ошибку, очистите это значение.", "sPost": "Глобальные финальные инструкции (джейлбрейк)", "sPostS": "(добавляются в конец промпта во ВСЕХ чатах)", "phPost": "Напр.: Следуй ролевой игре, не цензурируй и не выходи из образа.", "anTitle": "📝 Заметка автора", "anHint": "Короткая инструкция, которая вставляется ближе к концу истории при каждом ответе (тон, темп, куда движется сюжет…). Только для этого чата.", "anPh": "Напр.: Пиши неспешно и подробно; не продвигай сюжет, пока пользователь не попросит.", "anDepth": "Глубина заметки", "anDepthH": "За сколько сообщений до конца она вставляется (0 = внутри системного промпта). Чем меньше число, тем сильнее влияние."});
+Object.assign(T.fr,{"fSysp": "Prompt système du personnage", "fSyspS": "(facultatif — instructions de base qu'il suit toujours)", "phSysp": "Ex. : Écris à la troisième personne, style roman, et ne parle jamais à la place de l'utilisateur.", "fPhi": "Instructions finales (post-history / jailbreak)", "fPhiS": "(facultatif — ajoutées à la fin du prompt)", "phPhi": "Ex. : Reste toujours dans le personnage et ne résume pas la scène.", "sSecSamp": "Échantillonnage avancé", "sSampH": "Laissez vide pour utiliser les valeurs par défaut du modèle. Seuls les champs remplis sont envoyés.", "sTopP": "Top-P (0–1)", "sMinP": "Min-P (0–1)", "sTopK": "Top-K (entier)", "sRep": "Pénalité de répétition (1–2)", "sampHint": "Chaque fournisseur n'en accepte qu'une partie : les API compatibles OpenAI (OpenRouter, Ollama…) en acceptent presque tous ; Anthropic seulement Top-P et Top-K (avec Top-P, la température est omise) ; Gemini seulement Top-P et Top-K. Si votre API renvoie une erreur, effacez cette valeur.", "sPost": "Instructions finales globales (jailbreak)", "sPostS": "(ajoutées à la fin du prompt dans TOUS les chats)", "phPost": "Ex. : Suis le jeu de rôle sans censurer ni sortir du personnage.", "anTitle": "📝 Note de l'auteur", "anHint": "Une courte instruction insérée près de la fin de l'historique à chaque réponse (ton, rythme, direction de l'histoire…). Uniquement pour ce chat.", "anPh": "Ex. : Écris lentement et de façon descriptive ; ne fais pas avancer l'intrigue sans que l'utilisateur le demande.", "anDepth": "Profondeur de la note", "anDepthH": "Combien de messages avant la fin elle est insérée (0 = dans le prompt système). Un nombre plus petit influence davantage."});
+/* --- IA local: atajos, detectar modelos, aviso --- */
+Object.assign(T.es,{"presetT": "Atajos para IA local", "detectBtn": "🔍 Detectar modelos", "detectBusy": "Buscando…", "pickModel": "Modelos disponibles (toca para elegir)", "pickPh": "— elige un modelo —", "detectOk": "Se encontraron {n} modelos", "detectNone": "La conexión funciona, pero no devolvió ningún modelo. Descarga uno en tu programa local o escríbelo a mano.", "detectNeedUrl": "Escribe primero la URL base.", "detect401": "La API rechazó la clave (error {c}). Revisa tu API key.", "detectHttp": "El servidor respondió con error {c}. Revisa que la URL base sea correcta (normalmente termina en /v1).", "detectNet": "No se pudo conectar. Revisa que el programa esté abierto y que la URL sea correcta. Si es local, activa CORS (ver nota) o descarga el index.html.", "localNote": "💻 Modelo local: activa CORS en tu programa (en LM Studio, \"Enable CORS\" en la pestaña Local Server; en Ollama, inicia con OLLAMA_ORIGINS=\"*\"; KoboldCpp ya lo trae activo).", "localHttps": "Si abres Mizu.AI desde la versión https:// del navegador y no conecta, descarga el archivo index.html y ábrelo directo en tu PC: así el navegador no bloquea la conexión."});
+Object.assign(T.en,{"presetT": "Local AI shortcuts", "detectBtn": "🔍 Detect models", "detectBusy": "Searching…", "pickModel": "Available models (tap to choose)", "pickPh": "— choose a model —", "detectOk": "Found {n} models", "detectNone": "The connection works, but it returned no models. Download one in your local app or type it by hand.", "detectNeedUrl": "Enter the base URL first.", "detect401": "The API rejected the key (error {c}). Check your API key.", "detectHttp": "The server answered with error {c}. Check that the base URL is correct (usually ends in /v1).", "detectNet": "Could not connect. Make sure the program is running and the URL is correct. If it is local, enable CORS (see note) or download index.html.", "localNote": "💻 Local model: enable CORS in your program (in LM Studio, \"Enable CORS\" in the Local Server tab; in Ollama, start it with OLLAMA_ORIGINS=\"*\"; KoboldCpp already has it on).", "localHttps": "If you open Mizu.AI from the https:// version in your browser and it won't connect, download the index.html file and open it directly on your PC so the browser doesn't block the connection."});
+Object.assign(T.pt,{"presetT": "Atalhos para IA local", "detectBtn": "🔍 Detectar modelos", "detectBusy": "Procurando…", "pickModel": "Modelos disponíveis (toque para escolher)", "pickPh": "— escolha um modelo —", "detectOk": "Foram encontrados {n} modelos", "detectNone": "A conexão funciona, mas não retornou nenhum modelo. Baixe um no seu programa local ou digite à mão.", "detectNeedUrl": "Digite primeiro a URL base.", "detect401": "A API rejeitou a chave (erro {c}). Confira sua API key.", "detectHttp": "O servidor respondeu com erro {c}. Confira se a URL base está correta (normalmente termina em /v1).", "detectNet": "Não foi possível conectar. Veja se o programa está aberto e se a URL está correta. Se for local, ative o CORS (veja a nota) ou baixe o index.html.", "localNote": "💻 Modelo local: ative o CORS no seu programa (no LM Studio, \"Enable CORS\" na aba Local Server; no Ollama, inicie com OLLAMA_ORIGINS=\"*\"; o KoboldCpp já vem com ele ativo).", "localHttps": "Se você abrir o Mizu.AI pela versão https:// no navegador e não conectar, baixe o arquivo index.html e abra direto no seu PC para o navegador não bloquear a conexão."});
+Object.assign(T.ru,{"presetT": "Быстрый выбор локальной ИИ", "detectBtn": "🔍 Найти модели", "detectBusy": "Поиск…", "pickModel": "Доступные модели (нажмите, чтобы выбрать)", "pickPh": "— выберите модель —", "detectOk": "Найдено моделей: {n}", "detectNone": "Соединение работает, но моделей нет. Скачайте модель в локальной программе или впишите название вручную.", "detectNeedUrl": "Сначала введите базовый URL.", "detect401": "API отклонил ключ (ошибка {c}). Проверьте API-ключ.", "detectHttp": "Сервер ответил ошибкой {c}. Проверьте базовый URL (обычно он заканчивается на /v1).", "detectNet": "Не удалось подключиться. Убедитесь, что программа запущена и URL верный. Для локального сервера включите CORS (см. примечание) или скачайте index.html.", "localNote": "💻 Локальная модель: включите CORS в программе (в LM Studio — «Enable CORS» на вкладке Local Server; в Ollama — запуск с OLLAMA_ORIGINS=\"*\"; в KoboldCpp он уже включён).", "localHttps": "Если вы открываете Mizu.AI по https:// в браузере и подключения нет, скачайте файл index.html и откройте его прямо на компьютере — так браузер не заблокирует соединение."});
+Object.assign(T.fr,{"presetT": "Raccourcis IA locale", "detectBtn": "🔍 Détecter les modèles", "detectBusy": "Recherche…", "pickModel": "Modèles disponibles (touchez pour choisir)", "pickPh": "— choisissez un modèle —", "detectOk": "{n} modèles trouvés", "detectNone": "La connexion fonctionne, mais aucun modèle n'a été renvoyé. Téléchargez-en un dans votre programme local ou saisissez-le à la main.", "detectNeedUrl": "Saisissez d'abord l'URL de base.", "detect401": "L'API a refusé la clé (erreur {c}). Vérifiez votre clé API.", "detectHttp": "Le serveur a répondu avec l'erreur {c}. Vérifiez l'URL de base (elle se termine en général par /v1).", "detectNet": "Connexion impossible. Vérifiez que le programme est lancé et que l'URL est correcte. En local, activez CORS (voir la note) ou téléchargez index.html.", "localNote": "💻 Modèle local : activez CORS dans votre programme (dans LM Studio, « Enable CORS » dans l'onglet Local Server ; dans Ollama, lancez-le avec OLLAMA_ORIGINS=\"*\" ; KoboldCpp l'a déjà activé).", "localHttps": "Si vous ouvrez Mizu.AI via la version https:// du navigateur et que la connexion échoue, téléchargez le fichier index.html et ouvrez-le directement sur votre PC pour que le navigateur ne bloque pas la connexion."});
 function t(k,o){let v=(T[LANG]&&T[LANG][k])??T.en[k]??k;if(o)for(const x in o)v=v.split('{'+x+'}').join(o[x]);return v}
 const sameChar=(c,d)=>d&&c.name===d.name&&c.tagline===d.tagline&&c.desc===d.desc&&c.greet===d.greet&&c.scene===d.scene&&(c.tags||[]).join()===d.tags.join();
 const fromDef=(k,l)=>({...DEF[l][k],tags:[...DEF[l][k].tags]});
@@ -1103,19 +1146,19 @@ function mergeTurns(h){ // alterna roles, empieza y termina con usuario (lo pide
   if(out[out.length-1].role!=='user')out.push({role:'user',text:'(…)',imgs:[]});
   return out;
 }
-function buildNative(fmt,base,key,model,sys,hist,temp,cap){
+function buildNative(fmt,base,key,model,sys,hist,temp,cap,smp){smp=smp||{};
   base=base.replace(/\/+$/,'');const turns=mergeTurns(hist);
   if(fmt==='anthropic'){
     base=base.replace(/\/v1$/,'');
     return{url:base+'/v1/messages',
       headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:{model,max_tokens:cap||4096,temperature:Math.min(1,Math.max(0,temp)),stream:true,system:sys,
+      body:{model,max_tokens:cap||4096,...(smp.top_p!=null?{}:{temperature:Math.min(1,Math.max(0,temp))}),...smp,stream:true,system:sys,
         messages:turns.map(m=>({role:m.role,content:[...m.imgs.map(u=>{const p=dataParts(u);return p&&{type:'image',source:{type:'base64',media_type:p.mt,data:p.d}}}).filter(Boolean),{type:'text',text:m.text||'.'}]}))}};
   }
   base=base.replace(/\/v1(beta)?(\/openai)?$/,'');
   return{url:base+'/v1beta/models/'+encodeURIComponent(model.replace(/^models\//,''))+':streamGenerateContent?alt=sse',
     headers:{'Content-Type':'application/json','x-goog-api-key':key},
-    body:{systemInstruction:{parts:[{text:sys}]},generationConfig:{temperature:temp},
+    body:{systemInstruction:{parts:[{text:sys}]},generationConfig:{temperature:temp,...smp},
       contents:turns.map(m=>({role:m.role==='user'?'user':'model',parts:[...m.imgs.map(u=>{const p=dataParts(u);return p&&{inlineData:{mimeType:p.mt,data:p.d}}}).filter(Boolean),{text:m.text||'.'}]}))}};
 }
 function feedChunk(fmt,j,ai){
@@ -1134,6 +1177,22 @@ function feedChunk(fmt,j,ai){
     const dl=(j.choices&&j.choices[0]&&j.choices[0].delta)||{};
     ai.content+=dl.content||'';ai.think+=dl.reasoning_content||dl.reasoning||'';
   }
+}
+/* ---------- Muestreo avanzado y Nota del autor ---------- */
+const numOr=(v,a,b)=>{v=parseFloat(String(v==null?'':v).replace(',','.'));return isFinite(v)&&v>=a&&v<=b?v:undefined};
+function sampling(fmt){ // solo envía lo que el usuario rellenó
+  const st=S.settings,o={},tp=numOr(st.topP,0.01,1),tk=numOr(st.topK,1,1000),mp=numOr(st.minP,0.01,1),rp=numOr(st.rep,0.5,2);
+  if(fmt==='openai'){if(tp!=null)o.top_p=tp;if(tk!=null)o.top_k=Math.round(tk);if(mp!=null)o.min_p=mp;if(rp!=null&&rp!==1)o.repetition_penalty=rp}
+  else if(fmt==='anthropic'){if(tp!=null)o.top_p=tp;if(tk!=null)o.top_k=Math.round(tk)}
+  else{if(tp!=null)o.topP=tp;if(tk!=null)o.topK=Math.round(tk)}
+  return o;
+}
+const postFor=()=>{const p=(S.settings.post||'').trim();return p?'\n\n'+p:''};
+function injectNote(history,hist,depth,tag){ // mete la nota "depth" mensajes antes del final
+  const i=Math.max(0,history.length-depth),h=history[i];if(!h)return;
+  if(typeof h.content==='string')h.content+=tag;
+  else if(Array.isArray(h.content)){const p=h.content.find(x=>x.type==='text');if(p)p.text+=tag}
+  if(hist[i])hist[i].text=(hist[i].text||'')+tag;
 }
 async function ask(chat,reuse,spk){
   if(busy)return;
@@ -1174,7 +1233,9 @@ async function ask(chat,reuse,spk){
       let model=st.model,apiUrl=st.url,apiKey=st.key,fmt=st.fmt||'openai';
       if(hasImg&&st.vision)model=st.vision;
       else if(useThink){if(st.turl)fmt='openai';apiUrl=st.turl||st.url;apiKey=st.tkey||st.key;model=st.think||(/deepseek/i.test(apiUrl)?'deepseek-flash':st.model)}
-      let sys=systemPrompt(chat,ai.cid)+loreFor(chat)+memFor(chat);
+      let sys=systemPrompt(chat,ai.cid)+loreFor(chat)+memFor(chat)+postFor();
+      const anT=(chat.an||'').trim(),anD=+(chat.anDepth==null?3:chat.anDepth),anTag="\n\n[Author's Note: "+anT+"]";
+      if(anT){if(anD<=0||!history.length)sys+=anTag;else injectNote(history,hist,anD,anTag)}
       const capN=+((chat.charId||chat.group)?(st.maxChar??'500'):(st.maxGen??'0')),cap=useThink?0:(capN||0);
       if(cap)sys+='\n\nLength rule: keep every reply under about '+Math.round(cap*0.55)+' words and always finish your last sentence.';
       if(useSearch){
@@ -1194,8 +1255,8 @@ async function ask(chat,reuse,spk){
       }
       let rq;
       if(fmt==='openai')rq={url:apiUrl.replace(/\/$/,'')+'/chat/completions',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
-        body:{model,temperature:+st.temp,stream:true,...(cap?{max_tokens:cap}:{}),messages:[{role:'system',content:sys},...history]}};
-      else rq=buildNative(fmt,apiUrl,apiKey,model,sys,hist,+st.temp,cap);
+        body:{model,temperature:+st.temp,stream:true,...(cap?{max_tokens:cap}:{}),...(useThink?{}:sampling('openai')),messages:[{role:'system',content:sys},...history]}};
+      else rq=buildNative(fmt,apiUrl,apiKey,model,sys,hist,+st.temp,cap,useThink?{}:sampling(fmt));
       const r=await fetch(rq.url,{method:'POST',signal:abortCtl.signal,headers:rq.headers,body:JSON.stringify(rq.body)});
       if(!r.ok)throw new Error('Error '+r.status+': '+(await r.text()).slice(0,300));
       const rd=r.body.getReader(),dec=new TextDecoder();let buf='';
@@ -1353,7 +1414,7 @@ function openChar(id){
   $('#charModalTitle').textContent=t(c?'mEdit':'mCreate');
   $('#cName').value=c?c.name:'';$('#cTag').value=c?c.tagline:'';$('#cDesc').value=c?c.desc:'';
   $('#cGreet').value=c?c.greet:'';$('#cScene').value=c?c.scene:'';$('#cExample').value=c?c.example:'';
-  $('#cTags').value=c?(c.tags||[]).join(', '):'';
+  $('#cTags').value=c?(c.tags||[]).join(', '):'';$('#cSysp').value=c?(c.sysp||''):'';$('#cPhi').value=c?(c.phi||''):'';
   selEmoji=c?c.emoji:EMOJIS[0];selColor=c?safeColor(c.color):COLORS[0];selImg=c?safeImg(c.img):'';drawPickers();voiceUI(c);
   $('#charModal').classList.add('on');$('#cName').focus();
 }
@@ -1379,7 +1440,7 @@ $('#saveChar').onclick=()=>{
   if(!$('#cDesc').value.trim()){toast(t('descReq'));$('#cDesc').focus();return}
   const data={name,tagline:$('#cTag').value.trim(),emoji:selEmoji,color:selColor,img:selImg,desc:$('#cDesc').value.trim(),
     greet:$('#cGreet').value.trim(),scene:$('#cScene').value.trim(),example:$('#cExample').value.trim(),
-    tags:$('#cTags').value.split(',').map(t=>t.trim()).filter(Boolean),voiceMap:{...((editingCharId&&getChar(editingCharId).voiceMap)||{}),[LANG]:$('#cVoice').value},voicePitch:+$('#cPitch').value,voiceRate:+$('#cRate').value,voiceG:$('#cGender').value};
+    sysp:$('#cSysp').value.trim(),phi:$('#cPhi').value.trim(),tags:$('#cTags').value.split(',').map(t=>t.trim()).filter(Boolean),voiceMap:{...((editingCharId&&getChar(editingCharId).voiceMap)||{}),[LANG]:$('#cVoice').value},voicePitch:+$('#cPitch').value,voiceRate:+$('#cRate').value,voiceG:$('#cGender').value};
   if(editingCharId)Object.assign(getChar(editingCharId),data);else S.chars.unshift({id:uid(),...data});
   $('#charModal').classList.remove('on');renderAll();toast(t('charSaved'));
 };
@@ -1435,15 +1496,63 @@ $('#saveProf').onclick=()=>{
 };
 $('#openSettings').onclick=()=>{
   drawProf();const s=S.settings;$('#sFmt').value=s.fmt||'openai';$('#sUrl').value=s.url;$('#sModel').value=s.model;$('#sKey').value=s.key;$('#sSUrl').value=s.surl||'';$('#sSKey').value=s.skey||'';$('#sSHead').value=s.shead||'';$('#sSBody').value=s.sbody||'';$('#sTUrl').value=s.turl||'';$('#sTKey').value=s.tkey||'';$('#sThink').value=s.think||'';$('#sVision').value=s.vision||'';
-  $('#sTemp').value=s.temp;$('#sMaxChar').value=s.maxChar??'500';$('#sMaxGen').value=s.maxGen??'0';$('#sCtx').value=s.ctxMax??'20';$('#sCtxChar').value=s.ctxChar??'30';$('#sMemOn').value=s.memOn??'1';$('#tVal').textContent=s.temp;$('#sSys').value=s.sys;gvUI();$('#setModal').classList.add('on');
+  $('#sTemp').value=s.temp;$('#sMaxChar').value=s.maxChar??'500';$('#sMaxGen').value=s.maxGen??'0';$('#sCtx').value=s.ctxMax??'20';$('#sCtxChar').value=s.ctxChar??'30';$('#sMemOn').value=s.memOn??'1';$('#tVal').textContent=s.temp;$('#sSys').value=s.sys;$('#sPost').value=s.post||'';$('#sTopP').value=s.topP??'';$('#sMinP').value=s.minP??'';$('#sTopK').value=s.topK??'';$('#sRep').value=s.rep??'';gvUI();localNote();resetModelList();$('#setModal').classList.add('on');
 };
 $('#sFmt').onchange=e=>{
   const f=e.target.value,u=$('#sUrl'),v=u.value.trim();
   if(f==='anthropic'&&!/anthropic\.com/i.test(v))u.value='https://api.anthropic.com';
   else if(f==='gemini'&&!/googleapis\.com/i.test(v))u.value='https://generativelanguage.googleapis.com';
   else if(f==='openai'&&/api\.anthropic\.com/i.test(v))u.value='https://api.deepseek.com';
+  localNote();resetModelList();
 };
 $('#sTemp').oninput=e=>$('#tVal').textContent=e.target.value;
+/* ---------- IA local: atajos, detectar modelos, aviso ---------- */
+const isLocalUrl=u=>/^\s*https?:\/\/(localhost|127\.\d+\.\d+\.\d+|0\.0\.0\.0|\[::1\])(?=[:\/]|\s*$)/i.test(u||'');
+function localNote(){
+  const u=$('#sUrl').value.trim(),n=$('#localNote');
+  if(!isLocalUrl(u)){n.hidden=true;return}
+  n.textContent=t('localNote')+((location.protocol==='https:'&&/^http:/i.test(u))?' '+t('localHttps'):'');
+  n.hidden=false;
+}
+function resetModelList(){$('#modelListWrap').hidden=true;$('#modelList').innerHTML=''}
+$('#sUrl').addEventListener('input',localNote);
+$$('[data-preset]').forEach(b=>b.onclick=()=>{
+  $('#sFmt').value='openai';$('#sUrl').value=b.dataset.preset;
+  if(!$('#sKey').value.trim())$('#sKey').value='local';
+  localNote();resetModelList();
+});
+function modelsReq(fmt,base,key){
+  base=(base||'').trim().replace(/\/+$/,'');
+  if(fmt==='anthropic'){base=base.replace(/\/v1$/,'');
+    return{url:base+'/v1/models?limit=100',headers:{'x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'}}}
+  if(fmt==='gemini'){base=base.replace(/\/v1(beta)?(\/openai)?$/,'');
+    return{url:base+'/v1beta/models?pageSize=200',headers:{'x-goog-api-key':key}}}
+  return{url:base+'/models',headers:key?{'Authorization':'Bearer '+key}:{}};
+}
+function modelIds(j){
+  let a=Array.isArray(j)?j:(j&&(j.data||j.models))||[];if(!Array.isArray(a))return [];
+  return [...new Set(a.filter(m=>!m||!Array.isArray(m.supportedGenerationMethods)||m.supportedGenerationMethods.includes('generateContent'))
+    .map(m=>typeof m==='string'?m:(m&&(m.id||m.name||m.model))).filter(Boolean).map(x=>String(x).replace(/^models\//,'')))].sort((x,y)=>x.localeCompare(y));
+}
+$('#detectModels').onclick=async()=>{
+  const b=$('#detectModels'),lbl=t('detectBtn'),base=$('#sUrl').value.trim();
+  if(!base){toast(t('detectNeedUrl'));$('#sUrl').focus();return}
+  const rq=modelsReq($('#sFmt').value,base,$('#sKey').value.trim());
+  b.disabled=true;b.textContent=t('detectBusy');
+  const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),12000);
+  try{
+    const r=await fetch(rq.url,{headers:rq.headers,signal:ctl.signal});
+    if(!r.ok){toast(t(r.status===401||r.status===403?'detect401':'detectHttp',{c:r.status}),6000);return}
+    const ids=modelIds(await r.json());
+    if(!ids.length){resetModelList();toast(t('detectNone'),6000);return}
+    const cur=$('#sModel').value.trim();
+    $('#modelList').innerHTML='<option value="">'+esc(t('pickPh'))+'</option>'+ids.map(i=>`<option value="${esc(i)}"${i===cur?' selected':''}>${esc(i)}</option>`).join('');
+    $('#modelListWrap').hidden=false;toast(t('detectOk',{n:ids.length}));
+  }catch(e){toast(t('detectNet'),7000)}
+  finally{clearTimeout(to);b.disabled=false;b.textContent=lbl}
+};
+$('#modelList').onchange=e=>{if(e.target.value)$('#sModel').value=e.target.value};
+
 $('#clearKeys').onclick=()=>{
   if(!confirm(t('clearKeysAsk')))return;
   Object.assign(S.settings,{key:'',skey:'',tkey:''});
@@ -1451,8 +1560,8 @@ $('#clearKeys').onclick=()=>{
   save();renderAll();toast(t('clearKeysDone'));
 };
 $('#saveSet').onclick=()=>{
-  Object.assign(S.settings,{fmt:$('#sFmt').value,maxChar:$('#sMaxChar').value,maxGen:$('#sMaxGen').value,memOn:$('#sMemOn').value,ctxMax:$('#sCtx').value,ctxChar:$('#sCtxChar').value,url:$('#sUrl').value.trim(),model:$('#sModel').value.trim(),key:$('#sKey').value.trim(),surl:$('#sSUrl').value.trim(),skey:$('#sSKey').value.trim(),shead:$('#sSHead').value.trim(),sbody:$('#sSBody').value.trim(),turl:$('#sTUrl').value.trim(),tkey:$('#sTKey').value.trim(),think:$('#sThink').value.trim(),vision:$('#sVision').value.trim(),temp:+$('#sTemp').value,sys:$('#sSys').value});
-  S.settings.gvoice=gvGet();$('#setModal').classList.remove('on');renderAll();toast(t('setSaved'));
+  Object.assign(S.settings,{fmt:$('#sFmt').value,maxChar:$('#sMaxChar').value,maxGen:$('#sMaxGen').value,memOn:$('#sMemOn').value,ctxMax:$('#sCtx').value,ctxChar:$('#sCtxChar').value,url:$('#sUrl').value.trim(),model:$('#sModel').value.trim(),key:$('#sKey').value.trim(),surl:$('#sSUrl').value.trim(),skey:$('#sSKey').value.trim(),shead:$('#sSHead').value.trim(),sbody:$('#sSBody').value.trim(),turl:$('#sTUrl').value.trim(),tkey:$('#sTKey').value.trim(),think:$('#sThink').value.trim(),vision:$('#sVision').value.trim(),temp:+$('#sTemp').value,sys:$('#sSys').value,post:$('#sPost').value,topP:$('#sTopP').value.trim(),minP:$('#sMinP').value.trim(),topK:$('#sTopK').value.trim(),rep:$('#sRep').value.trim()});
+  if(!S.settings.key&&isLocalUrl(S.settings.url))S.settings.key='local';S.settings.gvoice=gvGet();$('#setModal').classList.remove('on');renderAll();toast(t('setSaved'));
 };
 $$('[data-close]').forEach(b=>b.onclick=()=>b.closest('.modal-bg').classList.remove('on'));
 $$('.modal-bg').forEach(m=>m.addEventListener('mousedown',e=>{if(e.target===m)m.classList.remove('on')}));
@@ -1582,8 +1691,8 @@ async function maybeSummarize(chat,force){ // resume lo que ya salió de la vent
     chat.mem=txt;chat.memId=fresh[fresh.length-1].id;save();return 'ok';
   }catch(e){return 'fail'}finally{memBusy=false}
 }
-$('#memBtn').onclick=()=>{$('#memText').value=cur().mem||'';$('#memModal').classList.add('on')};
-$('#memSave').onclick=()=>{const c=cur();c.mem=$('#memText').value.trim();if(!c.mem)delete c.memId;save();$('#memModal').classList.remove('on')};
+$('#memBtn').onclick=()=>{const c=cur();$('#memText').value=c.mem||'';$('#anText').value=c.an||'';$('#anDepth').value=String(c.anDepth==null?3:c.anDepth);$('#memModal').classList.add('on')};
+$('#memSave').onclick=()=>{const c=cur();c.mem=$('#memText').value.trim();if(!c.mem)delete c.memId;c.an=$('#anText').value.trim();c.anDepth=+$('#anDepth').value;save();$('#memModal').classList.remove('on')};
 $('#memClear').onclick=()=>{$('#memText').value=''};
 $('#memNow').onclick=async()=>{
   const c=cur(),b=$('#memNow'),lbl=b.textContent;c.mem=$('#memText').value.trim();if(!c.mem)delete c.memId;
