@@ -1341,7 +1341,7 @@ function buildNative(fmt,base,key,model,sys,hist,temp,cap,smp){smp=smp||{};
   base=base.replace(/\/v1(beta)?(\/openai)?$/,'');
   return{url:base+'/v1beta/models/'+encodeURIComponent(model.replace(/^models\//,''))+':streamGenerateContent?alt=sse',
     headers:{'Content-Type':'application/json','x-goog-api-key':key},
-    body:{systemInstruction:{parts:[{text:sys}]},generationConfig:{temperature:temp,...smp,...(useThink?{thinkingConfig:{includeThoughts:true}}:{})},
+    body:{systemInstruction:{parts:[{text:sys}]},generationConfig:{temperature:temp,...smp,...(useThink?{thinkingConfig:{includeThoughts:true,thinkingBudget:-1}}:{})},
       contents:turns.map(m=>({role:m.role==='user'?'user':'model',parts:[...m.imgs.map(u=>{const p=dataParts(u);return p&&{inlineData:{mimeType:p.mt,data:p.d}}}).filter(Boolean),{text:m.text||'.'}]}))}};
 }
 function feedChunk(fmt,j,ai){
@@ -1426,7 +1426,7 @@ async function ask(chat,reuse,spk,cont){
         history.push({role:'assistant',content:base},{role:'user',content:ci});hist.push({role:'assistant',text:base,imgs:[]},{role:'user',text:ci,imgs:[]})}
       let model=st.model,apiUrl=st.url,apiKey=st.key,fmt=st.fmt||'openai';
       if(hasImg&&st.vision)model=st.vision;
-      else if(useThink){if(st.turl)fmt='openai';apiUrl=st.turl||st.url;apiKey=st.tkey||st.key;model=st.think||(/deepseek/i.test(apiUrl)?'deepseek-flash':st.model)}
+      else if(useThink){if(st.turl)fmt=/googleapis\.com/i.test(st.turl)?'gemini':/anthropic\.com/i.test(st.turl)?'anthropic':'openai';apiUrl=st.turl||st.url;apiKey=st.tkey||st.key;model=st.think||(/deepseek/i.test(apiUrl)?'deepseek-flash':st.model)}
       let sys=systemPrompt(chat,ai.cid)+loreFor(chat,ai.cid)+memFor(chat)+postFor()+styleFor(chat);
       const anT=(chat.an||'').trim(),anD=+(chat.anDepth==null?3:chat.anDepth),anTag="\n\n[Author's Note: "+anT+"]";
       if(anT){if(anD<=0||!history.length)sys+=anTag;else injectNote(history,hist,anD,anTag)}
@@ -1483,6 +1483,7 @@ async function ask(chat,reuse,spk,cont){
     else{ai.stopped=true}
   }
   if(ai.think&&ai._t0&&ai.thinkMs==null)ai.thinkMs=Date.now()-ai._t0;delete ai._t0;delete ai._in;delete ai._hold;
+  if(useThink&&!cont&&ai.content&&!ai.think&&!ai.error)toast(t('noThink'),5000);
   sync();delete ai.pending;abortCtl=null;setBusy(false);chat.updated=Date.now();
   if(chat.messages.length<=3&&isDefaultTitle(chat.title)&&!chat.charId&&!chat.group){
     const f=chat.messages.find(m=>m.role==='user');if(f)chat.title=f.content.slice(0,36);
@@ -2605,6 +2606,11 @@ Object.assign(T.en,{thoughtFor:'Thought for {n} seconds',thinkingNow:'Thinking�
 Object.assign(T.pt,{thoughtFor:'Pensou por {n} segundos',thinkingNow:'Pensando…'});
 Object.assign(T.ru,{thoughtFor:'Думал {n} сек.',thinkingNow:'Думаю…'});
 Object.assign(T.fr,{thoughtFor:'Réflexion de {n} secondes',thinkingNow:'Réflexion…'});
+Object.assign(T.es,{noThink:'🧠 Este modelo no devolvió pensamiento. Prueba con otro modelo (ej. gemini-2.5-flash).'});
+Object.assign(T.en,{noThink:'🧠 This model returned no thinking. Try another model (e.g. gemini-2.5-flash).'});
+Object.assign(T.pt,{noThink:'🧠 Este modelo não devolveu pensamento. Tente outro modelo (ex. gemini-2.5-flash).'});
+Object.assign(T.ru,{noThink:'🧠 Эта модель не вернула рассуждение. Попробуйте другую (напр. gemini-2.5-flash).'});
+Object.assign(T.fr,{noThink:'🧠 Ce modèle n’a pas renvoyé de réflexion. Essayez un autre modèle (ex. gemini-2.5-flash).'});
 applyLook();
 applyStatic();
 renderAll();
