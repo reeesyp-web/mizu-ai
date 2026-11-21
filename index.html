@@ -176,7 +176,8 @@ textarea.field{resize:vertical;min-height:70px}
 
 /* Imágenes / avatares */
 .av,.cav{overflow:hidden}
-.av img,.cav img,.img-prev img,.mini img{width:100%;height:100%;object-fit:cover;display:block}
+.bgimg{display:none}
+.av img,.cav img,.img-prev img,.mini img{width:100%;height:100%;object-fit:cover;object-position:50% 0%;display:block}
 .img-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .img-prev{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-size:30px;overflow:hidden;background:var(--blue-100);flex-shrink:0}
 .mini{display:inline-grid;width:20px;height:20px;border-radius:7px;overflow:hidden;place-items:center;vertical-align:middle;font-size:14px}
@@ -283,7 +284,7 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 .pinTag{float:right;font-size:12px;margin:0 0 2px 8px;opacity:.85}
 /* ---- Historial por personaje (estilo Character.AI) ---- */
 .ci-av{width:30px;height:30px;border-radius:50%;overflow:hidden;display:grid;place-items:center;flex:none;background:var(--blue-100);font-size:16px}
-.ci-av img{width:100%;height:100%;object-fit:cover}
+.ci-av img{width:100%;height:100%;object-fit:cover;object-position:50% 0%}
 .tb-ico{flex:none;padding:6px 9px;font-size:15px;line-height:1;white-space:nowrap}
 .lbl-s{display:none}
 @media(max-width:520px){.lbl-l{display:none}.lbl-s{display:inline}}
@@ -312,7 +313,9 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 #charGrid .card{padding:0;gap:0;border-radius:18px;overflow:hidden;cursor:pointer}
 #charGrid .card:hover{transform:none}
 #charGrid .card-top{flex-direction:column;align-items:stretch;gap:0}
-#charGrid .cav{width:100%;height:auto;aspect-ratio:4/3;border-radius:0;font-size:56px}
+#charGrid .cav{width:100%;height:auto;aspect-ratio:4/5;border-radius:0;font-size:56px;position:relative;overflow:hidden}
+#charGrid .cav .bgimg{display:block;position:absolute;left:-12px;top:-12px;width:calc(100% + 24px);height:calc(100% + 24px);object-fit:cover;filter:blur(16px) brightness(.88)}
+#charGrid .cav img:not(.bgimg){position:relative;width:100%;height:100%;object-fit:contain}
 #charGrid .card-top>div:last-child{padding:10px 12px 0;min-width:0}
 #charGrid .card h3{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #charGrid .card .tag{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12px}
@@ -735,7 +738,7 @@ function readImg(file,size,keep){return new Promise((res,rej)=>{
     }
     const side=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=size;
     const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,size,size);
-    x.drawImage(im,(im.width-side)/2,(im.height-side)/2,side,side,0,0,size,size);
+    x.drawImage(im,(im.width-side)/2,0,side,side,0,0,size,size); // si es vertical, conserva la parte de ARRIBA (la cara)
     res(c.toDataURL('image/jpeg',.85));
   };im.src=r.result};
   r.readAsDataURL(file);
@@ -1760,7 +1763,7 @@ function renderChars(){
   n.innerHTML='<div><div class="plus">＋</div>'+t('newCard')+'</div>';n.onclick=()=>openChar();g.appendChild(n);
   S.chars.forEach(c=>{
     const d=document.createElement('div');d.className='card';
-    d.innerHTML=`<div class="card-top"><div class="cav" style="background:${safeColor(c.color)}">${avInner(c.img,c.emoji)}</div>
+    d.innerHTML=`<div class="card-top"><div class="cav" style="background:${safeColor(c.color)}">${safeImg(c.img)?`<img class="bgimg" src="${c.img}" alt="" aria-hidden="true">`:''}${avInner(c.img,c.emoji)}</div>
       <div><h3>${esc(c.name)}</h3><div class="tag">${esc(c.tagline||'')}</div></div></div>
       <div class="desc">${esc(c.desc||'')}</div>
       <div class="chips">${(c.tags||[]).map(t=>`<span class="chip">#${esc(t)}</span>`).join('')}</div>
@@ -1796,7 +1799,7 @@ function drawImg(){
 $('#cImgBtn').onclick=()=>$('#cImgFile').click();
 $('#cImgFile').onchange=async e=>{
   const f=e.target.files[0];e.target.value='';if(!f)return;
-  try{selImg=await readImg(f,256);drawImg()}catch(_){toast(t('imgFail'))}
+  try{selImg=await readImg(f,640,true);drawImg()}catch(_){toast(t('imgFail'))}
 };
 $('#cImgDel').onclick=()=>{selImg='';drawImg()};
 function drawPickers(){drawImg();
@@ -2487,7 +2490,7 @@ async function importCards(files){
     try{
       let raw,img='';
       if(/\.json$/i.test(f.name)||f.type==='application/json')raw=JSON.parse(await f.text());
-      else{const m=pngMeta(await f.arrayBuffer());if(!m)throw new Error('card');raw=JSON.parse(b64utf8(m));img=await readImg(f,320).catch(()=>'')}
+      else{const m=pngMeta(await f.arrayBuffer());if(!m)throw new Error('card');raw=JSON.parse(b64utf8(m));img=await readImg(f,640,true).catch(()=>'')}
       if(raw&&raw.chats)throw new Error('backup');
       if(raw&&raw.entries&&!raw.name&&!raw.data){toast(t('cardLore'),4000);continue}
       const c=cardToChar(raw);if(img)c.img=img;
@@ -2513,7 +2516,7 @@ const crc32=u=>{let c=0xffffffff;for(let i=0;i<u.length;i++)c=CRC[(c^u[i])&255]^
 async function exportPNG(c){
   const cv=document.createElement('canvas'),x=cv.getContext('2d');cv.width=cv.height=512;
   x.fillStyle=safeColor(c.color);x.fillRect(0,0,512,512);
-  if(safeImg(c.img)){const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=c.img});x.drawImage(im,0,0,512,512)}
+  if(safeImg(c.img)){const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=c.img});{const k=Math.min(512/im.width,512/im.height),w=im.width*k,h=im.height*k;x.drawImage(im,(512-w)/2,(512-h)/2,w,h)}}
   else{x.font='300px system-ui,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(c.emoji||'🙂',256,280)}
   const png=new Uint8Array(await(await new Promise(r=>cv.toBlob(r,'image/png'))).arrayBuffer());
   const u8=new TextEncoder().encode(JSON.stringify(cardOf(c)));let bin='';for(let i=0;i<u8.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));
