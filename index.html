@@ -297,6 +297,47 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 #charGrid .card-foot .btn{flex:1 1 0!important;padding:6px 0;font-size:14px;min-width:0}
 #charGrid .new-card{display:none}
 }
+.lore-bg{background:rgba(42,58,75,.55)}
+.modal.lore{display:flex;flex-direction:column;padding:0;overflow:hidden;width:min(680px,100%);height:min(88vh,820px);max-height:88vh;background:var(--white);box-shadow:0 20px 60px rgba(42,58,75,.35)}
+.lore-head{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px 12px;border-bottom:1px solid var(--line);background:var(--white)}
+.lore-head h2{margin:0;font-size:18px;min-width:0}
+.lore-bar{flex:none;display:flex;flex-direction:column;gap:8px;padding:10px 16px 12px;background:var(--white);border-bottom:1px solid var(--line)}
+.lore-row{display:flex;gap:10px;align-items:flex-end}
+.lore-count{flex:none;font-size:12.5px;font-weight:700;color:var(--blue-700);background:var(--blue-100);padding:9px 11px;border-radius:10px;white-space:nowrap}
+.lore-bar .field{font-size:16px}
+.lore-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:12px 16px 32px;background:var(--white)}
+.lore-hint{margin:0 0 12px;color:var(--muted);font-size:13px;line-height:1.45}
+.lore-foot{flex:none;display:grid;grid-template-columns:repeat(4,auto);justify-content:end;gap:8px;padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--white)}
+.lore-foot .btn{white-space:nowrap;padding:9px 12px;font-size:13.5px}
+.le{border:1px solid var(--line);border-radius:14px;margin:0 0 8px;background:var(--white);overflow:hidden}
+.le.open{border-color:var(--blue-300);box-shadow:0 2px 10px rgba(74,144,201,.12)}
+.le.off .le-title{opacity:.5}
+.le-head{display:flex;align-items:center;gap:8px;padding:7px 8px 7px 12px;min-height:50px;cursor:pointer}
+.le-title{flex:1;min-width:0;font-size:14px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.le-title.dim{font-weight:400;font-style:italic;color:var(--muted)}
+.sw{position:relative;flex:none;width:42px;height:26px;display:inline-block}
+.sw input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:1}
+.sw span{position:absolute;inset:0;border-radius:99px;background:var(--line);border:1px solid var(--blue-300);transition:.15s}
+.sw span::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:.15s}
+.sw input:checked+span{background:var(--blue-600);border-color:var(--blue-600)}
+.sw input:checked+span::after{transform:translateX(16px)}
+.le-ic{flex:none;width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--white);font-size:15px;display:grid;place-items:center;padding:0;color:var(--ink)}
+.le-ic.pin{opacity:.45;filter:grayscale(1)}
+.le-ic.pin.on{opacity:1;filter:none;background:var(--yellow-100);border-color:var(--yellow-300)}
+.le-chev{display:inline-block;font-size:13px;transition:.15s}
+.le.open .le-chev{transform:rotate(180deg)}
+.le-form{display:flex;flex-direction:column;gap:6px;padding:10px 12px 12px;border-top:1px solid var(--line)}
+.le-form label{font-size:12.5px;font-weight:600}
+.le-form .field{font-size:16px}
+.le-form textarea.field{min-height:200px;line-height:1.5}
+.le-note{font-size:12px;color:var(--muted);line-height:1.4}
+.le-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:4px}
+@media(max-width:600px){
+.lore-bg{padding:0;align-items:stretch}
+.modal.lore{width:100%;height:100vh;height:100dvh;max-height:100vh;max-height:100dvh;border-radius:0;box-shadow:none}
+.lore-foot{grid-template-columns:1fr 1fr;justify-content:stretch}
+.lore-foot .btn{padding:11px 8px}
+}
 </style>
 </head>
 <body>
@@ -581,16 +622,20 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 </div></div>
 
 <!-- Modal lorebook -->
-<div class="modal-bg" id="loreModal"><div class="modal">
-  <h2 data-i18n="loreTitle"></h2>
-  <p style="margin-top:-6px;color:var(--muted);font-size:13.5px" data-i18n="loreHint"></p>
-  <div class="f"><label data-i18n="loreScope"></label><select class="field" id="loreScope"></select></div>
-  <div id="loreList"></div>
-  <button class="btn ghost small" id="loreAdd" type="button" data-i18n="loreAdd"></button>
-  <button class="btn ghost small" id="loreImp" type="button" data-i18n="loreImp"></button>
-  <button class="btn ghost small" id="loreExp" type="button" data-i18n="loreExp"></button>
+<div class="modal-bg lore-bg" id="loreModal"><div class="modal lore">
+  <div class="lore-head"><h2 data-i18n="loreTitle"></h2><button type="button" class="btn ghost small" data-close data-i18n-title="close" aria-label="Close">✕</button></div>
+  <div class="lore-bar">
+    <div class="lore-row"><div class="f" style="flex:1;min-width:0;margin:0"><label data-i18n="loreScope"></label><select class="field" id="loreScope"></select></div><span class="lore-count" id="loreCount"></span></div>
+    <input class="field" id="loreSearch" type="search" data-i18n-ph="loreSearchPh" autocomplete="off" enterkeyhint="search">
+  </div>
+  <div class="lore-body"><p class="lore-hint" data-i18n="loreHint"></p><div id="loreList"></div></div>
+  <div class="lore-foot">
+    <button class="btn primary small" id="loreAdd" type="button" data-i18n="loreAdd"></button>
+    <button class="btn ghost small" id="loreImp" type="button" data-i18n="loreImp"></button>
+    <button class="btn ghost small" id="loreExp" type="button" data-i18n="loreExp"></button>
+    <button class="btn ghost small" type="button" data-close data-i18n="close"></button>
+  </div>
   <input type="file" id="loreFile" accept=".json,application/json" hidden>
-  <div class="modal-foot"><button class="btn ghost" data-close data-i18n="close"></button></div>
 </div></div>
 
 <div class="modal-bg" id="grpModal"><div class="modal">
@@ -1029,6 +1074,11 @@ if(T.en)Object.assign(T.en,{"persLbl": "Persona (identity)", "persNew": "＋ New
 if(T.pt)Object.assign(T.pt,{"persLbl": "Persona (identidade)", "persNew": "＋ Nova", "persDel": "Excluir", "persUnnamed": "Sem nome", "persDefault": "Padrão (perfil)", "optBtn": "Persona e estilo", "optTitle": "🎭 Persona e estilo deste chat", "persChat": "Persona neste chat", "styleLbl": "Estilo de narração", "st_bal": "Equilibrado", "st_fast": "Chat rápido", "st_novel": "Romance / Slow-burn", "st_intense": "Intenso / Ação", "pinBtn": "Fixar", "unpinBtn": "Desafixar", "pinTip": "Mensagem fixada: sempre enviada à IA", "branchBtn": "Ramificar", "branched": "Novo chat criado a partir dessa mensagem", "expTxt": "Exportar história (.txt)", "expMd": "Exportar história (.md)", "expEmpty": "Não há mensagens para exportar", "persDelConfirm": "Excluir esta persona?", "persMin": "Deve restar pelo menos uma persona"});
 if(T.ru)Object.assign(T.ru,{"persLbl": "Персона (личность)", "persNew": "＋ Новая", "persDel": "Удалить", "persUnnamed": "Без имени", "persDefault": "По умолчанию (профиль)", "optBtn": "Персона и стиль", "optTitle": "🎭 Персона и стиль этого чата", "persChat": "Персона в этом чате", "styleLbl": "Стиль повествования", "st_bal": "Сбалансированный", "st_fast": "Быстрый чат", "st_novel": "Роман / Слоу-бёрн", "st_intense": "Напряжённый / Экшен", "pinBtn": "Закрепить", "unpinBtn": "Открепить", "pinTip": "Закреплённое сообщение всегда отправляется ИИ", "branchBtn": "Ветвить", "branched": "Новый чат создан из этого сообщения", "expTxt": "Экспорт истории (.txt)", "expMd": "Экспорт истории (.md)", "expEmpty": "Нет сообщений для экспорта", "persDelConfirm": "Удалить эту персону?", "persMin": "Должна остаться хотя бы одна персона"});
 if(T.fr)Object.assign(T.fr,{"persLbl": "Persona (identité)", "persNew": "＋ Nouvelle", "persDel": "Supprimer", "persUnnamed": "Sans nom", "persDefault": "Par défaut (profil)", "optBtn": "Persona et style", "optTitle": "🎭 Persona et style de ce chat", "persChat": "Persona dans ce chat", "styleLbl": "Style de narration", "st_bal": "Équilibré", "st_fast": "Chat rapide", "st_novel": "Roman / Slow-burn", "st_intense": "Intense / Action", "pinBtn": "Épingler", "unpinBtn": "Désépingler", "pinTip": "Message épinglé : toujours envoyé à l’IA", "branchBtn": "Ramifier", "branched": "Nouveau chat créé depuis ce message", "expTxt": "Exporter l’histoire (.txt)", "expMd": "Exporter l’histoire (.md)", "expEmpty": "Aucun message à exporter", "persDelConfirm": "Supprimer cette persona ?", "persMin": "Il doit rester au moins une persona"});
+if(T.es)Object.assign(T.es,{"loreW1": "entrada", "loreW2": "entradas", "loreW5": "entradas", "loreOf": " de ", "loreSearchPh": "Buscar por palabra clave o contenido…", "loreNoKeys": "(sin palabras clave)", "loreNoMatch": "Sin resultados", "loreEditT": "Expandir / editar", "loreDelConfirm": "¿Eliminar esta entrada?", "loreDel": "Eliminar", "loreVars": "Puedes usar {{char}} y {{user}}: se reemplazan por el nombre del personaje y del usuario al enviarse a la IA."});
+if(T.en)Object.assign(T.en,{"loreW1": "entry", "loreW2": "entries", "loreW5": "entries", "loreOf": " of ", "loreSearchPh": "Search by keyword or content…", "loreNoKeys": "(no keywords)", "loreNoMatch": "No results", "loreEditT": "Expand / edit", "loreDelConfirm": "Delete this entry?", "loreDel": "Delete", "loreVars": "You can use {{char}} and {{user}}: they are replaced with the character’s and the user’s names when sent to the AI."});
+if(T.pt)Object.assign(T.pt,{"loreW1": "entrada", "loreW2": "entradas", "loreW5": "entradas", "loreOf": " de ", "loreSearchPh": "Buscar por palavra-chave ou conteúdo…", "loreNoKeys": "(sem palavras-chave)", "loreNoMatch": "Sem resultados", "loreEditT": "Expandir / editar", "loreDelConfirm": "Excluir esta entrada?", "loreDel": "Excluir", "loreVars": "Você pode usar {{char}} e {{user}}: são substituídos pelo nome do personagem e do usuário ao enviar à IA."});
+if(T.ru)Object.assign(T.ru,{"loreW1": "запись", "loreW2": "записи", "loreW5": "записей", "loreOf": " из ", "loreSearchPh": "Поиск по ключевому слову или тексту…", "loreNoKeys": "(нет ключевых слов)", "loreNoMatch": "Ничего не найдено", "loreEditT": "Развернуть / изменить", "loreDelConfirm": "Удалить эту запись?", "loreDel": "Удалить", "loreVars": "Можно использовать {{char}} и {{user}}: они заменяются именем персонажа и пользователя при отправке ИИ."});
+if(T.fr)Object.assign(T.fr,{"loreW1": "entrée", "loreW2": "entrées", "loreW5": "entrées", "loreOf": " sur ", "loreSearchPh": "Rechercher par mot-clé ou contenu…", "loreNoKeys": "(aucun mot-clé)", "loreNoMatch": "Aucun résultat", "loreEditT": "Déplier / modifier", "loreDelConfirm": "Supprimer cette entrée ?", "loreDel": "Supprimer", "loreVars": "Vous pouvez utiliser {{char}} et {{user}} : ils sont remplacés par le nom du personnage et de l’utilisateur à l’envoi à l’IA."});
 function t(k,o){let v=(T[LANG]&&T[LANG][k])??T.en[k]??k;if(o)for(const x in o)v=v.split('{'+x+'}').join(o[x]);return v}
 const sameChar=(c,d)=>d&&c.name===d.name&&c.tagline===d.tagline&&c.desc===d.desc&&c.greet===d.greet&&c.scene===d.scene&&(c.tags||[]).join()===d.tags.join();
 const fromDef=(k,l)=>({...DEF[l][k],tags:[...DEF[l][k].tags]});
@@ -1339,7 +1389,7 @@ async function ask(chat,reuse,spk,cont){
       let model=st.model,apiUrl=st.url,apiKey=st.key,fmt=st.fmt||'openai';
       if(hasImg&&st.vision)model=st.vision;
       else if(useThink){if(st.turl)fmt='openai';apiUrl=st.turl||st.url;apiKey=st.tkey||st.key;model=st.think||(/deepseek/i.test(apiUrl)?'deepseek-flash':st.model)}
-      let sys=systemPrompt(chat,ai.cid)+loreFor(chat)+memFor(chat)+postFor()+styleFor(chat);
+      let sys=systemPrompt(chat,ai.cid)+loreFor(chat,ai.cid)+memFor(chat)+postFor()+styleFor(chat);
       const anT=(chat.an||'').trim(),anD=+(chat.anDepth==null?3:chat.anDepth),anTag="\n\n[Author's Note: "+anT+"]";
       if(anT){if(anD<=0||!history.length)sys+=anTag;else injectNote(history,hist,anD,anTag)}
       const capN=+((chat.charId||chat.group)?(st.maxChar??'500'):(st.maxGen??'0')),cap=useThink?0:(capN||0);
@@ -1705,7 +1755,7 @@ $('#importBtn').onclick=()=>$('#importFile').click();
 $('#importFile').onchange=e=>{
   const f=e.target.files[0];if(!f)return;
   f.text().then(txt=>{try{const d=JSON.parse(txt);if(!d.chats)throw 0;const k=S.settings.key;S=d;S.settings=Object.assign(defaultState().settings,d.settings||{},{key:k});S.profile=Object.assign({img:'',bg:'',hue:207,tone:'soft',sm:1,mode:'light'},d.profile||{});
-    if(!S.chars)S.chars=defaultChars();if(!S.chats.length)newChat(null,true);S.activeId=S.chats[0].id;LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;applyLook();applyStatic();renderAll();toast(t('imported'))}catch(_){toast(t('invalid'))}});
+    if(!S.chars)S.chars=defaultChars();if(!S.seed8){const L0=DEF[S.lang]?S.lang:LANG;Object.keys(DEF.es).forEach(k=>{if(!S.chars.some(c=>c.bk===k))S.chars.push({id:uid(),bk:k,...fromDef(k,L0)})});S.seed8=1}if(!S.chats.length)newChat(null,true);S.activeId=S.chats[0].id;LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;applyLook();applyStatic();renderAll();toast(t('imported'))}catch(_){toast(t('invalid'))}});
   e.target.value='';
 };
 
@@ -1837,26 +1887,46 @@ $('#memNow').onclick=async()=>{
 };
 /* ---------- Lorebook ---------- */
 function loreArr(){const sc=$('#loreScope').value;if(sc==='_g'){S.lore=S.lore||[];return S.lore}const c=getChar(sc);c.lore=c.lore||[];return c.lore}
-function renderLore(){
-  const arr=loreArr();
-  $('#loreList').innerHTML=arr.length?arr.map((e,i)=>`<div style="border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0">
+let loreQ='',loreTm=0;const loreOpen=new Set();
+function loreWord(n){let k='loreW5';if(LANG==='ru'){const a=n%10,b=n%100;k=(a===1&&b!==11)?'loreW1':(a>=2&&a<=4&&(b<10||b>=20))?'loreW2':'loreW5'}else if(LANG==='fr')k=n<2?'loreW1':'loreW5';else k=n===1?'loreW1':'loreW5';return t(k)}
+function loreSum(e){const k=(e.keys||'').trim();if(k)return{t:k,dim:false};const c=(e.content||'').replace(/\s+/g,' ').trim();return c?{t:c.slice(0,90)+(c.length>90?'…':''),dim:true}:{t:t('loreNoKeys'),dim:true}}
+function loreEntry(e,i){
+  const open=loreOpen.has(e.id),sm=loreSum(e);
+  return `<div class="le${open?' open':''}${e.off?' off':''}" data-i="${i}">
+  <div class="le-head" data-lt="${i}">
+    <div class="le-title${sm.dim?' dim':''}">${esc(sm.t)}</div>
+    <label class="sw" title="${esc(t('loreOn'))}"><input type="checkbox" data-lf="on" data-i="${i}" aria-label="${esc(t('loreOn'))}" ${e.off?'':'checked'}><span></span></label>
+    <button type="button" class="le-ic pin${e.always?' on':''}" data-lpin="${i}" title="${esc(t('loreAlways'))}" aria-label="${esc(t('loreAlways'))}">📌</button>
+    <button type="button" class="le-ic" data-lt="${i}" title="${esc(t('loreEditT'))}" aria-label="${esc(t('loreEditT'))}"><span class="le-chev">▾</span></button>
+  </div>${open?`
+  <div class="le-form">
+    <label>${esc(t('loreKeys'))}</label>
     <input class="field" data-lf="keys" data-i="${i}" value="${esc(e.keys||'')}" placeholder="${esc(t('loreKeys'))}">
-    <textarea class="field" data-lf="content" data-i="${i}" rows="3" placeholder="${esc(t('loreContent'))}" style="margin-top:6px">${esc(e.content||'')}</textarea>
-    <div style="display:flex;gap:14px;align-items:center;margin-top:6px;flex-wrap:wrap">
-      <label style="cursor:pointer"><input type="checkbox" data-lf="on" data-i="${i}" ${e.off?'':'checked'}> ${esc(t('loreOn'))}</label>
-      <label style="cursor:pointer"><input type="checkbox" data-lf="always" data-i="${i}" ${e.always?'checked':''}> ${esc(t('loreAlways'))}</label>
-      <button type="button" class="btn ghost small" data-ldel="${i}">🗑</button></div></div>`).join(''):'<p style="color:var(--muted)">'+esc(t('loreEmpty'))+'</p>';
+    <label>${esc(t('loreContent'))}</label>
+    <textarea class="field" data-lf="content" data-i="${i}" rows="8" placeholder="${esc(t('loreContent'))}">${esc(e.content||'')}</textarea>
+    <div class="le-note">${esc(t('loreVars'))}</div>
+    <div class="le-actions"><button type="button" class="btn ghost small" data-ldel="${i}">🗑 ${esc(t('loreDel'))}</button></div>
+  </div>`:''}
+</div>`}
+function renderLore(){
+  const arr=loreArr();arr.forEach(e=>{if(!e.id)e.id=uid()});
+  const q=loreQ,idx=[];
+  arr.forEach((e,i)=>{if(!q||(e.keys||'').toLowerCase().includes(q)||(e.content||'').toLowerCase().includes(q))idx.push(i)});
+  $('#loreCount').textContent=q?idx.length+t('loreOf')+arr.length+' '+loreWord(arr.length):arr.length+' '+loreWord(arr.length);
+  $('#loreList').innerHTML=idx.length?idx.map(i=>loreEntry(arr[i],i)).join(''):'<p style="color:var(--muted);text-align:center;margin:24px 0">'+esc(arr.length?t('loreNoMatch'):t('loreEmpty'))+'</p>';
 }
-function loreFor(chat){ // entradas activas: palabras clave en los últimos 8 mensajes, o "siempre activa"
+function loreFor(chat,spk){ // entradas activas: palabras clave en los últimos 8 mensajes, o "siempre activa"
   const ms=chat.group?chat.group.map(getChar).filter(Boolean):[chat.charId&&getChar(chat.charId)].filter(Boolean);
-  const all=[...(S.lore||[]),...ms.flatMap(c=>c.lore||[])].filter(e=>!e.off&&(e.content||'').trim());
+  const sp=(spk&&getChar(spk))||ms[0],me=((persOf(chat).name)||'').trim()||'User';
+  const sub=(x,ch)=>String(x||'').replace(/\{\{\s*char\s*\}\}|<BOT>/gi,ch?ch.name:t('roleAI')).replace(/\{\{\s*user\s*\}\}|<USER>/gi,me);
+  const all=[...(S.lore||[]).map(e=>({e,o:sp})),...ms.flatMap(c=>(c.lore||[]).map(e=>({e,o:c})))].filter(x=>!x.e.off&&(x.e.content||'').trim());
   if(!all.length)return '';
   const scan=chat.messages.filter(m=>!m.error&&!m.pending).slice(-8).map(m=>m.content||'').join('\n').toLowerCase();
   const out=[];let n=0;
-  for(const e of all){
-    const ks=(e.keys||'').split(',').map(x=>x.trim().toLowerCase()).filter(Boolean);
+  for(const {e,o} of all){
+    const ks=sub(e.keys,o).split(',').map(x=>x.trim().toLowerCase()).filter(Boolean);
     if(!(e.always||ks.some(k=>scan.includes(k))))continue;
-    const c=mac(e.content.trim(),ms[0]);if(n+c.length>4000)break;n+=c.length;out.push('- '+c);
+    const c=sub(e.content.trim(),o);if(n+c.length>4000)break;n+=c.length;out.push('- '+c);
   }
   return out.length?'\n\n[World info / Lorebook — use when relevant]\n'+out.join('\n'):'';
 }
@@ -1864,213 +1934,40 @@ $('#loreBtn').onclick=()=>{
   const c0=cur(),sel=$('#loreScope');
   sel.innerHTML='<option value="_g">'+esc(t('loreGlobal'))+'</option>'+S.chars.map(c=>'<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>').join('');
   sel.value=(c0&&c0.charId&&getChar(c0.charId))?c0.charId:'_g';
-  renderLore();$('#loreModal').classList.add('on');
+  loreQ='';$('#loreSearch').value='';loreOpen.clear();
+  renderLore();$('#loreModal').classList.add('on');$('#loreModal .lore-body').scrollTop=0;
 };
-$('#loreScope').onchange=renderLore;
-$('#loreAdd').onclick=()=>{loreArr().push({id:uid(),keys:'',content:'',always:false,off:false});renderLore();save()};
-$('#loreList').addEventListener('input',e=>{const f=e.target.dataset.lf;if(!f||f==='on'||f==='always')return;loreArr()[+e.target.dataset.i][f]=e.target.value;save()});
-$('#loreList').addEventListener('change',e=>{const f=e.target.dataset.lf;if(f!=='on'&&f!=='always')return;const o=loreArr()[+e.target.dataset.i];if(f==='on')o.off=!e.target.checked;else o.always=e.target.checked;save()});
-$('#loreList').addEventListener('click',e=>{const b=e.target.closest('[data-ldel]');if(!b)return;loreArr().splice(+b.dataset.ldel,1);renderLore();save()});
-const LEGAL=/^https?:$/.test(location.protocol)?'':'https://reeesyp-web.github.io/mizu-ai/';
-const legalUrl=p=>LEGAL+p+'#'+LANG;
-document.querySelectorAll('.legalA').forEach(a=>{a.href=LEGAL+a.dataset.p;a.addEventListener('click',()=>{a.href=legalUrl(a.dataset.p)})});
-$('#aboutBtn').onclick=()=>{$('#aboutBody').innerHTML='<h3 style="margin:0 0 8px">'+esc(t('tagline'))+'</h3><p>'+esc(t('aboutTxt'))+'</p><p>'+esc(t('aboutLogo'))+' <a href="https://picrew.me/en/image_maker/3157" target="_blank" rel="noopener">ぷにぷにほっぺメーカー</a> (Picrew)</p><p><b>'+esc(t('aboutContact'))+':</b> <a href="mailto:mizuaisupport@gmail.com">mizuaisupport@gmail.com</a></p>';$('#aboutDlg').showModal()};
-$('#aboutClose').onclick=()=>$('#aboutDlg').close();
-$('#gdBtn').onclick=async()=>{
-  if(!gdTok){gdConsent();return}
-  if(!confirm(t('gdOut')))return;
-  clearTimeout(gdTimer);
-  const ok=gdReady?await gdUpload():true; // último guardado antes de limpiar
-  if(!ok&&!confirm(t('gdOutFail')))return;
-  gdTok=null;gdReady=false;gdNote='';gdDropTok();
-  ['gdOn','gdEmail','gdOwner','gdAt'].forEach(k=>gdLS(k,null));
-  gdFresh();gdUI();
+$('#loreScope').onchange=()=>{loreOpen.clear();renderLore();$('#loreModal .lore-body').scrollTop=0};
+$('#loreSearch').addEventListener('input',e=>{clearTimeout(loreTm);const v=e.target.value.trim().toLowerCase();loreTm=setTimeout(()=>{loreQ=v;renderLore()},120)});
+$('#loreAdd').onclick=()=>{
+  const e={id:uid(),keys:'',content:'',always:false,off:false};loreArr().push(e);
+  loreQ='';$('#loreSearch').value='';loreOpen.add(e.id);renderLore();save();
+  const l=$('#loreList').lastElementChild;if(l){l.scrollIntoView({block:'center'});const k=l.querySelector('[data-lf=keys]');if(k)k.focus({preventScroll:true})}
 };
-function gdConsent(){ // casilla SIEMPRE visible y sin marcar en cada inicio de sesión con Google (clickwrap)
-  if(typeof $('#termsDlg').showModal!=='function'){ // navegadores sin <dialog>
-    if(confirm(t('termsAcc').replace('{t}',t('terms')).replace('{p}',t('privacy')))){gdLS('gdTerms',new Date().toISOString());gdLogin(false)}
-    return}
-  const a=(u,x)=>'<a href="'+legalUrl(u)+'" target="_blank" rel="noopener">'+esc(x)+'</a>';
-  $('#termsTxt').innerHTML=t('termsAcc').replace('{t}',a('terminos.html',t('terms'))).replace('{p}',a('privacidad.html',t('privacy')));
-  $('#termsChk').checked=false;$('#termsGo').disabled=true;$('#termsDlg').showModal();
-}
-$('#termsChk').onchange=e=>{$('#termsGo').disabled=!e.target.checked};
-$('#termsGo').onclick=()=>{if(!$('#termsChk').checked)return;gdLS('gdTerms',new Date().toISOString());$('#termsDlg').close();gdLogin(false)};
-$('#termsNo').onclick=()=>$('#termsDlg').close();
-gdUI();
-
-/* ================= Seleccionar turnos · imagen · enlace ================= */
-var selMode=false,selSet=new Set(),pendingImport=false;
-const selList=()=>cur().messages.filter(m=>selSet.has(m.id));
-const selPickable=()=>cur().messages.filter(m=>!m.pending&&!m.error);
-function selUI(){
-  const n=selSet.size,all=selPickable();
-  $('#selCount').textContent=t('selN',{n});
-  const full=all.length>0&&all.every(m=>selSet.has(m.id));
-  const b=$('#selAllBox');b.className='selbox'+(full?' on':'');b.textContent=full?'✓':'';
-  ['selImg','selLink','selMore'].forEach(id=>$('#'+id).disabled=!n);
-}
-const keepScroll=fn=>{const b=$('#messages'),y=b.scrollTop;fn();b.scrollTop=y};
-function enterSel(){selMode=true;selSet=new Set();document.body.classList.add('selmode');$('#selMenu').style.display='none';selUI();keepScroll(renderChat)}
-function exitSel(){selMode=false;selSet=new Set();document.body.classList.remove('selmode');$('#selMenu').style.display='none';renderChat()}
-function toggleSel(id){selSet.has(id)?selSet.delete(id):selSet.add(id);selUI();keepScroll(renderChat)}
-function selTxt(m){return(m.content||'').trim()}
-function selLabel(m,chat){if(m.role==='user')return t('roleUser').replace(/^[^:：]*[:：]\s*/,'');const ch=m.cid?getChar(m.cid):chat.charId&&getChar(chat.charId);return ch?ch.name:t('roleAI').replace(/^[^:：]*[:：]\s*/,'')}
-function cssColor(v){const e=document.createElement('i');e.style.cssText='position:absolute;visibility:hidden;background:'+v;document.body.appendChild(e);const c=getComputedStyle(e).backgroundColor;e.remove();return c}
-function stripMd(x){return x.replace(/```\w*\n?/g,'').replace(/^#{1,6}\s+/gm,'').replace(/\*\*(.+?)\*\*/g,'$1').replace(/__(.+?)__/g,'$1').replace(/`([^`]+)`/g,'$1')}
-function wrapLines(ctx,text,maxW){
-  const out=[];
-  for(const para of text.split('\n')){
-    if(!para.trim()){out.push('');continue}
-    let line='';
-    for(const w of para.split(/(\s+)/)){
-      if(!w)continue;
-      if(ctx.measureText(line+w).width<=maxW){line+=w;continue}
-      if(line.trim()){out.push(line.trimEnd());line=''}
-      if(/^\s+$/.test(w))continue;
-      if(ctx.measureText(w).width<=maxW){line=w;continue}
-      for(const ch of w){if(ctx.measureText(line+ch).width>maxW){out.push(line);line=ch}else line+=ch}
-    }
-    out.push(line.trimEnd());
-  }
-  return out;
-}
-function rrect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
-async function makeImages(){
-  const chat=cur(),msgs=selList().filter(m=>selTxt(m));
-  if(!msgs.length){toast(t('selNone'));return}
-  toast(t('imgBusy'),4000);
-  await new Promise(r=>setTimeout(r,30));
-  const W=900,PAD=36,FS=30,LH=44,BW=W-PAD*2-90,PAGE=2600;
-  const cv=document.createElement('canvas'),c=cv.getContext('2d');
-  const font=`${FS}px system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif`;c.font=font;
-  const colUser=cssColor('var(--blue-200)'),colUserBd=cssColor('var(--blue-300)'),colAi=cssColor('#fff'),colAiBd=cssColor('var(--line)'),colBg=cssColor('var(--blue-50)'),colInk='#2a3a4b',colMuted='#74879a';
-  // bloques (cada uno cabe en una página; los mensajes largos se parten por líneas)
-  const blocks=[];
-  const maxLines=Math.floor((PAGE-PAD*2-60)/LH);
-  for(const m of msgs){
-    const lines=wrapLines(c,stripMd(selTxt(m)),BW-36);
-    for(let i=0;i<lines.length;i+=maxLines)blocks.push({u:m.role==='user',name:i?'':selLabel(m,chat),lines:lines.slice(i,i+maxLines)});
-  }
-  const bh=b=>(b.name?34:0)+b.lines.length*LH+30;
-  const pages=[];let cur_=[],h=PAD;
-  for(const b of blocks){const need=bh(b)+22;if(cur_.length&&h+need>PAGE-PAD){pages.push({b:cur_,h});cur_=[];h=PAD}cur_.push(b);h+=need}
-  if(cur_.length)pages.push({b:cur_,h});
-  const files=[];
-  for(let p=0;p<pages.length;p++){
-    const pg=pages[p];cv.width=W;cv.height=Math.ceil(pg.h+PAD);
-    c.font=font;c.fillStyle=colBg;c.fillRect(0,0,W,cv.height);c.textBaseline='top';
-    let y=PAD;
-    for(const b of pg.b){
-      const bw=Math.min(BW,Math.max(...b.lines.map(l=>c.measureText(l).width),60)+36);
-      const bx=b.u?W-PAD-bw:PAD,by=y+(b.name?34:0);
-      if(b.name){c.font=`600 ${FS-8}px system-ui,sans-serif`;c.fillStyle=colMuted;c.textAlign=b.u?'right':'left';c.fillText(b.name,b.u?W-PAD-6:PAD+6,y+2);c.textAlign='left'}
-      rrect(c,bx,by,bw,b.lines.length*LH+30,22);c.fillStyle=b.u?colUser:colAi;c.fill();c.lineWidth=2;c.strokeStyle=b.u?colUserBd:colAiBd;c.stroke();
-      c.font=font;c.fillStyle=colInk;b.lines.forEach((l,i)=>c.fillText(l,bx+18,by+15+i*LH));
-      y=by+b.lines.length*LH+30+22;
-    }
-    const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
-    files.push(new File([blob],`mizu-chat-${p+1}.png`,{type:'image/png'}));
-  }
-  try{
-    if(navigator.canShare&&navigator.canShare({files})){await navigator.share({files});return}
-  }catch(e){if(e&&e.name==='AbortError')return}
-  files.forEach((f,i)=>setTimeout(()=>{const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)},i*350));
-}
-/* ---- enlace: el chat va comprimido dentro del propio enlace (sin servidor) ---- */
-const b64u=u=>{let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
-const unb64u=x=>{x=x.replace(/-/g,'+').replace(/_/g,'/');while(x.length%4)x+='=';const b=atob(x),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
-async function zEnc(o){
-  const raw=new TextEncoder().encode(JSON.stringify(o));
-  if(typeof CompressionStream==='undefined')return'j='+b64u(raw);
-  const cs=new CompressionStream('deflate-raw'),w=cs.writable.getWriter();w.write(raw);w.close();
-  return'z='+b64u(new Uint8Array(await new Response(cs.readable).arrayBuffer()));
-}
-async function zDec(kind,s){
-  const u=unb64u(s);
-  if(kind==='j')return JSON.parse(new TextDecoder().decode(u));
-  const ds=new DecompressionStream('deflate-raw'),w=ds.writable.getWriter();w.write(u);w.close();
-  return JSON.parse(new TextDecoder().decode(await new Response(ds.readable).arrayBuffer()));
-}
-async function copyLink(){
-  const chat=cur(),msgs=selList().filter(m=>selTxt(m));
-  if(!msgs.length){toast(t('selNone'));return}
-  const payload={v:1,t:dispTitle(chat),m:msgs.map(m=>({r:m.role==='user'?'u':'a',c:selTxt(m)}))};
-  const url=location.origin+location.pathname+'#'+await zEnc(payload);
-  let ok=false;try{await navigator.clipboard.writeText(url);ok=true}catch(e){}
-  if(!ok){try{const ta=document.createElement('textarea');ta.value=url;document.body.appendChild(ta);ta.select();ok=document.execCommand('copy');ta.remove()}catch(e){}}
-  if(!ok){prompt(t('cpLink'),url);return}
-  toast(url.length>12000?t('linkLong'):t('linkCopied'),url.length>12000?4500:1800);
-}
-async function runImport(){
-  const m=location.hash.match(/^#([zj])=(.+)$/);if(!m)return;
-  try{
-    const d=await zDec(m[1],m[2]);
-    if(!d||!Array.isArray(d.m)||!d.m.length)throw 0;
-    const ch={id:uid(),title:String(d.t||t('newChatTitle')).slice(0,120),charId:null,updated:Date.now(),
-      messages:d.m.map(x=>({id:uid(),role:x.r==='u'?'user':'assistant',content:String(x.c||'')}))};
-    S.chats.unshift(ch);S.activeId=ch.id;
-    history.replaceState(null,'',location.pathname+location.search); // para que recargar no importe otra vez
-    if(typeof setView==='function')setView('chat');
-    renderAll();toast(t('impDone'));
-  }catch(e){history.replaceState(null,'',location.pathname+location.search);toast(t('impBad'))}
-}
-$('#selBtn').onclick=enterSel;$('#selX').onclick=exitSel;
-$('#selAllBtn').onclick=()=>{const all=selPickable(),full=all.every(m=>selSet.has(m.id));selSet=new Set(full?[]:all.map(m=>m.id));selUI();keepScroll(renderChat)};
-$('#selImg').onclick=()=>makeImages().catch(()=>toast(t('imgFail')));
-$('#selLink').onclick=()=>copyLink().catch(()=>toast(t('imgFail')));
-$('#selMore').onclick=e=>{e.stopPropagation();const m=$('#selMenu');m.style.display=m.style.display==='block'?'none':'block'};
-document.addEventListener('click',e=>{if(!e.target.closest('#selMenu'))$('#selMenu').style.display='none'});
-$('#selCopyTxt').onclick=async()=>{
-  const chat=cur(),txt=selList().map(m=>selLabel(m,chat)+':\n'+selTxt(m)).join('\n\n');
-  try{await navigator.clipboard.writeText(txt);toast(t('copied'))}catch(e){toast(t('copyFail'))}$('#selMenu').style.display='none'};
-$('#selDel').onclick=()=>{
-  const n=selSet.size;$('#selMenu').style.display='none';if(!n||!confirm(t('delSelAsk',{n})))return;
-  const chat=cur();chat.messages=chat.messages.filter(m=>!selSet.has(m.id));chat.updated=Date.now();exitSel();renderAll()};
-// importar un chat compartido: si hay sesión de Google, se espera a que termine la sincronización para no perderlo
-if(/^#[zj]=/.test(location.hash)){if(gdLS('gdOn')){pendingImport=true;toast(t('impWait'),3500)}else runImport()}
-if(gdLS('gdOn')){if(gdRestore()){gdUI();gdSync().catch(()=>{})}else gdArm()}
-
-/* ---------- Navegación ---------- */
-function setView(v){
-  $$('.tab').forEach(t=>t.classList.toggle('on',t.dataset.view===v));
-  $('#view-chat').classList.toggle('on',v==='chat');$('#view-chars').classList.toggle('on',v==='chars');
-}
-$$('.tab').forEach(t=>t.onclick=()=>{setView(t.dataset.view);if(t.dataset.view==='chars')closeMenu()});
-const closeMenu=()=>{$('#side').classList.remove('open');$('#scrim').classList.remove('on')};
-$$('[data-menu]').forEach(b=>b.onclick=()=>{$('#side').classList.add('open');$('#scrim').classList.add('on')});
-$('#scrim').onclick=closeMenu;
-$('#newChat').onclick=()=>{newChat(null);setView('chat');closeMenu();$('#input').focus()};
-$('#createChar').onclick=()=>openChar();
-$('#search').oninput=renderSide;
-$('#titleInput').oninput=e=>{cur().title=e.target.value||t('untitled');renderSide();save()};
-$('#clearChat').onclick=()=>{if(confirm(t('clearConfirm'))){const c=cur();c.messages=[];(c.group?c.group:[c.charId]).map(getChar).filter(Boolean).forEach(ch=>{const m=greetMsg(ch);if(m){if(c.group)m.cid=ch.id;c.messages.push(m)}});renderAll()}};
-$('#input').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();sendUser()}});
-$('#input').addEventListener('input',autosize);
-$('#langSel').onchange=e=>{
-  const old=LANG;LANG=e.target.value;S.lang=LANG;
-  if(Object.values(T).some(l=>l.sysDefault===S.settings.sys))S.settings.sys=t('sysDefault');
-  S.chars.forEach(c=>{if(c.bk&&DEF[old]&&DEF[LANG][c.bk]&&sameChar(c,DEF[old][c.bk]))Object.assign(c,fromDef(c.bk,LANG))});
-  applyStatic();renderAll();
-};
-/* ================= Tarjetas PNG/JSON · Lorebook .json · Chats grupales ================= */
-Object.assign(T.es,{impCard:'📥 Importar tarjeta',expPng:'Exportar como tarjeta PNG',expJson:'Exportar como JSON',cardOk:'Tarjetas importadas: {n}',cardBad:'No es una tarjeta válida: {f}',cardLore:'Ese archivo es un lorebook: impórtalo desde 📚',
- loreImp:'⬆️ Importar .json',loreExp:'⬇️ Exportar .json',loreImpOk:'Entradas importadas: {n}',grpNew:'👥 Nuevo grupo',grpTitle:'👥 Nuevo chat grupal',grpName:'Nombre del grupo (opcional)',grpPick:'Elige al menos 2 personajes',grpCreate:'Crear grupo',grpMin:'Elige al menos 2 personajes',grpAuto:'🎲 Auto',grpAll:'👥 Todos',
- grpRule:'Esto es un chat grupal. Personajes presentes: {l}. Tú eres SOLO {n}: escribe únicamente el turno de {n}, sin hablar ni actuar por el usuario ni por los demás, y sin empezar con tu nombre. En el historial cada mensaje ajeno va precedido por "Nombre: ". Los demás personajes: {o}\n'});
-Object.assign(T.en,{impCard:'📥 Import card',expPng:'Export as PNG card',expJson:'Export as JSON',cardOk:'Cards imported: {n}',cardBad:'Not a valid card: {f}',cardLore:'That file is a lorebook: import it from 📚',
- loreImp:'⬆️ Import .json',loreExp:'⬇️ Export .json',loreImpOk:'Entries imported: {n}',grpNew:'👥 New group',grpTitle:'👥 New group chat',grpName:'Group name (optional)',grpPick:'Pick at least 2 characters',grpCreate:'Create group',grpMin:'Pick at least 2 characters',grpAuto:'🎲 Auto',grpAll:'👥 Everyone',
- grpRule:'This is a group chat. Characters present: {l}. You are ONLY {n}: write only {n}\'s turn, never speak or act for the user or the others, and do not start with your name. In the history every message from someone else is prefixed with "Name: ". The other characters: {o}\n'});
-
-/* ---------- Macros de SillyTavern ---------- */
-const mac=(s,ch)=>String(s||'').replace(/\{\{char\}\}|<BOT>/gi,ch?ch.name:'').replace(/\{\{user\}\}|<USER>/gi,((persOf(cur()).name)||'').trim()||'User');
-function greetMsg(c){
-  const a=[c.greet,...(c.altGreets||[])].filter(Boolean).map(x=>mac(x,c));if(!a.length)return null;
-  const m={id:uid(),role:'assistant',content:a[0]};if(a.length>1){m.alts=a;m.altIdx=0}return m;
-}
-const splitK=s=>String(s||'').split(',').map(x=>x.trim()).filter(Boolean);
-const fname=c=>(c.name||'character').replace(/[\\\/:*?"<>|\s]+/g,'_').slice(0,40)||'character';
-function dl(data,name,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
-
+$('#loreList').addEventListener('input',e=>{
+  const f=e.target.dataset.lf;if(!f||f==='on')return;
+  const o=loreArr()[+e.target.dataset.i];if(!o)return;o[f]=e.target.value;save();
+  const el=e.target.closest('.le'),ti=el&&el.querySelector('.le-title');
+  if(ti){const sm=loreSum(o);ti.textContent=sm.t;ti.classList.toggle('dim',sm.dim)}
+});
+$('#loreList').addEventListener('change',e=>{
+  if(e.target.dataset.lf!=='on')return;
+  const o=loreArr()[+e.target.dataset.i];if(!o)return;o.off=!e.target.checked;save();
+  const el=e.target.closest('.le');if(el)el.classList.toggle('off',o.off);
+});
+$('#loreList').addEventListener('click',e=>{
+  const arr=loreArr();
+  const d=e.target.closest('[data-ldel]');
+  if(d){const i=+d.dataset.ldel;if(!confirm(t('loreDelConfirm')))return;loreOpen.delete((arr[i]||{}).id);arr.splice(i,1);renderLore();save();return}
+  const p=e.target.closest('[data-lpin]');
+  if(p){const o=arr[+p.dataset.lpin];o.always=!o.always;p.classList.toggle('on',o.always);save();return}
+  if(e.target.closest('.sw,.le-form'))return;
+  const h=e.target.closest('[data-lt]');
+  if(h){const i=+h.dataset.lt,o=arr[i],el=h.closest('.le');if(!o||!el)return;
+    if(loreOpen.has(o.id))loreOpen.delete(o.id);else loreOpen.add(o.id);
+    el.outerHTML=loreEntry(o,i);
+    if(loreOpen.has(o.id)){const n=$('#loreList').querySelector('.le[data-i="'+i+'"]');if(n)n.scrollIntoView({block:'nearest',behavior:'smooth'})}}
+});
 /* ---------- Lorebook: entrada / salida ---------- */
 function loreIn(o){ // acepta V2 (character_book), SillyTavern World Info y arrays simples
   let es=o&&o.entries;if(!es)return [];if(!Array.isArray(es))es=Object.values(es);
@@ -2358,6 +2255,15 @@ function exportStory(md){const chat=cur(),ch=chat.charId&&getChar(chat.charId),m
   dl(out.trim()+'\n',f+(md?'.md':'.txt'),md?'text/markdown':'text/plain')}
 $('#expTxt').onclick=()=>exportStory(false);
 $('#expMd').onclick=()=>exportStory(true);
+
+
+/* ---------- Textos es/en de tarjetas, Lorebook .json y chats grupales ---------- */
+Object.assign(T.es,{impCard:'📥 Importar tarjeta',expPng:'Exportar como tarjeta PNG',expJson:'Exportar como JSON',cardOk:'Tarjetas importadas: {n}',cardBad:'No es una tarjeta válida: {f}',cardLore:'Ese archivo es un lorebook: impórtalo desde 📚',
+ loreImp:'⬆️ Importar .json',loreExp:'⬇️ Exportar .json',loreImpOk:'Entradas importadas: {n}',grpNew:'👥 Nuevo grupo',grpTitle:'👥 Nuevo chat grupal',grpName:'Nombre del grupo (opcional)',grpPick:'Elige al menos 2 personajes',grpCreate:'Crear grupo',grpMin:'Elige al menos 2 personajes',grpAuto:'🎲 Auto',grpAll:'👥 Todos',
+ grpRule:'Esto es un chat grupal. Personajes presentes: {l}. Tú eres SOLO {n}: escribe únicamente el turno de {n}, sin hablar ni actuar por el usuario ni por los demás, y sin empezar con tu nombre. En el historial cada mensaje ajeno va precedido por "Nombre: ". Los demás personajes: {o}\n'});
+Object.assign(T.en,{impCard:'📥 Import card',expPng:'Export as PNG card',expJson:'Export as JSON',cardOk:'Cards imported: {n}',cardBad:'Not a valid card: {f}',cardLore:'That file is a lorebook: import it from 📚',
+ loreImp:'⬆️ Import .json',loreExp:'⬇️ Export .json',loreImpOk:'Entries imported: {n}',grpNew:'👥 New group',grpTitle:'👥 New group chat',grpName:'Group name (optional)',grpPick:'Pick at least 2 characters',grpCreate:'Create group',grpMin:'Pick at least 2 characters',grpAuto:'🎲 Auto',grpAll:'👥 Everyone',
+ grpRule:'This is a group chat. Characters present: {l}. You are ONLY {n}: write only {n}\'s turn, never speak or act for the user or the others, and do not start with your name. In the history every message from someone else is prefixed with "Name: ". The other characters: {o}\n'});
 
 applyLook();
 applyStatic();
