@@ -356,6 +356,13 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 .bk-act{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end}
 .bk-act .btn{white-space:nowrap}
 .bk-new{border-style:dashed;border-color:var(--blue-300)}
+
+/* ---- Bloque de pensamiento estilo DeepSeek ---- */
+.thk{margin:0 0 10px}
+.thk-h{display:inline-flex;align-items:center;gap:6px;font-size:.85em;font-weight:600;color:var(--muted);padding:2px 0;background:none}
+.thk-c{display:inline-block;transition:transform .15s;font-size:1.15em;line-height:1}
+.thk.open .thk-c{transform:rotate(90deg)}
+.thk-b{white-space:pre-wrap;margin:6px 0 4px 4px;padding-left:12px;border-left:3px solid var(--blue-200);color:var(--muted);font-size:.9em;line-height:1.55}
 </style>
 </head>
 <body>
@@ -668,16 +675,6 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 <div class="toast" id="toast"></div>
 
 <script>
-/* Diagnóstico: si algo falla en tu dispositivo, aparece una franja roja con el error (tócala para cerrarla) */
-(function(){
-  function show(msg){try{let d=document.getElementById('errBanner');
-    if(!d){d=document.createElement('div');d.id='errBanner';
-      d.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#7a1f1f;color:#fff;padding:10px 12px;border-radius:10px;font:12px/1.4 system-ui,sans-serif;white-space:pre-wrap;max-height:40vh;overflow:auto';
-      d.onclick=function(){d.remove()};document.body.appendChild(d)}
-    d.textContent='⚠️ Error (toca para cerrar):\n'+msg}catch(_){}}
-  window.addEventListener('error',function(e){show((e.message||'error')+(e.lineno?'\nlínea '+e.lineno+':'+e.colno:''))});
-  window.addEventListener('unhandledrejection',function(e){var r=e.reason;if(r&&r.name==='AbortError')return;show('Promesa: '+((r&&r.message)||r))});
-})();
 (()=>{
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
@@ -1156,7 +1153,7 @@ Object.assign(T.fr,{saveFail:'⚠️ Enregistrement impossible : le stockage du 
 if(!S.chats.length){newChat(null,true)}
 if(!S.activeId||!getChat(S.activeId))S.activeId=S.chats[0].id;
 
-let editing=null, abortCtl=null, busy=false, editingCharId=null, selEmoji=EMOJIS[0], selColor=COLORS[0], selImg='';
+let editing=null, abortCtl=null, stopReq=false, busy=false, editingCharId=null, selEmoji=EMOJIS[0], selColor=COLORS[0], selImg='';
 
 function getChat(id){return S.chats.find(c=>c.id===id)}
 function cur(){return getChat(S.activeId)}
@@ -1266,7 +1263,7 @@ function msgEl(m,i,chat){
       </div></div>`;
   }else{
     inner=`<div class="bubble">${m.pinned?`<span class="pinTag" title="${esc(t('pinTip'))}">📌</span>`:''}${extraHTML(m)}${m.pending&&!m.content?'<span class="typing"><span></span><span></span><span></span></span>':md(m.content)}${srcHTML(m)}</div>
-      ${(m.role!=='user'&&isLast&&!m.pending&&!m.error&&(m.stopped||m.cut))?`<div class="contBar"><span class="contLbl">${m.cut&&!m.stopped?'✂️ '+t('cutLbl'):'⏸ '+t('stopLbl')}</span><button type="button" class="contBtn" data-x="cont">${t('contBtn')}</button></div>`:''}
+      ${(m.role!=='user'&&isLast&&!m.pending&&!m.error&&!busy&&(m.stopped||m.cut))?`<div class="contBar"><span class="contLbl">${m.stopped?'⏸ '+t('stopLbl'):'✂️ '+t('cutLbl')}</span><span style="display:flex;gap:8px"><button type="button" class="contBtn" data-x="done">${t('doneBtn')}</button><button type="button" class="contBtn" data-x="cont">${t('contBtn')}</button></span></div>`:''}
       ${m.pending?'':`<div class="actions">
         <button class="act" data-x="edit">${t('edit')}</button>
         <button class="act" data-x="swap" title="${t('swapT')}">${m.role==='user'?t('swapAI'):t('swapUser')}</button>
@@ -1296,6 +1293,7 @@ function msgEl(m,i,chat){
     }
     else if(x==='pin'){if(m.pinned)delete m.pinned;else m.pinned=true;chat.updated=Date.now();renderAll()}
     else if(x==='branch'){const c=JSON.parse(JSON.stringify(chat));c.id=uid();c.title=dispTitle(chat)+' 🌿';c.messages=msgs.slice(0,i+1).map(z=>{const k=JSON.parse(JSON.stringify(z));k.id=uid();k.pending=false;return k});c.updated=Date.now();S.chats.unshift(c);S.activeId=c.id;renderAll();toast(t('branched'))}
+    else if(x==='think'){const live=!!m.pending&&!m.content&&m.thinkMs==null;m.thinkOpen=!(m.thinkOpen!=null?m.thinkOpen:live);keepScroll(renderChat)}
     else if(x==='speak')speak(m,chat);
     else if(x==='copy'){try{await navigator.clipboard.writeText(m.content);toast(t('copied'))}catch(_){toast(t('copyFail'))}}
     else if(x==='swap'){m.role=m.role==='user'?'assistant':'user';chat.updated=Date.now();renderAll()}
@@ -1306,6 +1304,7 @@ function msgEl(m,i,chat){
       const n=m.alts.length;m.altIdx=(m.altIdx+(x==='next'?1:-1)+n)%n;m.content=m.alts[m.altIdx];m.error=false;renderAll();
     }
     else if(x==='cont'){ask(chat,m,undefined,true)}
+    else if(x==='done'){delete m.stopped;delete m.cut;chat.updated=Date.now();renderAll()}
     else if(x==='regen'){ask(chat,m)} // conserva la respuesta anterior como alternativa
   };
   return el;
@@ -1342,7 +1341,7 @@ function buildNative(fmt,base,key,model,sys,hist,temp,cap,smp){smp=smp||{};
   base=base.replace(/\/v1(beta)?(\/openai)?$/,'');
   return{url:base+'/v1beta/models/'+encodeURIComponent(model.replace(/^models\//,''))+':streamGenerateContent?alt=sse',
     headers:{'Content-Type':'application/json','x-goog-api-key':key},
-    body:{systemInstruction:{parts:[{text:sys}]},generationConfig:{temperature:temp,...smp},
+    body:{systemInstruction:{parts:[{text:sys}]},generationConfig:{temperature:temp,...smp,...(useThink?{thinkingConfig:{includeThoughts:true}}:{})},
       contents:turns.map(m=>({role:m.role==='user'?'user':'model',parts:[...m.imgs.map(u=>{const p=dataParts(u);return p&&{inlineData:{mimeType:p.mt,data:p.d}}}).filter(Boolean),{text:m.text||'.'}]}))}};
 }
 function feedChunk(fmt,j,ai){
@@ -1389,14 +1388,14 @@ async function ask(chat,reuse,spk,cont){
     ai=reuse;if(!ai.alts)ai.alts=ai.error?[]:[ai.content];
     ai.alts.push('');ai.altIdx=ai.alts.length-1;ai.content='';ai.error=false;ai.pending=true;
   }else{ai={id:uid(),role:'assistant',content:'',pending:true,...(chat.group?{cid:spk||pickSpeaker(chat)}:{})};chat.messages.push(ai)}
-  if(!cont){ai.think='';ai.sources=null;delete ai.stopped;delete ai.cut}
+  if(!cont){ai.think='';ai.sources=null;delete ai.stopped;delete ai.cut;delete ai.thinkMs;delete ai.thinkOpen;delete ai._in;delete ai._hold;ai._t0=Date.now()}
   const base=cont?ai.content:'';if(cont&&!base.trim())ai.think='';let joined=false;delete ai.stopped;delete ai.cut;
   const sync=()=>{if(ai.alts)ai.alts[ai.altIdx]=ai.content};
   const revert=()=>{ // si falla, vuelve a la respuesta anterior
     if(ai.alts&&ai.alts.length>1){ai.alts.pop();ai.altIdx=ai.alts.length-1;ai.content=ai.alts[ai.altIdx];return true}
     delete ai.alts;delete ai.altIdx;return false;
   };
-  setBusy(true);renderChat();renderSide();
+  stopReq=false;setBusy(true);renderChat();renderSide();
   const upd=()=>{
     if(cont&&!joined&&ai.content.length>base.length){joined=true;const nw=ai.content.slice(base.length); // une bien el texto nuevo con el anterior
       if(base&&!/\s$/.test(base)&&/^[A-Za-z\u00C0-\u024F\u0400-\u04FF0-9\u00BF\u00A1"\u201C\u00AB(\[]/.test(nw)&&/[.!?,;:)\]\u201D\u00BB\u2026*_"']$/.test(base))ai.content=base+' '+nw}
@@ -1450,33 +1449,40 @@ async function ask(chat,reuse,spk,cont){
       }
       let rq;
       if(fmt==='openai')rq={url:apiUrl.replace(/\/$/,'')+'/chat/completions',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
-        body:{model,temperature:+st.temp,stream:true,...(cap?{max_tokens:cap}:{}),...(useThink?{}:sampling('openai')),messages:[{role:'system',content:sys},...history]}};
+        body:{model,temperature:+st.temp,stream:true,...(cap?{max_tokens:cap}:{}),...(useThink?{}:sampling('openai')),...(useThink&&/deepseek/i.test(apiUrl)?{thinking:{type:'enabled'}}:{}),messages:[{role:'system',content:sys},...history]}};
       else rq=buildNative(fmt,apiUrl,apiKey,model,sys,hist,+st.temp,cap,useThink?{}:sampling(fmt));
       const r=await fetch(rq.url,{method:'POST',signal:abortCtl.signal,headers:rq.headers,body:JSON.stringify(rq.body)});
       if(!r.ok)throw new Error('Error '+r.status+': '+(await r.text()).slice(0,300));
       const rd=r.body.getReader(),dec=new TextDecoder();let buf='';
       for(;;){
+        if(stopReq){try{rd.cancel()}catch(_){}ai.stopped=true;break}
         const {done,value}=await rd.read();if(done)break;
+        if(stopReq){try{rd.cancel()}catch(_){}ai.stopped=true;break}
         buf+=dec.decode(value,{stream:true});
         const lines=buf.split('\n');buf=lines.pop();
         for(const l of lines){
+          if(stopReq)break;
           const ln=l.trim();if(!ln.startsWith('data:'))continue;
           const d=ln.slice(5).trim();if(!d||d==='[DONE]')continue;
           let j;try{j=JSON.parse(d)}catch(_){continue}
-          feedChunk(fmt,j,ai);upd();
+          const _l=ai.content.length;feedChunk(fmt,j,ai);if(ai.content.length>_l){const _d=ai.content.slice(_l);ai.content=ai.content.slice(0,_l);routeDelta(ai,_d)}thinkTick(ai);upd();
         }
       }
+      if(stopReq)ai.stopped=true;
+      if(ai._hold){if(ai._in)ai.think+=ai._hold;else ai.content+=ai._hold;ai._hold=''}thinkTick(ai);
       if(chat.group&&ai.cid){const nm=(getChar(ai.cid)||{}).name;if(nm)ai.content=ai.content.replace(new RegExp('^\\s*\\**'+nm.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\**\\s*:\\s*','i'),'')}
-      if(!ai.content)ai.content=t('emptyResp');
+      if(!ai.content&&stopReq&&!ai.think){if(!revert())chat.messages=chat.messages.filter(m=>m!==ai);delete ai.stopped}
+      else if(!ai.content)ai.content=t('emptyResp');
     }
   }catch(e){
-    if(e.name!=='AbortError'){
+    if(e.name!=='AbortError'&&!stopReq){
       if(cont){ai.content=base;ai.stopped=true;toast('⚠️ '+e.message.slice(0,120))}
       else if(revert())toast('⚠️ '+e.message.slice(0,120));else{ai.content='⚠️ '+e.message;ai.error=true}
     }
     else if(!ai.content&&!ai.think){if(!revert())chat.messages=chat.messages.filter(m=>m!==ai)}
     else{ai.stopped=true}
   }
+  if(ai.think&&ai._t0&&ai.thinkMs==null)ai.thinkMs=Date.now()-ai._t0;delete ai._t0;delete ai._in;delete ai._hold;
   sync();delete ai.pending;abortCtl=null;setBusy(false);chat.updated=Date.now();
   if(chat.messages.length<=3&&isDefaultTitle(chat.title)&&!chat.charId&&!chat.group){
     const f=chat.messages.find(m=>m.role==='user');if(f)chat.title=f.content.slice(0,36);
@@ -1485,6 +1491,25 @@ async function ask(chat,reuse,spk,cont){
   if(S.settings.autoRead&&!ai.error&&ai.content&&cur().id===chat.id)speak(ai,chat);
   maybeSummarize(chat);
 }
+function tagTail(s,tag){const a=s.toLowerCase();for(let k=Math.min(a.length,tag.length-1);k>0;k--)if(tag.startsWith(a.slice(-k)))return k;return 0}
+function routeDelta(ai,d){ // separa <think>…</think> del texto de la respuesta (modelos locales, R1, etc.)
+  if(ai.think==null)ai.think='';
+  let s=(ai._hold||'')+d;ai._hold='';
+  while(s){
+    if(ai._in){
+      const m=/<\/think(?:ing)?>/i.exec(s);
+      if(!m){const k=tagTail(s,'</thinking>');ai.think+=s.slice(0,s.length-k);ai._hold=s.slice(s.length-k);return}
+      ai.think+=s.slice(0,m.index);s=s.slice(m.index+m[0].length).replace(/^\s+/,'');ai._in=false;
+    }else if(!ai.content.trim()){
+      const m=/^\s*<think(?:ing)?>/i.exec(s);
+      if(m){ai._in=true;s=s.slice(m[0].length).replace(/^\s+/,'');continue}
+      const tr=s.replace(/^\s+/,'');
+      if(tr&&tr.length<10&&'<thinking>'.startsWith(tr.toLowerCase())){ai._hold=s;return}
+      ai.content+=s;return;
+    }else{ai.content+=s;return}
+  }
+}
+function thinkTick(ai){if(ai.think&&ai._t0&&ai.thinkMs==null&&ai.content.trim())ai.thinkMs=Date.now()-ai._t0}
 function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
 async function demo(chat,ai,upd){
   const last=[...chat.messages].reverse().find(m=>m.role==='user');
@@ -1510,7 +1535,7 @@ function sendUser(){
 //           con texto -> añade ese texto como mensaje de la IA, escrito a mano.
 let lastStop=0;
 function sendAI(){
-  if(busy){lastStop=Date.now();grpStop=true;abortCtl&&abortCtl.abort();if(!abortCtl)setBusy(false);return}
+  if(busy){lastStop=Date.now();grpStop=true;stopReq=true;try{abortCtl&&abortCtl.abort()}catch(_){}return}
   if(lastStop&&Date.now()-lastStop<1500){ // segundo toque seguido: corta aquí y quita "Continuar"
     lastStop=0;const c0=cur(),l=c0.messages[c0.messages.length-1];
     if(l&&l.role!=='user'&&(l.stopped||l.cut)){delete l.stopped;delete l.cut;if(!(l.content||'').trim())c0.messages.pop();renderAll();toast(t('cutDone'));return}
@@ -1572,10 +1597,18 @@ function findResults(j){
 function srcHTML(m){
   return m.sources&&m.sources.length?`<div class="srcs"><b>${t('srcLbl')}</b>${m.sources.map((s,i)=>/^https?:\/\//.test(s.url)?`<a href="${esc(s.url)}" target="_blank" rel="noopener">[${i+1}] ${esc(s.title||s.url)}</a>`:'').join('')}</div>`:'';
 }
+function thinkHTML(m){
+  if(!m.think)return '';
+  const live=!!m.pending&&!m.content&&m.thinkMs==null;
+  const open=m.thinkOpen!=null?m.thinkOpen:live;
+  const secs=m.thinkMs!=null?Math.max(1,Math.round(m.thinkMs/1000)):null;
+  const lbl=live?t('thinkingNow'):secs!=null?t('thoughtFor',{n:secs}):t('thinkLbl');
+  return `<div class="thk${open?' open':''}"><button type="button" class="thk-h" data-x="think">${lbl} <span class="thk-c">›</span></button>${open?`<div class="thk-b">${esc(m.think)}</div>`:''}</div>`;
+}
 function extraHTML(m){
   const fs=m.files||[];
   return fs.map(f=>f.k==='img'?`<img class="att" src="${safeImg(f.data)}" alt="">`:`<span class="fchip">📄 ${esc(f.name)}</span>`).join('')+
-    (m.think?`<details class="think" ${m.pending&&!m.content?'open':''}><summary>🧠 ${t('thinkLbl')}</summary><div>${esc(m.think)}</div></details>`:'');
+    thinkHTML(m);
 }
 // Busca en cualquier JSON la lista que parezca resultados de búsqueda (title/url/content con nombres comunes)
 let fs=18;try{fs=+localStorage.getItem('chatFs')||18}catch(_){}
@@ -2566,6 +2599,12 @@ ru:{loreGen:'Общие записи',loreNewBook:'＋ Новая книга',lo
 fr:{loreGen:'Entrées générales',loreNewBook:'＋ Nouveau livre',loreBack:'← Retour aux livres',loreOpen:'Ouvrir',loreBookName:'Nom du livre',loreCover:'Changer la couverture',loreCreate:'Créer le livre',loreBDelConfirm:'Supprimer le livre « {n} » et toutes ses entrées ?',loreGenClear:'Vider « Entrées générales » ? Toutes ses entrées seront supprimées (le livre reste).',loreMore:'Charger plus',loreBookOn:'Livre activé',loreShelfHint:'Chaque livre regroupe des entrées. Si vous désactivez un livre, aucune de ses entrées n’est envoyée à l’IA.',loreNewDef:'Nouveau livre',loreBookDelT:'Supprimer le livre',loreBookClearT:'Vider le livre',loreB1:'livre',loreB2:'livres',loreB5:'livres'}};
 for(const k in LB)Object.assign(T[k],LB[k]);
 
+Object.assign(T.es,{doneBtn:'Listo'});Object.assign(T.en,{doneBtn:'Done'});Object.assign(T.pt,{doneBtn:'Pronto'});Object.assign(T.ru,{doneBtn:'Готово'});Object.assign(T.fr,{doneBtn:'Terminé'});
+Object.assign(T.es,{thoughtFor:'Pensado por {n} segundos',thinkingNow:'Pensando…'});
+Object.assign(T.en,{thoughtFor:'Thought for {n} seconds',thinkingNow:'Thinking…'});
+Object.assign(T.pt,{thoughtFor:'Pensou por {n} segundos',thinkingNow:'Pensando…'});
+Object.assign(T.ru,{thoughtFor:'Думал {n} сек.',thinkingNow:'Думаю…'});
+Object.assign(T.fr,{thoughtFor:'Réflexion de {n} secondes',thinkingNow:'Réflexion…'});
 applyLook();
 applyStatic();
 renderAll();
