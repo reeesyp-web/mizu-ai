@@ -281,6 +281,32 @@ aside{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:tou
 aside>*{flex-shrink:0}
 aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 .pinTag{float:right;font-size:12px;margin:0 0 2px 8px;opacity:.85}
+/* ---- Historial por personaje (estilo Character.AI) ---- */
+.ci-av{width:30px;height:30px;border-radius:50%;overflow:hidden;display:grid;place-items:center;flex:none;background:var(--blue-100);font-size:16px}
+.ci-av img{width:100%;height:100%;object-fit:cover}
+.tb-ico{flex:none;padding:6px 9px;font-size:15px;line-height:1;white-space:nowrap}
+.lbl-s{display:none}
+@media(max-width:520px){.lbl-l{display:none}.lbl-s{display:inline}}
+.hist-search{padding:10px 12px 0}
+.modal.hist{display:flex;flex-direction:column;padding:0;overflow:hidden;width:min(520px,100%);height:min(86vh,760px);max-height:86vh}
+.hist-head{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.hist-head .ci-av{width:40px;height:40px;font-size:22px}
+.hist-head h2{margin:0;font-size:17px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-head small{display:block;color:var(--muted);font-weight:400;font-size:12px}
+.hist-list{flex:1;overflow:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.h-item{border:1px solid var(--line);border-radius:14px;padding:10px 12px;cursor:pointer;background:var(--white)}
+.h-item:hover{background:var(--blue-50)}
+.h-item.on{border-color:var(--blue-400);background:var(--blue-50)}
+.h-cur{font-size:12px;font-weight:700;color:var(--blue-600);margin-bottom:2px}
+.h-top{display:flex;align-items:center;gap:8px;font-size:13px}
+.h-time{font-weight:700;color:var(--ink)}
+.h-title{color:var(--muted);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.h-top .sp{flex:1}
+.h-act{display:flex;gap:2px;margin-left:auto}
+.h-snip{margin-top:6px;font-size:13.5px;line-height:1.45;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.hist-foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:space-between}
+@media(max-width:800px){.modal.hist{width:100%;height:100vh;height:100dvh;max-height:100dvh;border-radius:0}}
+
 @media(max-width:800px){
 #charGrid.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 #charGrid .card{padding:0;gap:0;border-radius:18px;overflow:hidden;cursor:pointer}
@@ -418,6 +444,8 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
         <button class="menu-btn" data-menu>☰</button>
         <input class="title-input" id="titleInput" data-i18n-ph="titlePh">
         <span class="badge" id="charBadge" style="display:none"></span>
+        <button class="btn ghost small tb-ico" id="tbHist" type="button" style="display:none" data-i18n-title="histTip">🕘</button>
+        <button class="btn ghost small tb-ico" id="tbNew" type="button" data-i18n-title="newTip">＋</button>
         <button class="btn ghost small fsb" id="moreBtn" type="button">⋯</button><div id="moreMenu"></div>
         <button class="btn ghost small fsb" id="memBtn" data-i18n-title="memBtn">📝</button>
         <button class="btn ghost small fsb" id="fsDown" title="A−">A−</button>
@@ -671,6 +699,12 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
   <input type="file" id="loreCoverFile" accept="image/*" hidden>
 </div></div>
 
+<div class="modal-bg" id="histModal"><div class="modal hist">
+  <div class="hist-head"><span class="ci-av" id="histAv"></span><h2><span id="histName"></span><small id="histSub"></small></h2><button class="btn ghost small" data-close type="button">✕</button></div>
+  <div class="hist-search"><input class="search" id="histSearch" type="search" data-i18n-ph="histSearchPh" autocomplete="off"></div>
+  <div class="hist-list" id="histList"></div>
+  <div class="hist-foot"><button class="btn primary" id="histNew" type="button" data-i18n="newChat"></button></div>
+</div></div>
 <div class="modal-bg" id="grpModal"><div class="modal">
   <h2 data-i18n="grpTitle"></h2>
   <div class="f"><label data-i18n="grpName"></label><input class="field" id="gName" maxlength="60"></div>
@@ -1107,6 +1141,20 @@ if(T.en)Object.assign(T.en,{"persLbl": "Persona (identity)", "persNew": "＋ New
 if(T.pt)Object.assign(T.pt,{"persLbl": "Persona (identidade)", "persNew": "＋ Nova", "persDel": "Excluir", "persUnnamed": "Sem nome", "persDefault": "Padrão (perfil)", "optBtn": "Persona e estilo", "optTitle": "🎭 Persona e estilo deste chat", "persChat": "Persona neste chat", "styleLbl": "Estilo de narração", "st_bal": "Equilibrado", "st_fast": "Chat rápido", "st_novel": "Romance / Slow-burn", "st_intense": "Intenso / Ação", "pinBtn": "Fixar", "unpinBtn": "Desafixar", "pinTip": "Mensagem fixada: sempre enviada à IA", "branchBtn": "Ramificar", "branched": "Novo chat criado a partir dessa mensagem", "expTxt": "Exportar história (.txt)", "expMd": "Exportar história (.md)", "expEmpty": "Não há mensagens para exportar", "persDelConfirm": "Excluir esta persona?", "persMin": "Deve restar pelo menos uma persona"});
 if(T.ru)Object.assign(T.ru,{"persLbl": "Персона (личность)", "persNew": "＋ Новая", "persDel": "Удалить", "persUnnamed": "Без имени", "persDefault": "По умолчанию (профиль)", "optBtn": "Персона и стиль", "optTitle": "🎭 Персона и стиль этого чата", "persChat": "Персона в этом чате", "styleLbl": "Стиль повествования", "st_bal": "Сбалансированный", "st_fast": "Быстрый чат", "st_novel": "Роман / Слоу-бёрн", "st_intense": "Напряжённый / Экшен", "pinBtn": "Закрепить", "unpinBtn": "Открепить", "pinTip": "Закреплённое сообщение всегда отправляется ИИ", "branchBtn": "Ветвить", "branched": "Новый чат создан из этого сообщения", "expTxt": "Экспорт истории (.txt)", "expMd": "Экспорт истории (.md)", "expEmpty": "Нет сообщений для экспорта", "persDelConfirm": "Удалить эту персону?", "persMin": "Должна остаться хотя бы одна персона"});
 if(T.fr)Object.assign(T.fr,{"persLbl": "Persona (identité)", "persNew": "＋ Nouvelle", "persDel": "Supprimer", "persUnnamed": "Sans nom", "persDefault": "Par défaut (profil)", "optBtn": "Persona et style", "optTitle": "🎭 Persona et style de ce chat", "persChat": "Persona dans ce chat", "styleLbl": "Style de narration", "st_bal": "Équilibré", "st_fast": "Chat rapide", "st_novel": "Roman / Slow-burn", "st_intense": "Intense / Action", "pinBtn": "Épingler", "unpinBtn": "Désépingler", "pinTip": "Message épinglé : toujours envoyé à l’IA", "branchBtn": "Ramifier", "branched": "Nouveau chat créé depuis ce message", "expTxt": "Exporter l’histoire (.txt)", "expMd": "Exporter l’histoire (.md)", "expEmpty": "Aucun message à exporter", "persDelConfirm": "Supprimer cette persona ?", "persMin": "Il doit rester au moins une persona"});
+
+Object.assign(T.es,{histT:'Historial',histTip:'Historial de chats',newTip:'Nuevo chat',curChat:'Chat actual',histEmpty:'Aún no hay chats con este personaje.',noMsgs:'Sin mensajes',alreadyNew:'Ya estás en un chat nuevo'});
+Object.assign(T.en,{histT:'History',histTip:'Chat history',newTip:'New chat',curChat:'Current chat',histEmpty:'No chats with this character yet.',noMsgs:'No messages',alreadyNew:'You are already in a new chat'});
+Object.assign(T.pt,{histT:'Histórico',histTip:'Histórico de chats',newTip:'Novo chat',curChat:'Chat atual',histEmpty:'Ainda não há chats com este personagem.',noMsgs:'Sem mensagens',alreadyNew:'Você já está em um chat novo'});
+Object.assign(T.ru,{histT:'История',histTip:'История чатов',newTip:'Новый чат',curChat:'Текущий чат',histEmpty:'С этим персонажем пока нет чатов.',noMsgs:'Нет сообщений',alreadyNew:'Вы уже в новом чате'});
+Object.assign(T.fr,{histT:'Historique',histTip:'Historique des chats',newTip:'Nouveau chat',curChat:'Chat actuel',histEmpty:'Aucun chat avec ce personnage pour l’instant.',noMsgs:'Aucun message',alreadyNew:'Vous êtes déjà dans un nouveau chat'});
+Object.assign(T.es,{histBtn:'Historial de chats',histBtnS:'Historial de chats',histSearchPh:'Buscar en este historial…',histNone:'Sin resultados'});
+Object.assign(T.en,{histBtn:'Chat history',histBtnS:'Chat history',histSearchPh:'Search this history…',histNone:'No results'});
+Object.assign(T.pt,{histBtn:'Histórico de chats',histBtnS:'Histórico de chats',histSearchPh:'Buscar neste histórico…',histNone:'Sem resultados'});
+Object.assign(T.ru,{histBtn:'История чатов',histBtnS:'История чатов',histSearchPh:'Поиск по истории…',histNone:'Ничего не найдено'});
+Object.assign(T.fr,{histBtn:'Historique des chats',histBtnS:'Historique des chats',histSearchPh:'Rechercher dans l’historique…',histNone:'Aucun résultat'});
+Object.assign(T.pt,{sTavily:'Tavily API key (busca na web)',sProv:'Serviço'});
+Object.assign(T.ru,{sTavily:'Tavily API key (веб-поиск)',sProv:'Сервис'});
+Object.assign(T.fr,{sTavily:'Tavily API key (recherche web)',sProv:'Service'});
 if(T.es)Object.assign(T.es,{"loreW1": "entrada", "loreW2": "entradas", "loreW5": "entradas", "loreOf": " de ", "loreSearchPh": "Buscar por palabra clave o contenido…", "loreNoKeys": "(sin palabras clave)", "loreNoMatch": "Sin resultados", "loreEditT": "Expandir / editar", "loreDelConfirm": "¿Eliminar esta entrada?", "loreDel": "Eliminar", "loreVars": "Puedes usar {{char}} y {{user}}: se reemplazan por el nombre del personaje y del usuario al enviarse a la IA."});
 if(T.en)Object.assign(T.en,{"loreW1": "entry", "loreW2": "entries", "loreW5": "entries", "loreOf": " of ", "loreSearchPh": "Search by keyword or content…", "loreNoKeys": "(no keywords)", "loreNoMatch": "No results", "loreEditT": "Expand / edit", "loreDelConfirm": "Delete this entry?", "loreDel": "Delete", "loreVars": "You can use {{char}} and {{user}}: they are replaced with the character’s and the user’s names when sent to the AI."});
 if(T.pt)Object.assign(T.pt,{"loreW1": "entrada", "loreW2": "entradas", "loreW5": "entradas", "loreOf": " de ", "loreSearchPh": "Buscar por palavra-chave ou conteúdo…", "loreNoKeys": "(sem palavras-chave)", "loreNoMatch": "Sem resultados", "loreEditT": "Expandir / editar", "loreDelConfirm": "Excluir esta entrada?", "loreDel": "Excluir", "loreVars": "Você pode usar {{char}} e {{user}}: são substituídos pelo nome do personagem e do usuário ao enviar à IA."});
@@ -1197,33 +1245,112 @@ function renderProfBtn(){
 }
 function renderAll(){const _pr=S.profile,_pa=Array.isArray(_pr.personas)&&_pr.personas.find(x=>x.id===_pr.activePersona);if(_pa){_pa.name=_pr.name||'';_pa.img=_pr.img||'';_pa.bio=_pr.bio||''}renderSide();renderChat();renderChars();renderProfBtn();save()}
 
+const charChats=id=>S.chats.filter(c=>c.charId===id&&!c.group&&getChar(c.charId)).sort((a,b)=>(b.updated||0)-(a.updated||0));
+function openCharChat(id){const l=charChats(id);if(l.length){S.activeId=l[0].id;editing=null}else newChat(id,true);setView('chat');renderAll();closeMenu()}
+function startNew(charId){
+  const c=cur();
+  const same=c&&!c.group&&((charId&&c.charId===charId)||(!charId&&!c.charId));
+  if(same&&c.messages.every(m=>m.role!=='user')){setView('chat');closeMenu();toast(t('alreadyNew'));$('#input').focus();return}
+  newChat(charId||null);setView('chat');closeMenu();$('#input').focus();
+}
+function agoL(ts){const d=Math.round((Date.now()-ts)/864e5);return d>=30?new Date(ts).toLocaleDateString(LANG):ago(ts)}
+function syncTb(){const c=cur(),ch=c&&!c.group&&c.charId&&getChar(c.charId);}
 function renderSide(){
   const q=$('#search').value.toLowerCase().trim();
   const list=$('#chatList');list.innerHTML='';
   $('#count').textContent=t('chatsCount',{n:S.chats.length});
-  S.chats.forEach((c,i)=>{
-    if(q&&!(c.title.toLowerCase().includes(q)||c.messages.some(m=>m.content.toLowerCase().includes(q))))return;
-    const ch=c.charId&&getChar(c.charId);
-    const d=document.createElement('div');d.className='chat-item'+(c.id===S.activeId?' on':'');
-    d.innerHTML=`<span class="num">${i+1}</span>
-      <span class="ci-title">${c.pin?'<span class="mini">📌</span> ':''}${c.group?'<span class="mini">👥</span> ':ch?`<span class="mini">${avInner(ch.img,ch.emoji)}</span> `:''}${esc(dispTitle(c))}<small>${t('msgs',{n:c.messages.length})} · ${ago(c.updated)}</small></span>
+  // Un solo renglón por personaje (sus chats viven en su historial); los chats generales y grupales van sueltos.
+  const seen=new Set(),ents=[];
+  S.chats.forEach(c=>{
+    const ch=!c.group&&c.charId&&getChar(c.charId);
+    if(ch){if(seen.has(ch.id))return;seen.add(ch.id);ents.push({anchor:c,ch,chats:charChats(ch.id)})}
+    else ents.push({anchor:c,chats:[c]});
+  });
+  const hit=c=>c.title.toLowerCase().includes(q)||c.messages.some(m=>m.content.toLowerCase().includes(q));
+  const vis=ents.filter(e=>!q||(e.ch&&e.ch.name.toLowerCase().includes(q))||e.chats.some(hit));
+  let gn=0;
+  vis.forEach((e,k)=>{
+    const c=e.anchor,ch=e.ch;
+    const last=ch?e.chats[0]:c;
+    const active=ch?e.chats.some(x=>x.id===S.activeId):c.id===S.activeId;
+    const d=document.createElement('div');d.className='chat-item'+(active?' on':'');
+    if(ch){
+      d.innerHTML=`<span class="ci-av">${avInner(ch.img,ch.emoji)}</span>
+      <span class="ci-title">${esc(ch.name)}<small>${t('chatsCount',{n:e.chats.length})} · ${ago(last.updated)}</small></span>
       <span class="ci-actions">
-        <button class="icon-btn" data-a="pin" title="${c.pin?'Desfijar / Unpin':'Fijar / Pin'}">${c.pin?'📍':'📌'}</button>
+        <button class="icon-btn" data-a="hist" title="${t('histTip')}">🕘</button>
+        <button class="icon-btn" data-a="new" title="${t('newTip')}">＋</button></span>`;
+    }else{
+      gn++;
+      d.innerHTML=`<span class="num">${gn}</span>
+      <span class="ci-title">${c.pin?'<span class="mini">📌</span> ':''}${c.group?'<span class="mini">👥</span> ':''}${esc(dispTitle(c))}<small>${t('msgs',{n:c.messages.length})} · ${ago(c.updated)}</small></span>
+      <span class="ci-actions">
+        <button class="icon-btn" data-a="pin" title="${c.pin?t('unpinBtn'):t('pinBtn')}">${c.pin?'📍':'📌'}</button>
         <button class="icon-btn" data-a="up" title="${t('up')}">↑</button>
         <button class="icon-btn" data-a="down" title="${t('down')}">↓</button>
         <button class="icon-btn" data-a="ren" title="${t('ren')}">✎</button>
         <button class="icon-btn" data-a="dup" title="${t('dup')}">⧉</button>
         <button class="icon-btn del" data-a="del" title="${t('del')}">✕</button></span>`;
-    d.onclick=e=>{
-      const a=e.target.closest('[data-a]')?.dataset.a;
-      if(a==='up'||a==='down'){const j=a==='up'?i-1:i+1;if(j>=0&&j<S.chats.length){[S.chats[i],S.chats[j]]=[S.chats[j],S.chats[i]];renderAll()}return}
+    }
+    d.onclick=ev=>{
+      const a=ev.target.closest('[data-a]')?.dataset.a;
+      if(ch){
+        if(a==='hist'){openHist(ch.id);return}
+        if(a==='new'){startNew(ch.id);return}
+        S.activeId=last.id;editing=null;setView('chat');renderAll();closeMenu();return;
+      }
+      const i=S.chats.indexOf(c);
+      if(a==='up'||a==='down'){
+        const dir=a==='up'?-1:1;let j=k+dir;
+        while(j>=0&&j<vis.length&&vis[j].ch)j+=dir; // salta los renglones de personajes
+        if(j>=0&&j<vis.length){const B=S.chats.indexOf(vis[j].anchor);[S.chats[i],S.chats[B]]=[S.chats[B],S.chats[i]];renderAll()}
+        return}
       if(a==='pin'){c.pin=!c.pin;if(c.pin&&i>0){S.chats.splice(i,1);S.chats.unshift(c)}renderAll();return}
-      if(a==='dup'){const k=JSON.parse(JSON.stringify(c));k.id=uid();k.title=(c.title||t('untitled'))+t('dupSuffix');k.updated=Date.now();(k.messages||[]).forEach(m=>{m.id=uid()});S.chats.splice(i+1,0,k);S.activeId=k.id;editing=null;setView('chat');renderAll();toast(t('dupDone'));return}
+      if(a==='dup'){const k2=JSON.parse(JSON.stringify(c));k2.id=uid();k2.title=(c.title||t('untitled'))+t('dupSuffix');k2.updated=Date.now();(k2.messages||[]).forEach(m=>{m.id=uid()});S.chats.splice(i+1,0,k2);S.activeId=k2.id;editing=null;setView('chat');renderAll();toast(t('dupDone'));return}
       if(a==='ren'){const n=prompt(t('renPrompt'),dispTitle(c));if(n&&n.trim()){c.title=n.trim();renderAll()}return}
       if(a==='del'){if(confirm(t('delChat'))){S.chats=S.chats.filter(x=>x.id!==c.id);if(!S.chats.length)newChat(null,true);if(!getChat(S.activeId))S.activeId=S.chats[0].id;renderAll()}return}
       S.activeId=c.id;editing=null;setView('chat');renderAll();closeMenu();
     };
     list.appendChild(d);
+  });
+  syncTb();
+}
+
+/* ---------- Historial de un personaje (como Character.AI) ---------- */
+let histChar=null;
+function openHist(id){histChar=id;$('#histSearch').value='';renderHist();$('#histModal').classList.add('on')}
+function renderHist(){
+  const ch=getChar(histChar);
+  if(!ch){$('#histModal').classList.remove('on');return}
+  $('#histAv').innerHTML=avInner(ch.img,ch.emoji);
+  $('#histName').textContent=ch.name;
+  const l=charChats(ch.id);
+  $('#histSub').textContent=t('histBtn')+' · '+t('chatsCount',{n:l.length});
+  const box=$('#histList');box.innerHTML='';
+  const hq=$('#histSearch').value.toLowerCase().trim();
+  const f=hq?l.filter(c=>c.title.toLowerCase().includes(hq)||c.messages.some(m=>m.content&&m.content.toLowerCase().includes(hq))):l;
+  if(!f.length){box.innerHTML='<p style="color:var(--muted)">'+esc(t(l.length?'histNone':'histEmpty'))+'</p>';return}
+  f.forEach(c=>{
+    const lm=[...c.messages].reverse().find(m=>m.content&&m.content.trim());
+    const snip=lm?lm.content.replace(/\*/g,'').replace(/\s+/g,' ').trim().slice(0,260):t('noMsgs');
+    const on=c.id===S.activeId;
+    const d=document.createElement('div');d.className='h-item'+(on?' on':'');
+    d.innerHTML=(on?`<div class="h-cur">${esc(t('curChat'))}</div>`:'')+
+      `<div class="h-top"><span class="h-time">${agoL(c.updated||Date.now())}</span>${isDefaultTitle(c.title)?'<span class="sp"></span>':`<span class="h-title">${esc(c.title)}</span>`}
+      <span class="h-act"><button class="icon-btn" data-a="ren" title="${t('ren')}">✎</button><button class="icon-btn" data-a="dup" title="${t('dup')}">⧉</button><button class="icon-btn del" data-a="del" title="${t('del')}">✕</button></span></div>
+      <div class="h-snip">${esc(snip)}</div>`;
+    d.onclick=ev=>{
+      const a=ev.target.closest('[data-a]')?.dataset.a;
+      if(a==='ren'){const n=prompt(t('renPrompt'),dispTitle(c));if(n&&n.trim()){c.title=n.trim();renderAll();renderHist()}return}
+      if(a==='dup'){const k2=JSON.parse(JSON.stringify(c));k2.id=uid();k2.title=(c.title||t('untitled'))+t('dupSuffix');k2.updated=Date.now();(k2.messages||[]).forEach(m=>{m.id=uid()});S.chats.splice(S.chats.indexOf(c)+1,0,k2);renderAll();renderHist();toast(t('dupDone'));return}
+      if(a==='del'){
+        if(!confirm(t('delChat')))return;
+        S.chats=S.chats.filter(x=>x.id!==c.id);
+        if(!getChat(S.activeId)){const r=charChats(ch.id);if(r.length)S.activeId=r[0].id;else newChat(ch.id,true)}
+        renderAll();renderHist();return}
+      S.activeId=c.id;editing=null;$('#histModal').classList.remove('on');setView('chat');renderAll();closeMenu();
+    };
+    box.appendChild(d);
   });
 }
 function ago(ts){const m=Math.round((Date.now()-ts)/60000);if(m<1)return t('now');if(m<60)return m+' min';const h=Math.round(m/60);if(h<24)return h+' h';return Math.round(h/24)+' d'}
@@ -1644,7 +1771,7 @@ function renderChars(){
       <button class="btn ghost small" data-a="del" style="flex:0 0 auto">✕</button></div>`;
     d.onclick=e=>{
       const a=e.target.closest('[data-a]')?.dataset.a;
-      if(a==='chat'||(!a&&window.matchMedia('(max-width:800px)').matches)){newChat(c.id);setView('chat');renderAll();$('#input').focus()}
+      if(a==='chat'||(!a&&window.matchMedia('(max-width:800px)').matches)){openCharChat(c.id);$('#input').focus()}
       else if(a==='edit')openChar(c.id);
       else if(a==='png')exportPNG(c).catch(()=>toast(t('invalid')));
       else if(a==='json')dl(JSON.stringify(cardOf(c),null,2),fname(c)+'.json','application/json');
@@ -2286,7 +2413,11 @@ $$('.tab').forEach(t=>t.onclick=()=>{setView(t.dataset.view);if(t.dataset.view==
 const closeMenu=()=>{$('#side').classList.remove('open');$('#scrim').classList.remove('on')};
 $$('[data-menu]').forEach(b=>b.onclick=()=>{$('#side').classList.add('open');$('#scrim').classList.add('on')});
 $('#scrim').onclick=closeMenu;
-$('#newChat').onclick=()=>{newChat(null);setView('chat');closeMenu();$('#input').focus()};
+$('#newChat').onclick=()=>startNew(null);
+$('#tbNew').onclick=()=>{const c=cur(),ch=c&&!c.group&&c.charId&&getChar(c.charId);startNew(ch?ch.id:null)};
+$('#tbHist').onclick=()=>{const c=cur();if(c&&c.charId&&getChar(c.charId))openHist(c.charId)};
+$('#histSearch').oninput=renderHist;
+$('#histNew').onclick=()=>{$('#histModal').classList.remove('on');startNew(histChar)};
 $('#createChar').onclick=()=>openChar();
 $('#search').oninput=renderSide;
 $('#titleInput').oninput=e=>{cur().title=e.target.value||t('untitled');renderSide();save()};
@@ -2517,7 +2648,8 @@ Object.assign(T.fr,{voiceNone:'Aucune voix pour cette langue sur votre appareil.
 /* ---------- Menú ⋯ de la barra superior y flecha para ocultar el menú lateral ---------- */
 $('#moreBtn').onclick=e=>{e.stopPropagation();const m=$('#moreMenu');
   if(m.style.display==='block'){m.style.display='none';return}
-  m.innerHTML=[['📝',t('memBtn'),'memBtn'],['☑',t('selBtn'),'selBtn'],['A−','','fsDown'],['A+','','fsUp'],['🎭',t('optBtn'),'optBtn'],['📖',t('expTxt'),'expTxt'],['📄',t('expMd'),'expMd'],['🧹',t('clearT'),'clearChat']].map(x=>`<button type="button" data-t="${x[2]}">${x[0]} ${esc(x[1])}</button>`).join('');
+  const _c=cur(),_ch=_c&&!_c.group&&_c.charId&&getChar(_c.charId);
+  m.innerHTML=[['＋',t('newTip'),'tbNew'],...(_ch?[['🕘',t('histBtn'),'tbHist']]:[]),['📝',t('memBtn'),'memBtn'],['☑',t('selBtn'),'selBtn'],['A−','','fsDown'],['A+','','fsUp'],['🎭',t('optBtn'),'optBtn'],['📖',t('expTxt'),'expTxt'],['📄',t('expMd'),'expMd'],['🧹',t('clearT'),'clearChat']].map(x=>`<button type="button" data-t="${x[2]}">${x[0]} ${esc(x[1])}</button>`).join('');
   m.style.display='block'};
 $('#moreMenu').onclick=e=>{const b=e.target.closest('[data-t]');if(!b)return;if(!/^fs/.test(b.dataset.t))$('#moreMenu').style.display='none';$('#'+b.dataset.t).click()};
 document.addEventListener('click',e=>{if(!e.target.closest('#moreMenu'))$('#moreMenu').style.display='none'});
