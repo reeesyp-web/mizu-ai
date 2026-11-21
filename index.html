@@ -73,10 +73,11 @@ main{flex:1;min-width:0;display:flex;flex-direction:column;background:linear-gra
 .msg{display:flex;gap:12px;margin-bottom:20px}
 .msg.user{flex-direction:row-reverse}
 .av{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;flex-shrink:0;font-size:18px;background:var(--blue-200)}
-.msg.user .av{background:var(--yellow-200)}
+.msg.user .av{background:var(--blue-200)}
 .body{max-width:calc(100% - 52px);min-width:0}
 .bubble{padding:11px 15px;border-radius:var(--radius);background:var(--white);border:1px solid var(--line);box-shadow:0 1px 3px rgba(74,144,201,.08);word-wrap:break-word;overflow-wrap:anywhere}
-.msg.user .bubble{background:var(--yellow-100);border-color:var(--yellow-200)}
+.msg.user .bubble{background:var(--blue-200);border-color:var(--blue-300)}
+:root[data-tone="deep"]:not([data-mode="dark"]) .msg.user .bubble{border-color:var(--blue-200)}
 .msg.err .bubble{background:#fff0f0;border-color:#f3c7c7}
 .bubble p{margin:0 0 .6em}.bubble p:last-child{margin:0}
 .bubble pre{background:var(--blue-50);border:1px solid var(--line);border-radius:10px;padding:10px;overflow:auto;font-size:13px}
@@ -212,6 +213,31 @@ textarea.field{resize:vertical;min-height:70px}
 .fsb{padding:6px 10px;font-weight:700}
 .tag{display:block;font-size:11.5px;font-weight:500;color:var(--muted);line-height:1.25;margin-top:1px}
 .legal{margin-top:3px}.legal a{color:var(--muted);text-decoration:underline}
+
+/* ---- Selección de turnos / compartir ---- */
+.selTop{display:none;align-items:center;gap:12px;padding:12px 16px;background:var(--white);border-bottom:1px solid var(--line);font-weight:600}
+.selTop .selAll{display:flex;align-items:center;gap:10px;background:none;font:inherit;color:var(--ink);padding:4px}
+.selbox{width:26px;height:26px;border-radius:50%;border:2px solid var(--blue-400);background:var(--white);color:#fff;font-size:15px;line-height:1;display:grid;place-items:center;flex-shrink:0;align-self:center;padding:0}
+.selbox.on{background:var(--blue-600);border-color:var(--blue-600)}
+.msg.selmode{cursor:pointer;gap:10px;padding:6px 8px;border-radius:14px}
+.msg.selmode .actions{display:none!important}
+.msg.selmode.picked{background:var(--blue-100)}
+.msg.selmode .bubble{pointer-events:none}
+#selBar{display:none;flex-direction:column;gap:10px;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));background:var(--white);border-top:1px solid var(--line);position:relative}
+#selBar .selHead{display:flex;align-items:center;justify-content:center;font-weight:700;position:relative}
+#selBar .selX{position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:22px;color:var(--ink);padding:4px 8px}
+#selBar .selActs{display:flex;justify-content:space-around;gap:8px}
+#selBar .selAct{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;color:var(--ink);font:inherit;font-weight:600;font-size:14px;min-width:84px}
+#selBar .selAct .ic{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:var(--blue-200);color:var(--blue-700)}
+#selBar .selAct.main .ic{background:var(--blue-600);color:#fff}
+#selBar .selAct:disabled{opacity:.45}
+#selMenu{display:none;position:absolute;right:16px;bottom:100%;margin-bottom:6px;background:var(--white);border:1px solid var(--line);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.15);padding:6px;min-width:190px;z-index:30}
+#selMenu button{display:block;width:100%;text-align:left;padding:10px 12px;border-radius:9px;font:inherit;color:var(--ink);background:none}
+#selMenu button:hover{background:var(--blue-100)}
+#selMenu .del{color:var(--danger)}
+body.selmode .composer,body.selmode #view-chat>.topbar{display:none}
+body.selmode .selTop{display:flex}
+body.selmode #selBar{display:flex}
 </style>
 </head>
 <body>
@@ -234,6 +260,7 @@ textarea.field{resize:vertical;min-height:70px}
       <option value="fr">🌐 Français</option>
     </select>
     <button class="btn ghost small" id="openProfile" style="text-align:left"></button>
+    <button class="btn ghost small" id="loreBtn" style="text-align:left" data-i18n="loreBtn"></button>
     <button class="btn ghost small" id="gdBtn" style="text-align:left"></button>
     <button class="btn ghost small" id="aboutBtn" style="text-align:left" data-i18n="aboutBtn"></button>
     <dialog id="aboutDlg" style="max-width:520px;border:1px solid var(--line);border-radius:16px;background:var(--white);color:var(--ink);padding:20px"><div id="aboutBody"></div>
@@ -259,11 +286,21 @@ textarea.field{resize:vertical;min-height:70px}
         <button class="menu-btn" data-menu>☰</button>
         <input class="title-input" id="titleInput" data-i18n-ph="titlePh">
         <span class="badge" id="charBadge" style="display:none"></span>
+        <button class="btn ghost small fsb" id="memBtn" data-i18n-title="memBtn">📝</button>
         <button class="btn ghost small fsb" id="fsDown" title="A−">A−</button>
         <button class="btn ghost small fsb" id="fsUp" title="A+">A+</button>
+        <button class="btn ghost small" id="selBtn" data-i18n-title="selBtn">☑</button>
         <button class="btn ghost small" id="clearChat" data-i18n="clear" data-i18n-title="clearT"></button>
       </div>
+      <div class="selTop" id="selTop"><button type="button" class="selAll" id="selAllBtn"><span class="selbox" id="selAllBox"></span><span data-i18n="selAll"></span></button></div>
       <div class="messages" id="messages"><div class="wrap" id="msgWrap"></div></div>
+      <div id="selBar"><div id="selMenu"><button type="button" id="selCopyTxt" data-i18n="copyTxt"></button><button type="button" class="del" id="selDel" data-i18n="delSel"></button></div>
+        <div class="selHead"><span id="selCount"></span><button type="button" class="selX" id="selX" aria-label="x">✕</button></div>
+        <div class="selActs">
+          <button type="button" class="selAct" id="selImg"><span class="ic">🖼️</span><span data-i18n="mkImg"></span></button>
+          <button type="button" class="selAct main" id="selLink"><span class="ic">🔗</span><span data-i18n="cpLink"></span></button>
+          <button type="button" class="selAct" id="selMore"><span class="ic">⋯</span><span data-i18n="more"></span></button>
+        </div></div>
       <div class="composer">
         <div class="tools">
           <button type="button" class="tg" id="tgSearch">🌐 <span data-i18n="tSearch"></span></button>
@@ -377,8 +414,11 @@ textarea.field{resize:vertical;min-height:70px}
   <div class="two">
     <div class="f"><label data-i18n="sMaxChar"></label><select class="field" id="sMaxChar"><option value="200">200</option><option value="300">300</option><option value="400">400</option><option value="500">500</option><option value="800">800</option><option value="1000">1000</option><option value="0" data-i18n="noLimit"></option></select></div>
     <div class="f"><label data-i18n="sMaxGen"></label><select class="field" id="sMaxGen"><option value="200">200</option><option value="300">300</option><option value="400">400</option><option value="500">500</option><option value="800">800</option><option value="1000">1000</option><option value="0" data-i18n="noLimit"></option></select></div>
+    <div class="f"><label data-i18n="sCtx"></label><select class="field" id="sCtx"><option value="6">6</option><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="50">50</option><option value="0" data-i18n="noLimit"></option></select></div>
+    <div class="f"><label data-i18n="sCtxChar"></label><select class="field" id="sCtxChar"><option value="6">6</option><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="50">50</option><option value="80">80</option><option value="0" data-i18n="noLimit"></option></select></div>
   </div>
   <small data-i18n="maxHint" style="display:block;color:var(--muted);margin:-4px 0 8px"></small>
+  <div class="f"><label data-i18n="sMemOn"></label><select class="field" id="sMemOn"><option value="1" data-i18n="memOptOn"></option><option value="0" data-i18n="memOptOff"></option></select></div>
   <div class="f"><label data-i18n="sKey"></label><input class="field" id="sKey" type="password" placeholder="sk-…"></div>
   <small data-i18n="keyNote" style="display:block;color:var(--muted);margin:-4px 0 8px"></small>
   <small data-i18n="spendNote" style="display:block;color:var(--muted);margin:0 0 8px"></small>
@@ -402,6 +442,25 @@ textarea.field{resize:vertical;min-height:70px}
     <button class="btn ghost" data-close data-i18n="close"></button>
     <button class="btn primary" id="saveSet" data-i18n="save"></button>
   </div>
+</div></div>
+
+<!-- Modal memoria -->
+<div class="modal-bg" id="memModal"><div class="modal">
+  <h2 data-i18n="memTitle"></h2>
+  <p style="margin-top:-6px;color:var(--muted);font-size:13.5px" data-i18n="memHint"></p>
+  <textarea class="field" id="memText" rows="10"></textarea>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn ghost small" id="memNow" type="button" data-i18n="memNow"></button><button class="btn ghost small" id="memClear" type="button" data-i18n="memClear"></button></div>
+  <div class="modal-foot"><button class="btn ghost" data-close data-i18n="close"></button><button class="btn primary" id="memSave" data-i18n="save"></button></div>
+</div></div>
+
+<!-- Modal lorebook -->
+<div class="modal-bg" id="loreModal"><div class="modal">
+  <h2 data-i18n="loreTitle"></h2>
+  <p style="margin-top:-6px;color:var(--muted);font-size:13.5px" data-i18n="loreHint"></p>
+  <div class="f"><label data-i18n="loreScope"></label><select class="field" id="loreScope"></select></div>
+  <div id="loreList"></div>
+  <button class="btn ghost small" id="loreAdd" type="button" data-i18n="loreAdd"></button>
+  <div class="modal-foot"><button class="btn ghost" data-close data-i18n="close"></button></div>
 </div></div>
 
 <div class="toast" id="toast"></div>
@@ -769,15 +828,28 @@ pt:{sFmt:'Formato da API',fmtHint:'OpenAI serve para quase todos. Escolha Anthro
 ru:{sFmt:'Формат API',fmtHint:'OpenAI подходит почти всем. Выбирайте Anthropic или Gemini, только если используете их нативный API (URL подставится сам).'},
 fr:{sFmt:'Format de l’API',fmtHint:'OpenAI convient à presque tout le monde. Choisissez Anthropic ou Gemini seulement si vous utilisez leur API native (l’URL se remplit toute seule).'}};
 for(const k in X)if(T[k])Object.assign(T[k],X[k])})();
-Object.assign(T.es,{sMaxChar:'Límite de respuesta · chats de personajes',sMaxGen:'Límite de respuesta · chat general',noLimit:'Sin límite',maxHint:'✂️ Tokens máximos que la IA puede escribir por respuesta (≈ ¾ de palabra cada uno). No se aplica en el modo de pensamiento profundo.'});
-Object.assign(T.en,{sMaxChar:'Reply limit · character chats',sMaxGen:'Reply limit · general chat',noLimit:'No limit',maxHint:'✂️ Maximum tokens the AI can write per reply (≈ ¾ of a word each). Not applied in deep-thinking mode.'});
-if(T.pt)Object.assign(T.pt,{sMaxChar:'Limite de resposta · chats de personagens',sMaxGen:'Limite de resposta · chat geral',noLimit:'Sem limite',maxHint:'✂️ Máximo de tokens que a IA pode escrever por resposta (≈ ¾ de palavra cada). Não se aplica no modo de pensamento profundo.'});
-if(T.ru)Object.assign(T.ru,{sMaxChar:'Лимит ответа · чаты с персонажами',sMaxGen:'Лимит ответа · общий чат',noLimit:'Без ограничений',maxHint:'✂️ Максимум токенов в одном ответе ИИ (≈ ¾ слова каждый). Не применяется в режиме глубокого мышления.'});
-if(T.fr)Object.assign(T.fr,{sMaxChar:'Limite de réponse · chats de personnages',sMaxGen:'Limite de réponse · chat général',noLimit:'Sans limite',maxHint:'✂️ Nombre maximal de tokens que l’IA peut écrire par réponse (≈ ¾ de mot chacun). Non appliqué en mode réflexion approfondie.'});
+Object.assign(T.es,{sCtx:'Memoria · chat general (mensajes que se envían a la IA)',sCtxChar:'Memoria · chats de personajes (mensajes que se envían a la IA)',sMaxChar:'Límite de respuesta · chats de personajes',sMaxGen:'Límite de respuesta · chat general',noLimit:'Sin límite',maxHint:'✂️ Tokens máximos que la IA puede escribir por respuesta (≈ ¾ de palabra cada uno). No se aplica en el modo de pensamiento profundo.'});
+Object.assign(T.en,{sCtx:'Memory · general chat (messages sent to the AI)',sCtxChar:'Memory · character chats (messages sent to the AI)',sMaxChar:'Reply limit · character chats',sMaxGen:'Reply limit · general chat',noLimit:'No limit',maxHint:'✂️ Maximum tokens the AI can write per reply (≈ ¾ of a word each). Not applied in deep-thinking mode.'});
+if(T.pt)Object.assign(T.pt,{sCtx:'Memória · chat geral (mensagens enviadas à IA)',sCtxChar:'Memória · chats de personagens (mensagens enviadas à IA)',sMaxChar:'Limite de resposta · chats de personagens',sMaxGen:'Limite de resposta · chat geral',noLimit:'Sem limite',maxHint:'✂️ Máximo de tokens que a IA pode escrever por resposta (≈ ¾ de palavra cada). Não se aplica no modo de pensamento profundo.'});
+if(T.ru)Object.assign(T.ru,{sCtx:'Память · общий чат (сообщений отправляется ИИ)',sCtxChar:'Память · чаты с персонажами (сообщений отправляется ИИ)',sMaxChar:'Лимит ответа · чаты с персонажами',sMaxGen:'Лимит ответа · общий чат',noLimit:'Без ограничений',maxHint:'✂️ Максимум токенов в одном ответе ИИ (≈ ¾ слова каждый). Не применяется в режиме глубокого мышления.'});
+if(T.fr)Object.assign(T.fr,{sCtx:'Mémoire · chat général (messages envoyés à l’IA)',sCtxChar:'Mémoire · chats de personnages (messages envoyés à l’IA)',sMaxChar:'Limite de réponse · chats de personnages',sMaxGen:'Limite de réponse · chat général',noLimit:'Sans limite',maxHint:'✂️ Nombre maximal de tokens que l’IA peut écrire par réponse (≈ ¾ de mot chacun). Non appliqué en mode réflexion approfondie.'});
 Object.assign(T.es,{terms:'Términos del servicio'});Object.assign(T.en,{terms:'Terms of service'});
 if(T.pt)Object.assign(T.pt,{terms:'Termos de serviço'});if(T.ru)Object.assign(T.ru,{terms:'Условия использования'});if(T.fr)Object.assign(T.fr,{terms:'Conditions d’utilisation'});
 Object.assign(T.es,{termsAcc:'He leído y acepto los {t} y la {p}.',termsGo:'Continuar con Google'});Object.assign(T.en,{termsAcc:'I have read and accept the {t} and the {p}.',termsGo:'Continue with Google'});
 if(T.pt)Object.assign(T.pt,{termsAcc:'Li e aceito os {t} e a {p}.',termsGo:'Continuar com o Google'});if(T.ru)Object.assign(T.ru,{termsAcc:'Я прочитал(а) и принимаю: {t}, {p}.',termsGo:'Продолжить с Google'});if(T.fr)Object.assign(T.fr,{termsAcc:'J’ai lu et j’accepte les {t} et la {p}.',termsGo:'Continuer avec Google'});
+Object.assign(T.es,{dup:'Duplicar',dupSuffix:' (copia)',dupDone:'Chat duplicado'});Object.assign(T.en,{dup:'Duplicate',dupSuffix:' (copy)',dupDone:'Chat duplicated'});if(T.pt)Object.assign(T.pt,{dup:'Duplicar',dupSuffix:' (cópia)',dupDone:'Chat duplicado'});if(T.ru)Object.assign(T.ru,{dup:'Дублировать',dupSuffix:' (копия)',dupDone:'Чат дублирован'});if(T.fr)Object.assign(T.fr,{dup:'Dupliquer',dupSuffix:' (copie)',dupDone:'Chat dupliqué'});
+Object.assign(T.es,{gdOut:'¿Cerrar sesión de Google? Tus chats y ajustes quedan guardados en tu Drive y esta pantalla quedará como nueva. Tus claves de API se quedan solo en este dispositivo.',gdOutFail:'No se pudo guardar en Drive. Si cierras sesión ahora perderás los últimos cambios. ¿Cerrar sesión de todos modos?'});Object.assign(T.en,{gdOut:'Sign out of Google? Your chats and settings stay saved in your Drive and this screen will reset to new. Your API keys stay only on this device.',gdOutFail:'Could not save to Drive. If you sign out now you will lose your latest changes. Sign out anyway?'});if(T.pt)Object.assign(T.pt,{gdOut:'Sair do Google? Seus chats e ajustes ficam salvos no Drive e esta tela voltará ao estado novo. Suas chaves de API ficam só neste dispositivo.',gdOutFail:'Não foi possível salvar no Drive. Se sair agora, você perderá as últimas alterações. Sair mesmo assim?'});if(T.ru)Object.assign(T.ru,{gdOut:'Выйти из Google? Чаты и настройки сохранятся в Drive, а этот экран станет новым. Ключи API останутся только на этом устройстве.',gdOutFail:'Не удалось сохранить в Drive. Если выйти сейчас, последние изменения будут потеряны. Всё равно выйти?'});if(T.fr)Object.assign(T.fr,{gdOut:'Se déconnecter de Google ? Vos chats et réglages restent dans Drive et cet écran sera remis à neuf. Vos clés d’API restent uniquement sur cet appareil.',gdOutFail:'Impossible d’enregistrer dans Drive. Si vous vous déconnectez maintenant, vous perdrez les dernières modifications. Se déconnecter quand même ?'});
+Object.assign(T.es,{selBtn:'Seleccionar turnos',selAll:'Seleccionar todo',selN:'{n} turnos seleccionados',mkImg:'Crear imagen',cpLink:'Copiar enlace',more:'Más',copyTxt:'Copiar texto',delSel:'Eliminar turnos',delSelAsk:'¿Eliminar {n} turnos de este chat?',linkCopied:'Enlace copiado',linkLong:'Enlace copiado, pero es muy largo y algunas apps pueden cortarlo',imgBusy:'Creando imagen…',imgFail:'No se pudo crear la imagen',impDone:'Chat importado',impBad:'El enlace no es válido',selNone:'Selecciona al menos un turno',impWait:'Toca la pantalla para importar el chat compartido'});Object.assign(T.en,{selBtn:'Select turns',selAll:'Select all',selN:'{n} turns selected',mkImg:'Create image',cpLink:'Copy link',more:'More',copyTxt:'Copy text',delSel:'Delete turns',delSelAsk:'Delete {n} turns from this chat?',linkCopied:'Link copied',linkLong:'Link copied, but it is very long and some apps may cut it',imgBusy:'Creating image…',imgFail:'Could not create the image',impDone:'Chat imported',impBad:'The link is not valid',selNone:'Select at least one turn',impWait:'Tap the screen to import the shared chat'});if(T.pt)Object.assign(T.pt,{selBtn:'Selecionar turnos',selAll:'Selecionar tudo',selN:'{n} turnos selecionados',mkImg:'Criar imagem',cpLink:'Copiar link',more:'Mais',copyTxt:'Copiar texto',delSel:'Excluir turnos',delSelAsk:'Excluir {n} turnos deste chat?',linkCopied:'Link copiado',linkLong:'Link copiado, mas é muito longo e alguns apps podem cortá-lo',imgBusy:'Criando imagem…',imgFail:'Não foi possível criar a imagem',impDone:'Chat importado',impBad:'O link não é válido',selNone:'Selecione pelo menos um turno',impWait:'Toque na tela para importar o chat compartilhado'});if(T.ru)Object.assign(T.ru,{selBtn:'Выбрать реплики',selAll:'Выбрать все',selN:'Выбрано реплик: {n}',mkImg:'Создать изображение',cpLink:'Копировать ссылку',more:'Ещё',copyTxt:'Копировать текст',delSel:'Удалить реплики',delSelAsk:'Удалить реплики ({n}) из этого чата?',linkCopied:'Ссылка скопирована',linkLong:'Ссылка скопирована, но она очень длинная, и некоторые приложения могут её обрезать',imgBusy:'Создаю изображение…',imgFail:'Не удалось создать изображение',impDone:'Чат импортирован',impBad:'Ссылка недействительна',selNone:'Выберите хотя бы одну реплику',impWait:'Коснитесь экрана, чтобы импортировать чат'});if(T.fr)Object.assign(T.fr,{selBtn:'Sélectionner des tours',selAll:'Tout sélectionner',selN:'{n} tours sélectionnés',mkImg:'Créer une image',cpLink:'Copier le lien',more:'Plus',copyTxt:'Copier le texte',delSel:'Supprimer les tours',delSelAsk:'Supprimer {n} tours de ce chat ?',linkCopied:'Lien copié',linkLong:'Lien copié, mais il est très long et certaines applis peuvent le couper',imgBusy:'Création de l’image…',imgFail:'Impossible de créer l’image',impDone:'Chat importé',impBad:'Le lien n’est pas valide',selNone:'Sélectionnez au moins un tour',impWait:'Touchez l’écran pour importer le chat partagé'});
+Object.assign(T.es,{loreBtn:'📚 Lorebook (mundo)',loreTitle:'Lorebook · datos del mundo',loreHint:'Cada entrada se envía a la IA solo cuando una de sus palabras clave aparece en los últimos mensajes (o si es “siempre activa”). Así la IA recuerda lugares, personas y reglas sin gastar tokens de más.',loreScope:'Alcance',loreGlobal:'🌍 Global (todos los chats)',loreAdd:'+ Añadir entrada',loreKeys:'Palabras clave (separadas por comas)',loreContent:'Lo que la IA debe saber…',loreOn:'Activa',loreAlways:'Siempre activa',loreEmpty:'Aún no hay entradas.'});
+Object.assign(T.en,{loreBtn:'📚 Lorebook (world info)',loreTitle:'Lorebook · world info',loreHint:'Each entry is sent to the AI only when one of its keywords appears in the latest messages (or if it is “always on”). This way the AI remembers places, people and rules without wasting tokens.',loreScope:'Scope',loreGlobal:'🌍 Global (all chats)',loreAdd:'+ Add entry',loreKeys:'Keywords (comma-separated)',loreContent:'What the AI should know…',loreOn:'Enabled',loreAlways:'Always on',loreEmpty:'No entries yet.'});
+if(T.pt)Object.assign(T.pt,{loreBtn:'📚 Lorebook (mundo)',loreTitle:'Lorebook · dados do mundo',loreHint:'Cada entrada é enviada à IA apenas quando uma das suas palavras-chave aparece nas últimas mensagens (ou se for “sempre ativa”). Assim a IA lembra lugares, pessoas e regras sem gastar tokens à toa.',loreScope:'Escopo',loreGlobal:'🌍 Global (todos os chats)',loreAdd:'+ Adicionar entrada',loreKeys:'Palavras-chave (separadas por vírgulas)',loreContent:'O que a IA deve saber…',loreOn:'Ativa',loreAlways:'Sempre ativa',loreEmpty:'Ainda não há entradas.'});
+if(T.ru)Object.assign(T.ru,{loreBtn:'📚 Лорбук (мир)',loreTitle:'Лорбук · данные мира',loreHint:'Каждая запись отправляется ИИ только тогда, когда одно из её ключевых слов встречается в последних сообщениях (или если она «всегда включена»). Так ИИ помнит места, людей и правила, не тратя лишние токены.',loreScope:'Область',loreGlobal:'🌍 Глобально (все чаты)',loreAdd:'+ Добавить запись',loreKeys:'Ключевые слова (через запятую)',loreContent:'Что должен знать ИИ…',loreOn:'Включена',loreAlways:'Всегда',loreEmpty:'Записей пока нет.'});
+if(T.fr)Object.assign(T.fr,{loreBtn:'📚 Lorebook (univers)',loreTitle:'Lorebook · infos de l’univers',loreHint:'Chaque entrée n’est envoyée à l’IA que lorsque l’un de ses mots-clés apparaît dans les derniers messages (ou si elle est « toujours active »). Ainsi l’IA se souvient des lieux, personnes et règles sans gaspiller de tokens.',loreScope:'Portée',loreGlobal:'🌍 Global (tous les chats)',loreAdd:'+ Ajouter une entrée',loreKeys:'Mots-clés (séparés par des virgules)',loreContent:'Ce que l’IA doit savoir…',loreOn:'Activée',loreAlways:'Toujours active',loreEmpty:'Aucune entrée pour l’instant.'});
+Object.assign(T.es,{sMemOn:'Resumen automático de mensajes antiguos (memoria a largo plazo)',memOptOn:'Activado',memOptOff:'Desactivado',memBtn:'Memoria del chat',memTitle:'📝 Memoria del chat',memHint:'Resumen de lo que ya salió de la ventana de mensajes. Se envía a la IA junto con los mensajes recientes. Puedes corregirlo a mano.',memNow:'Resumir ahora',memClear:'Borrar memoria',memWork:'Resumiendo…',memFail:'No se pudo resumir',memNone:'Todavía no hay mensajes antiguos que resumir.'});
+Object.assign(T.en,{sMemOn:'Auto-summary of old messages (long-term memory)',memOptOn:'On',memOptOff:'Off',memBtn:'Chat memory',memTitle:'📝 Chat memory',memHint:'Summary of what has already left the message window. It is sent to the AI along with the recent messages. You can edit it by hand.',memNow:'Summarize now',memClear:'Clear memory',memWork:'Summarizing…',memFail:'Could not summarize',memNone:'There are no old messages to summarize yet.'});
+if(T.pt)Object.assign(T.pt,{sMemOn:'Resumo automático de mensagens antigas (memória de longo prazo)',memOptOn:'Ativado',memOptOff:'Desativado',memBtn:'Memória do chat',memTitle:'📝 Memória do chat',memHint:'Resumo do que já saiu da janela de mensagens. É enviado à IA junto com as mensagens recentes. Você pode corrigi-lo manualmente.',memNow:'Resumir agora',memClear:'Apagar memória',memWork:'Resumindo…',memFail:'Não foi possível resumir',memNone:'Ainda não há mensagens antigas para resumir.'});
+if(T.ru)Object.assign(T.ru,{sMemOn:'Автосводка старых сообщений (долгая память)',memOptOn:'Включено',memOptOff:'Выключено',memBtn:'Память чата',memTitle:'📝 Память чата',memHint:'Сводка того, что уже вышло за окно сообщений. Отправляется ИИ вместе с недавними сообщениями. Вы можете править её вручную.',memNow:'Свести сейчас',memClear:'Очистить память',memWork:'Составляю сводку…',memFail:'Не удалось составить сводку',memNone:'Пока нет старых сообщений для сводки.'});
+if(T.fr)Object.assign(T.fr,{sMemOn:'Résumé automatique des anciens messages (mémoire à long terme)',memOptOn:'Activé',memOptOff:'Désactivé',memBtn:'Mémoire du chat',memTitle:'📝 Mémoire du chat',memHint:'Résumé de ce qui est déjà sorti de la fenêtre de messages. Il est envoyé à l’IA avec les messages récents. Vous pouvez le corriger à la main.',memNow:'Résumer maintenant',memClear:'Effacer la mémoire',memWork:'Résumé en cours…',memFail:'Impossible de résumer',memNone:'Aucun ancien message à résumer pour l’instant.'});
 function t(k,o){let v=(T[LANG]&&T[LANG][k])??T.en[k]??k;if(o)for(const x in o)v=v.split('{'+x+'}').join(o[x]);return v}
 const sameChar=(c,d)=>d&&c.name===d.name&&c.tagline===d.tagline&&c.desc===d.desc&&c.greet===d.greet&&c.scene===d.scene&&(c.tags||[]).join()===d.tags.join();
 const fromDef=(k,l)=>({...DEF[l][k],tags:[...DEF[l][k].tags]});
@@ -820,7 +892,7 @@ let editing=null, abortCtl=null, busy=false, editingCharId=null, selEmoji=EMOJIS
 function getChat(id){return S.chats.find(c=>c.id===id)}
 function cur(){return getChat(S.activeId)}
 function getChar(id){return S.chars.find(c=>c.id===id)}
-function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),1800)}
+function toast(t,ms){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),ms||1800)}
 
 function newChat(charId,silent){
   const ch={id:uid(),title:t('newChatTitle'),charId:charId||null,messages:[],updated:Date.now()};
@@ -866,10 +938,12 @@ function renderSide(){
         <button class="icon-btn" data-a="up" title="${t('up')}">↑</button>
         <button class="icon-btn" data-a="down" title="${t('down')}">↓</button>
         <button class="icon-btn" data-a="ren" title="${t('ren')}">✎</button>
+        <button class="icon-btn" data-a="dup" title="${t('dup')}">⧉</button>
         <button class="icon-btn del" data-a="del" title="${t('del')}">✕</button></span>`;
     d.onclick=e=>{
       const a=e.target.closest('[data-a]')?.dataset.a;
       if(a==='up'||a==='down'){const j=a==='up'?i-1:i+1;if(j>=0&&j<S.chats.length){[S.chats[i],S.chats[j]]=[S.chats[j],S.chats[i]];renderAll()}return}
+      if(a==='dup'){const k=JSON.parse(JSON.stringify(c));k.id=uid();k.title=(c.title||t('untitled'))+t('dupSuffix');k.updated=Date.now();(k.messages||[]).forEach(m=>{m.id=uid()});S.chats.splice(i+1,0,k);S.activeId=k.id;editing=null;setView('chat');renderAll();toast(t('dupDone'));return}
       if(a==='ren'){const n=prompt(t('renPrompt'),dispTitle(c));if(n&&n.trim()){c.title=n.trim();renderAll()}return}
       if(a==='del'){if(confirm(t('delChat'))){S.chats=S.chats.filter(x=>x.id!==c.id);if(!S.chats.length)newChat(null,true);if(!getChat(S.activeId))S.activeId=S.chats[0].id;renderAll()}return}
       S.activeId=c.id;editing=null;setView('chat');renderAll();closeMenu();
@@ -930,6 +1004,9 @@ function msgEl(m,i,chat){
         <button class="act del" data-x="del">${t('delMsg')}</button></div>`}`;
   }
   el.innerHTML=`<div class="av">${avatarFor(m,chat)}</div><div class="body">${inner}</div>`;
+  if(selMode){const on=selSet.has(m.id);el.classList.add('selmode');if(on)el.classList.add('picked');
+    el.insertAdjacentHTML('afterbegin',`<button type="button" class="selbox ${on?'on':''}" aria-label="select">${on?'✓':''}</button>`);
+    el.onclick=e=>{e.preventDefault();toggleSel(m.id)};return el}
   el.onclick=async e=>{
     const x=e.target.closest('[data-x]')?.dataset.x;if(!x)return;
     const msgs=chat.messages;
@@ -1032,21 +1109,24 @@ async function ask(chat,reuse){
     else{
       abortCtl=new AbortController();
       const hasImg=chat.messages.some(m=>m!==ai&&!m.error&&(m.files||[]).some(f=>f.k==='img'));
-      const history=chat.messages.filter(m=>m!==ai&&!m.error).map(m=>{
+      let history=chat.messages.filter(m=>m!==ai&&!m.error).map(m=>{
         const fs=m.files||[];if(!fs.length)return{role:m.role,content:m.content};
         const body=(m.content?m.content+'\n\n':'')+fs.filter(f=>f.k==='txt').map(f=>`[${t('fileLbl')}: ${f.name}]\n${f.text}`).join('\n\n');
         const imgs=fs.filter(f=>f.k==='img');
         return imgs.length?{role:m.role,content:[{type:'text',text:body||'.'},...imgs.map(f=>({type:'image_url',image_url:{url:f.data}}))]}:{role:m.role,content:body};
       });
-      const hist=chat.messages.filter(m=>m!==ai&&!m.error).map(m=>{
+      let hist=chat.messages.filter(m=>m!==ai&&!m.error).map(m=>{
         const fs=m.files||[];
         const text=((m.content?m.content+'\n\n':'')+fs.filter(f=>f.k==='txt').map(f=>`[${t('fileLbl')}: ${f.name}]\n${f.text}`).join('\n\n')).trim();
         return{role:m.role==='user'?'user':'assistant',text,imgs:fs.filter(f=>f.k==='img').map(f=>f.data)};
       });
+      const ctxN=+(chat.charId?(st.ctxChar??'30'):(st.ctxMax??'20'));
+      const cut=a=>{if(!ctxN||a.length<=ctxN)return a;let r=a.slice(-ctxN);while(r.length>1&&r[0].role!=='user')r=r.slice(1);return r};
+      history=cut(history);hist=cut(hist);
       let model=st.model,apiUrl=st.url,apiKey=st.key,fmt=st.fmt||'openai';
       if(hasImg&&st.vision)model=st.vision;
       else if(useThink){if(st.turl)fmt='openai';apiUrl=st.turl||st.url;apiKey=st.tkey||st.key;model=st.think||(/deepseek/i.test(apiUrl)?'deepseek-flash':st.model)}
-      let sys=systemPrompt(chat);
+      let sys=systemPrompt(chat)+loreFor(chat)+memFor(chat);
       const capN=+(chat.charId?(st.maxChar??'500'):(st.maxGen??'0')),cap=useThink?0:(capN||0);
       if(cap)sys+='\n\nLength rule: keep every reply under about '+Math.round(cap*0.55)+' words and always finish your last sentence.';
       if(useSearch){
@@ -1057,11 +1137,11 @@ async function ask(chat,reuse){
             const hd=(st.shead||'Authorization: Bearer {key}').split(':');
             const sr=await fetch(st.surl,{method:'POST',headers:{'Content-Type':'application/json',[hd[0].trim()]:hd.slice(1).join(':').trim().replace('{key}',st.skey)},
               body:(st.sbody||'{"query":"{q}","max_results":5}').replace('{q}',()=>JSON.stringify(q.slice(0,380)).slice(1,-1))});
-            if(!sr.ok)throw new Error('search');
+            if(!sr.ok)throw new Error('HTTP '+sr.status);
             const rs=findResults(await sr.json());
             if(rs.length){ai.sources=rs.map(x=>({title:x.title,url:x.url}));
               sys+=t('srcIntro',{d:new Date().toLocaleDateString()})+rs.map((x,i)=>`[${i+1}] ${x.title}\n${x.url}\n${x.content.slice(0,700)}`).join('\n\n')}
-          }catch(e){toast(t('srcFail'))}
+          }catch(e){toast(t('srcFail')+' ['+((e&&e.message)||'error')+']',7000)}
         }
       }
       let rq;
@@ -1095,6 +1175,7 @@ async function ask(chat,reuse){
     const f=chat.messages.find(m=>m.role==='user');if(f)chat.title=f.content.slice(0,36);
   }
   renderAll();
+  maybeSummarize(chat);
 }
 function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
 async function demo(chat,ai,upd){
@@ -1251,7 +1332,7 @@ $('#saveChar').onclick=()=>{
 
 /* ---------- Ajustes ---------- */
 const THEMES=[
-  ...[207,340,150,265,25,185,5,85,310].map(h=>({h,tone:'soft',sm:1,c:`hsl(${h} 65% 75%)`})),
+  ...[207,340,150,265,25,50,185,5,85,310].map(h=>({h,tone:'soft',sm:1,c:`hsl(${h} 65% 75%)`})),
   {h:215,tone:'soft',sm:.12,c:'hsl(215 8% 78%)'},
   ...[220,345,145,255,290,180,20].map(h=>({h,tone:'deep',sm:1,c:`hsl(${h} 45% 32%)`})),
   {h:215,tone:'deep',sm:.1,c:'hsl(215 8% 26%)'},
@@ -1300,7 +1381,7 @@ $('#saveProf').onclick=()=>{
 };
 $('#openSettings').onclick=()=>{
   drawProf();const s=S.settings;$('#sFmt').value=s.fmt||'openai';$('#sUrl').value=s.url;$('#sModel').value=s.model;$('#sKey').value=s.key;$('#sSUrl').value=s.surl||'';$('#sSKey').value=s.skey||'';$('#sSHead').value=s.shead||'';$('#sSBody').value=s.sbody||'';$('#sTUrl').value=s.turl||'';$('#sTKey').value=s.tkey||'';$('#sThink').value=s.think||'';$('#sVision').value=s.vision||'';
-  $('#sTemp').value=s.temp;$('#sMaxChar').value=s.maxChar??'500';$('#sMaxGen').value=s.maxGen??'0';$('#tVal').textContent=s.temp;$('#sSys').value=s.sys;$('#setModal').classList.add('on');
+  $('#sTemp').value=s.temp;$('#sMaxChar').value=s.maxChar??'500';$('#sMaxGen').value=s.maxGen??'0';$('#sCtx').value=s.ctxMax??'20';$('#sCtxChar').value=s.ctxChar??'30';$('#sMemOn').value=s.memOn??'1';$('#tVal').textContent=s.temp;$('#sSys').value=s.sys;$('#setModal').classList.add('on');
 };
 $('#sFmt').onchange=e=>{
   const f=e.target.value,u=$('#sUrl'),v=u.value.trim();
@@ -1316,7 +1397,7 @@ $('#clearKeys').onclick=()=>{
   save();renderAll();toast(t('clearKeysDone'));
 };
 $('#saveSet').onclick=()=>{
-  Object.assign(S.settings,{fmt:$('#sFmt').value,maxChar:$('#sMaxChar').value,maxGen:$('#sMaxGen').value,url:$('#sUrl').value.trim(),model:$('#sModel').value.trim(),key:$('#sKey').value.trim(),surl:$('#sSUrl').value.trim(),skey:$('#sSKey').value.trim(),shead:$('#sSHead').value.trim(),sbody:$('#sSBody').value.trim(),turl:$('#sTUrl').value.trim(),tkey:$('#sTKey').value.trim(),think:$('#sThink').value.trim(),vision:$('#sVision').value.trim(),temp:+$('#sTemp').value,sys:$('#sSys').value});
+  Object.assign(S.settings,{fmt:$('#sFmt').value,maxChar:$('#sMaxChar').value,maxGen:$('#sMaxGen').value,memOn:$('#sMemOn').value,ctxMax:$('#sCtx').value,ctxChar:$('#sCtxChar').value,url:$('#sUrl').value.trim(),model:$('#sModel').value.trim(),key:$('#sKey').value.trim(),surl:$('#sSUrl').value.trim(),skey:$('#sSKey').value.trim(),shead:$('#sSHead').value.trim(),sbody:$('#sSBody').value.trim(),turl:$('#sTUrl').value.trim(),tkey:$('#sTKey').value.trim(),think:$('#sThink').value.trim(),vision:$('#sVision').value.trim(),temp:+$('#sTemp').value,sys:$('#sSys').value});
   $('#setModal').classList.remove('on');renderAll();toast(t('setSaved'));
 };
 $$('[data-close]').forEach(b=>b.onclick=()=>b.closest('.modal-bg').classList.remove('on'));
@@ -1338,7 +1419,16 @@ $('#importFile').onchange=e=>{
 
 /* ---------- Cuenta de Google + guardado en Drive ---------- */
 var GD_CLIENT='1060785017392-epmfufbf64gp63ut7qvu2ihbkjsd7req.apps.googleusercontent.com',GD_SCOPE='openid email https://www.googleapis.com/auth/drive.appdata',GD_FILE='mizu-ai-data.json';
-var gdTok=null,gdId=null,gdTimer=0,gdSkip=false,gdNote='',gdArmed=false;
+var gdTok=null,gdId=null,gdTimer=0,gdSkip=false,gdNote='',gdArmed=false,gdReady=false;
+const API_KEYS=['fmt','url','model','key','surl','skey','shead','sbody','turl','tkey','think','vision']; // las APIs son del dispositivo: nunca se suben ni se pisan desde Drive
+const apiOnly=o=>{const r={};API_KEYS.forEach(k=>{if(o&&o[k]!==undefined)r[k]=o[k]});return r};
+function gdFresh(){ // pantalla nueva como Character.ai: se conservan solo las APIs de este dispositivo
+  const keep=apiOnly(S.settings);gdSkip=true;clearTimeout(gdTimer);
+  S=defaultState();S.settings=Object.assign(defaultState().settings,keep);
+  S.profile={img:'',bg:'',hue:207,tone:'soft',sm:1,mode:'light'};S.lang=LANG;
+  newChat(null,true);S.activeId=S.chats[0].id;
+  applyLook();applyStatic();renderAll();gdSkip=false;
+}
 function gdSaveTok(sec){try{sessionStorage.setItem('gdTok',JSON.stringify({t:gdTok,e:Date.now()+(sec||3600)*1000-60000}))}catch(_){}}
 function gdDropTok(){gdTok=null;try{sessionStorage.removeItem('gdTok')}catch(_){}}
 function gdRestore(){try{const o=JSON.parse(sessionStorage.getItem('gdTok'));if(o&&o.e>Date.now()){gdTok=o.t;return true}}catch(_){}return false}
@@ -1367,18 +1457,19 @@ async function gdFileId(){
 async function gdDownload(){const id=await gdFileId();return id?(await gdFetch('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media')).json():null}
 async function gdUpload(){
   try{
-    const d=JSON.parse(JSON.stringify(S));d.settings.key='';d.settings.skey='';d.settings.tkey='';d.savedAt=Date.now();
+    if((gdLS('gdOwner')||'').toLowerCase()!==(gdLS('gdEmail')||'').toLowerCase())return false; // datos de otra cuenta: no se suben
+    const d=JSON.parse(JSON.stringify(S));API_KEYS.forEach(k=>{delete d.settings[k]});d.savedAt=Date.now();
     const body=JSON.stringify(d),id=await gdFileId();
     if(id)await gdFetch('https://www.googleapis.com/upload/drive/v3/files/'+id+'?uploadType=media',{method:'PATCH',headers:{'Content-Type':'application/json'},body});
     else{const b='mizu'+Date.now(),meta=JSON.stringify({name:GD_FILE,parents:['appDataFolder']});
       const r=await(await gdFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+b},
         body:'--'+b+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+meta+'\r\n--'+b+'\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--'+b+'--'})).json();gdId=r.id}
-    gdLS('gdAt',String(d.savedAt));gdNote='✓ '+t('gdSaved')+' '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});gdUI();
-  }catch(e){gdNote='⚠️';gdUI()}
+    gdLS('gdAt',String(d.savedAt));gdNote='✓ '+t('gdSaved')+' '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});gdUI();return true
+  }catch(e){gdNote='⚠️';gdUI();return false}
 }
-function gdQueue(){if(!gdTok||gdSkip)return;clearTimeout(gdTimer);gdTimer=setTimeout(gdUpload,3000)}
+function gdQueue(){if(!gdTok||gdSkip||!gdReady)return;clearTimeout(gdTimer);gdTimer=setTimeout(gdUpload,3000)}
 function applyRemote(d){
-  const k=S.settings;S=d;S.settings=Object.assign(defaultState().settings,d.settings||{},{key:k.key,skey:k.skey,tkey:k.tkey});
+  const k=S.settings;S=d;S.settings=Object.assign(defaultState().settings,d.settings||{},apiOnly(k));
   S.profile=Object.assign({img:'',bg:'',hue:207,tone:'soft',sm:1,mode:'light'},S.profile||{});
   if(!S.chars)S.chars=defaultChars();if(!S.chats.length)newChat(null,true);
   if(!S.chats.some(c=>c.id===S.activeId))S.activeId=S.chats[0].id;
@@ -1388,20 +1479,115 @@ async function gdSync(){
   const r=await gdDownload(),at=+gdLS('gdAt')||0,hasLocal=S.chats.some(c=>(c.messages||[]).length);
   if(r&&r.chats&&r.savedAt>at&&(at||!hasLocal||confirm(t('gdAsk')))){gdSkip=true;applyRemote(r);gdSkip=false;gdLS('gdAt',String(r.savedAt));gdNote='✓ '+t('gdSaved');gdUI()}
   else await gdUpload();
+  gdReady=true;
+  if(pendingImport){pendingImport=false;runImport()}
 }
 async function gdLogin(auto){
+  gdReady=false;
   try{
     await gdAuth(!!auto);
     const u=await(await gdFetch('https://www.googleapis.com/oauth2/v3/userinfo')).json();
-    gdLS('gdOn','1');gdLS('gdEmail',u.email||'');gdUI();await gdSync();
-  }catch(e){gdTok=null;gdUI();if(!auto)toast(t('gdFail'))}
+    const em=(u.email||'').toLowerCase();if(!em)throw new Error('no email');
+    const owner=(gdLS('gdOwner')||gdLS('gdEmail')||'').toLowerCase();
+    if(owner&&owner!==em){gdFresh();gdLS('gdAt',null)} // lo que había en este dispositivo era de otra cuenta
+    gdLS('gdOwner',em);gdLS('gdOn','1');gdLS('gdEmail',u.email||'');gdUI();await gdSync();
+  }catch(e){gdTok=null;gdUI();if(!auto)toast(t('gdFail'));if(pendingImport){pendingImport=false;runImport()}}
 }
+/* ---------- Memoria con resúmenes (chat general y de personajes) ---------- */
+let memBusy=false;
+const memFor=chat=>chat.mem?'\n\n[Story so far — summary of earlier messages]\n'+chat.mem:'';
+async function aiOnce(sys,user){ // una llamada simple a la IA configurada, sin mostrarla en el chat
+  const st=S.settings,fmt=st.fmt||'openai',out={content:'',think:''};
+  const rq=fmt==='openai'?{url:st.url.replace(/\/$/,'')+'/chat/completions',headers:{'Content-Type':'application/json','Authorization':'Bearer '+st.key},
+      body:{model:st.model,temperature:0.3,stream:true,messages:[{role:'system',content:sys},{role:'user',content:user}]}}
+    :buildNative(fmt,st.url,st.key,st.model,sys,[{role:'user',text:user,imgs:[]}],0.3,0);
+  const r=await fetch(rq.url,{method:'POST',headers:rq.headers,body:JSON.stringify(rq.body)});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const rd=r.body.getReader(),dec=new TextDecoder();let buf='';
+  for(;;){const {done,value}=await rd.read();if(done)break;buf+=dec.decode(value,{stream:true});const lines=buf.split('\n');buf=lines.pop();
+    for(const l of lines){const ln=l.trim();if(!ln.startsWith('data:'))continue;const d=ln.slice(5).trim();if(!d||d==='[DONE]')continue;let j;try{j=JSON.parse(d)}catch(_){continue}feedChunk(fmt,j,out)}}
+  return out.content.trim();
+}
+async function maybeSummarize(chat,force){ // resume lo que ya salió de la ventana de mensajes
+  const st=S.settings;if(memBusy||!st.key)return 'skip';
+  if(!force&&(st.memOn??'1')!=='1')return 'skip';
+  const ctxN=+(chat.charId?(st.ctxChar??'30'):(st.ctxMax??'20'));if(!ctxN)return 'skip';
+  const msgs=chat.messages.filter(m=>!m.error&&!m.pending&&(m.content||'').trim());
+  const old=msgs.slice(0,Math.max(0,msgs.length-ctxN));
+  let from=0;
+  if(chat.memId){const i=old.findIndex(m=>m.id===chat.memId);if(i>=0)from=i+1;else chat.mem=''}
+  const fresh=old.slice(from);
+  if(fresh.length<(force?1:10))return 'none';
+  memBusy=true;
+  try{
+    const ch=chat.charId&&getChar(chat.charId),me=(S.profile&&S.profile.name)||'User',ai=ch?ch.name:'AI';
+    const txt=await aiOnce('You maintain the long-term memory of an ongoing roleplay or chat. Update the running summary with the new messages. Keep names, relationships, places, key events, promises, decisions and the current situation. Write in the same language as the conversation, in third person, at most about 250 words. Output ONLY the updated summary.',
+      '[Current summary]\n'+(chat.mem||'(none)')+'\n\n[New messages]\n'+fresh.map(m=>(m.role==='user'?me:ai)+': '+m.content.slice(0,1500)).join('\n'));
+    if(!txt)return 'fail';
+    chat.mem=txt;chat.memId=fresh[fresh.length-1].id;save();return 'ok';
+  }catch(e){return 'fail'}finally{memBusy=false}
+}
+$('#memBtn').onclick=()=>{$('#memText').value=cur().mem||'';$('#memModal').classList.add('on')};
+$('#memSave').onclick=()=>{const c=cur();c.mem=$('#memText').value.trim();if(!c.mem)delete c.memId;save();$('#memModal').classList.remove('on')};
+$('#memClear').onclick=()=>{$('#memText').value=''};
+$('#memNow').onclick=async()=>{
+  const c=cur(),b=$('#memNow'),lbl=b.textContent;c.mem=$('#memText').value.trim();if(!c.mem)delete c.memId;
+  b.disabled=true;b.textContent=t('memWork');
+  const r=await maybeSummarize(c,true);
+  b.disabled=false;b.textContent=lbl;
+  if(r==='ok')$('#memText').value=c.mem;else toast(r==='none'?t('memNone'):t('memFail'));
+};
+/* ---------- Lorebook ---------- */
+function loreArr(){const sc=$('#loreScope').value;if(sc==='_g'){S.lore=S.lore||[];return S.lore}const c=getChar(sc);c.lore=c.lore||[];return c.lore}
+function renderLore(){
+  const arr=loreArr();
+  $('#loreList').innerHTML=arr.length?arr.map((e,i)=>`<div style="border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0">
+    <input class="field" data-lf="keys" data-i="${i}" value="${esc(e.keys||'')}" placeholder="${esc(t('loreKeys'))}">
+    <textarea class="field" data-lf="content" data-i="${i}" rows="3" placeholder="${esc(t('loreContent'))}" style="margin-top:6px">${esc(e.content||'')}</textarea>
+    <div style="display:flex;gap:14px;align-items:center;margin-top:6px;flex-wrap:wrap">
+      <label style="cursor:pointer"><input type="checkbox" data-lf="on" data-i="${i}" ${e.off?'':'checked'}> ${esc(t('loreOn'))}</label>
+      <label style="cursor:pointer"><input type="checkbox" data-lf="always" data-i="${i}" ${e.always?'checked':''}> ${esc(t('loreAlways'))}</label>
+      <button type="button" class="btn ghost small" data-ldel="${i}">🗑</button></div></div>`).join(''):'<p style="color:var(--muted)">'+esc(t('loreEmpty'))+'</p>';
+}
+function loreFor(chat){ // entradas activas: palabras clave en los últimos 8 mensajes, o "siempre activa"
+  const ch=chat.charId&&getChar(chat.charId);
+  const all=[...(S.lore||[]),...((ch&&ch.lore)||[])].filter(e=>!e.off&&(e.content||'').trim());
+  if(!all.length)return '';
+  const scan=chat.messages.filter(m=>!m.error&&!m.pending).slice(-8).map(m=>m.content||'').join('\n').toLowerCase();
+  const out=[];let n=0;
+  for(const e of all){
+    const ks=(e.keys||'').split(',').map(x=>x.trim().toLowerCase()).filter(Boolean);
+    if(!(e.always||ks.some(k=>scan.includes(k))))continue;
+    const c=e.content.trim();if(n+c.length>4000)break;n+=c.length;out.push('- '+c);
+  }
+  return out.length?'\n\n[World info / Lorebook — use when relevant]\n'+out.join('\n'):'';
+}
+$('#loreBtn').onclick=()=>{
+  const c0=cur(),sel=$('#loreScope');
+  sel.innerHTML='<option value="_g">'+esc(t('loreGlobal'))+'</option>'+S.chars.map(c=>'<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>').join('');
+  sel.value=(c0&&c0.charId&&getChar(c0.charId))?c0.charId:'_g';
+  renderLore();$('#loreModal').classList.add('on');
+};
+$('#loreScope').onchange=renderLore;
+$('#loreAdd').onclick=()=>{loreArr().push({id:uid(),keys:'',content:'',always:false,off:false});renderLore();save()};
+$('#loreList').addEventListener('input',e=>{const f=e.target.dataset.lf;if(!f||f==='on'||f==='always')return;loreArr()[+e.target.dataset.i][f]=e.target.value;save()});
+$('#loreList').addEventListener('change',e=>{const f=e.target.dataset.lf;if(f!=='on'&&f!=='always')return;const o=loreArr()[+e.target.dataset.i];if(f==='on')o.off=!e.target.checked;else o.always=e.target.checked;save()});
+$('#loreList').addEventListener('click',e=>{const b=e.target.closest('[data-ldel]');if(!b)return;loreArr().splice(+b.dataset.ldel,1);renderLore();save()});
 const LEGAL=/^https?:$/.test(location.protocol)?'':'https://reeesyp-web.github.io/mizu-ai/';
 const legalUrl=p=>LEGAL+p+'#'+LANG;
 document.querySelectorAll('.legalA').forEach(a=>{a.href=LEGAL+a.dataset.p;a.addEventListener('click',()=>{a.href=legalUrl(a.dataset.p)})});
 $('#aboutBtn').onclick=()=>{$('#aboutBody').innerHTML='<h3 style="margin:0 0 8px">'+esc(t('tagline'))+'</h3><p>'+esc(t('aboutTxt'))+'</p><p>'+esc(t('aboutLogo'))+' <a href="https://picrew.me/en/image_maker/3157" target="_blank" rel="noopener">ぷにぷにほっぺメーカー</a> (Picrew)</p><p><b>'+esc(t('aboutContact'))+':</b> <a href="mailto:mizuaisupport@gmail.com">mizuaisupport@gmail.com</a></p>';$('#aboutDlg').showModal()};
 $('#aboutClose').onclick=()=>$('#aboutDlg').close();
-$('#gdBtn').onclick=()=>{if(gdTok){if(confirm(t('gdOut'))){gdTok=null;gdNote='';gdDropTok();gdLS('gdOn',null);gdLS('gdEmail',null);gdUI()}}else gdConsent()};
+$('#gdBtn').onclick=async()=>{
+  if(!gdTok){gdConsent();return}
+  if(!confirm(t('gdOut')))return;
+  clearTimeout(gdTimer);
+  const ok=gdReady?await gdUpload():true; // último guardado antes de limpiar
+  if(!ok&&!confirm(t('gdOutFail')))return;
+  gdTok=null;gdReady=false;gdNote='';gdDropTok();
+  ['gdOn','gdEmail','gdOwner','gdAt'].forEach(k=>gdLS(k,null));
+  gdFresh();gdUI();
+};
 function gdConsent(){ // casilla SIEMPRE visible y sin marcar en cada inicio de sesión con Google (clickwrap)
   if(typeof $('#termsDlg').showModal!=='function'){ // navegadores sin <dialog>
     if(confirm(t('termsAcc').replace('{t}',t('terms')).replace('{p}',t('privacy')))){gdLS('gdTerms',new Date().toISOString());gdLogin(false)}
@@ -1414,6 +1600,137 @@ $('#termsChk').onchange=e=>{$('#termsGo').disabled=!e.target.checked};
 $('#termsGo').onclick=()=>{if(!$('#termsChk').checked)return;gdLS('gdTerms',new Date().toISOString());$('#termsDlg').close();gdLogin(false)};
 $('#termsNo').onclick=()=>$('#termsDlg').close();
 gdUI();
+
+/* ================= Seleccionar turnos · imagen · enlace ================= */
+var selMode=false,selSet=new Set(),pendingImport=false;
+const selList=()=>cur().messages.filter(m=>selSet.has(m.id));
+const selPickable=()=>cur().messages.filter(m=>!m.pending&&!m.error);
+function selUI(){
+  const n=selSet.size,all=selPickable();
+  $('#selCount').textContent=t('selN',{n});
+  const full=all.length>0&&all.every(m=>selSet.has(m.id));
+  const b=$('#selAllBox');b.className='selbox'+(full?' on':'');b.textContent=full?'✓':'';
+  ['selImg','selLink','selMore'].forEach(id=>$('#'+id).disabled=!n);
+}
+const keepScroll=fn=>{const b=$('#messages'),y=b.scrollTop;fn();b.scrollTop=y};
+function enterSel(){selMode=true;selSet=new Set();document.body.classList.add('selmode');$('#selMenu').style.display='none';selUI();keepScroll(renderChat)}
+function exitSel(){selMode=false;selSet=new Set();document.body.classList.remove('selmode');$('#selMenu').style.display='none';renderChat()}
+function toggleSel(id){selSet.has(id)?selSet.delete(id):selSet.add(id);selUI();keepScroll(renderChat)}
+function selTxt(m){return(m.content||'').trim()}
+function selLabel(m,chat){if(m.role==='user')return t('roleUser').replace(/^[^:：]*[:：]\s*/,'');const ch=chat.charId&&getChar(chat.charId);return ch?ch.name:t('roleAI').replace(/^[^:：]*[:：]\s*/,'')}
+function cssColor(v){const e=document.createElement('i');e.style.cssText='position:absolute;visibility:hidden;background:'+v;document.body.appendChild(e);const c=getComputedStyle(e).backgroundColor;e.remove();return c}
+function stripMd(x){return x.replace(/```\w*\n?/g,'').replace(/^#{1,6}\s+/gm,'').replace(/\*\*(.+?)\*\*/g,'$1').replace(/__(.+?)__/g,'$1').replace(/`([^`]+)`/g,'$1')}
+function wrapLines(ctx,text,maxW){
+  const out=[];
+  for(const para of text.split('\n')){
+    if(!para.trim()){out.push('');continue}
+    let line='';
+    for(const w of para.split(/(\s+)/)){
+      if(!w)continue;
+      if(ctx.measureText(line+w).width<=maxW){line+=w;continue}
+      if(line.trim()){out.push(line.trimEnd());line=''}
+      if(/^\s+$/.test(w))continue;
+      if(ctx.measureText(w).width<=maxW){line=w;continue}
+      for(const ch of w){if(ctx.measureText(line+ch).width>maxW){out.push(line);line=ch}else line+=ch}
+    }
+    out.push(line.trimEnd());
+  }
+  return out;
+}
+function rrect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+async function makeImages(){
+  const chat=cur(),msgs=selList().filter(m=>selTxt(m));
+  if(!msgs.length){toast(t('selNone'));return}
+  toast(t('imgBusy'),4000);
+  await new Promise(r=>setTimeout(r,30));
+  const W=900,PAD=36,FS=30,LH=44,BW=W-PAD*2-90,PAGE=2600;
+  const cv=document.createElement('canvas'),c=cv.getContext('2d');
+  const font=`${FS}px system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif`;c.font=font;
+  const colUser=cssColor('var(--blue-200)'),colUserBd=cssColor('var(--blue-300)'),colAi=cssColor('#fff'),colAiBd=cssColor('var(--line)'),colBg=cssColor('var(--blue-50)'),colInk='#2a3a4b',colMuted='#74879a';
+  // bloques (cada uno cabe en una página; los mensajes largos se parten por líneas)
+  const blocks=[];
+  const maxLines=Math.floor((PAGE-PAD*2-60)/LH);
+  for(const m of msgs){
+    const lines=wrapLines(c,stripMd(selTxt(m)),BW-36);
+    for(let i=0;i<lines.length;i+=maxLines)blocks.push({u:m.role==='user',name:i?'':selLabel(m,chat),lines:lines.slice(i,i+maxLines)});
+  }
+  const bh=b=>(b.name?34:0)+b.lines.length*LH+30;
+  const pages=[];let cur_=[],h=PAD;
+  for(const b of blocks){const need=bh(b)+22;if(cur_.length&&h+need>PAGE-PAD){pages.push({b:cur_,h});cur_=[];h=PAD}cur_.push(b);h+=need}
+  if(cur_.length)pages.push({b:cur_,h});
+  const files=[];
+  for(let p=0;p<pages.length;p++){
+    const pg=pages[p];cv.width=W;cv.height=Math.ceil(pg.h+PAD);
+    c.font=font;c.fillStyle=colBg;c.fillRect(0,0,W,cv.height);c.textBaseline='top';
+    let y=PAD;
+    for(const b of pg.b){
+      const bw=Math.min(BW,Math.max(...b.lines.map(l=>c.measureText(l).width),60)+36);
+      const bx=b.u?W-PAD-bw:PAD,by=y+(b.name?34:0);
+      if(b.name){c.font=`600 ${FS-8}px system-ui,sans-serif`;c.fillStyle=colMuted;c.textAlign=b.u?'right':'left';c.fillText(b.name,b.u?W-PAD-6:PAD+6,y+2);c.textAlign='left'}
+      rrect(c,bx,by,bw,b.lines.length*LH+30,22);c.fillStyle=b.u?colUser:colAi;c.fill();c.lineWidth=2;c.strokeStyle=b.u?colUserBd:colAiBd;c.stroke();
+      c.font=font;c.fillStyle=colInk;b.lines.forEach((l,i)=>c.fillText(l,bx+18,by+15+i*LH));
+      y=by+b.lines.length*LH+30+22;
+    }
+    const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
+    files.push(new File([blob],`mizu-chat-${p+1}.png`,{type:'image/png'}));
+  }
+  try{
+    if(navigator.canShare&&navigator.canShare({files})){await navigator.share({files});return}
+  }catch(e){if(e&&e.name==='AbortError')return}
+  files.forEach((f,i)=>setTimeout(()=>{const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)},i*350));
+}
+/* ---- enlace: el chat va comprimido dentro del propio enlace (sin servidor) ---- */
+const b64u=u=>{let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+const unb64u=x=>{x=x.replace(/-/g,'+').replace(/_/g,'/');while(x.length%4)x+='=';const b=atob(x),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+async function zEnc(o){
+  const raw=new TextEncoder().encode(JSON.stringify(o));
+  if(typeof CompressionStream==='undefined')return'j='+b64u(raw);
+  const cs=new CompressionStream('deflate-raw'),w=cs.writable.getWriter();w.write(raw);w.close();
+  return'z='+b64u(new Uint8Array(await new Response(cs.readable).arrayBuffer()));
+}
+async function zDec(kind,s){
+  const u=unb64u(s);
+  if(kind==='j')return JSON.parse(new TextDecoder().decode(u));
+  const ds=new DecompressionStream('deflate-raw'),w=ds.writable.getWriter();w.write(u);w.close();
+  return JSON.parse(new TextDecoder().decode(await new Response(ds.readable).arrayBuffer()));
+}
+async function copyLink(){
+  const chat=cur(),msgs=selList().filter(m=>selTxt(m));
+  if(!msgs.length){toast(t('selNone'));return}
+  const payload={v:1,t:dispTitle(chat),m:msgs.map(m=>({r:m.role==='user'?'u':'a',c:selTxt(m)}))};
+  const url=location.origin+location.pathname+'#'+await zEnc(payload);
+  let ok=false;try{await navigator.clipboard.writeText(url);ok=true}catch(e){}
+  if(!ok){try{const ta=document.createElement('textarea');ta.value=url;document.body.appendChild(ta);ta.select();ok=document.execCommand('copy');ta.remove()}catch(e){}}
+  if(!ok){prompt(t('cpLink'),url);return}
+  toast(url.length>12000?t('linkLong'):t('linkCopied'),url.length>12000?4500:1800);
+}
+async function runImport(){
+  const m=location.hash.match(/^#([zj])=(.+)$/);if(!m)return;
+  try{
+    const d=await zDec(m[1],m[2]);
+    if(!d||!Array.isArray(d.m)||!d.m.length)throw 0;
+    const ch={id:uid(),title:String(d.t||t('newChatTitle')).slice(0,120),charId:null,updated:Date.now(),
+      messages:d.m.map(x=>({id:uid(),role:x.r==='u'?'user':'assistant',content:String(x.c||'')}))};
+    S.chats.unshift(ch);S.activeId=ch.id;
+    history.replaceState(null,'',location.pathname+location.search); // para que recargar no importe otra vez
+    if(typeof setView==='function')setView('chat');
+    renderAll();toast(t('impDone'));
+  }catch(e){history.replaceState(null,'',location.pathname+location.search);toast(t('impBad'))}
+}
+$('#selBtn').onclick=enterSel;$('#selX').onclick=exitSel;
+$('#selAllBtn').onclick=()=>{const all=selPickable(),full=all.every(m=>selSet.has(m.id));selSet=new Set(full?[]:all.map(m=>m.id));selUI();keepScroll(renderChat)};
+$('#selImg').onclick=()=>makeImages().catch(()=>toast(t('imgFail')));
+$('#selLink').onclick=()=>copyLink().catch(()=>toast(t('imgFail')));
+$('#selMore').onclick=e=>{e.stopPropagation();const m=$('#selMenu');m.style.display=m.style.display==='block'?'none':'block'};
+document.addEventListener('click',e=>{if(!e.target.closest('#selMenu'))$('#selMenu').style.display='none'});
+$('#selCopyTxt').onclick=async()=>{
+  const chat=cur(),txt=selList().map(m=>selLabel(m,chat)+':\n'+selTxt(m)).join('\n\n');
+  try{await navigator.clipboard.writeText(txt);toast(t('copied'))}catch(e){toast(t('copyFail'))}$('#selMenu').style.display='none'};
+$('#selDel').onclick=()=>{
+  const n=selSet.size;$('#selMenu').style.display='none';if(!n||!confirm(t('delSelAsk',{n})))return;
+  const chat=cur();chat.messages=chat.messages.filter(m=>!selSet.has(m.id));chat.updated=Date.now();exitSel();renderAll()};
+// importar un chat compartido: si hay sesión de Google, se espera a que termine la sincronización para no perderlo
+if(/^#[zj]=/.test(location.hash)){if(gdLS('gdOn')){pendingImport=true;toast(t('impWait'),3500)}else runImport()}
 if(gdLS('gdOn')){if(gdRestore()){gdUI();gdSync().catch(()=>{})}else gdArm()}
 
 /* ---------- Navegación ---------- */
