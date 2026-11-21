@@ -1652,7 +1652,12 @@ function gdArm(){ // sin servidor: reconecta en el primer toque/tecla (el navega
   ev.forEach(e=>document.addEventListener(e,re,true));
 }
 const gdLS=(k,v)=>{try{return v===undefined?localStorage.getItem(k):v===null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(_){}};
-function gdUI(){const e=gdLS('gdEmail')||'';$('#gdBtn').innerHTML='<img src="'+GLOGO+'" alt="" style="width:18px;height:18px;vertical-align:-4px;margin-right:8px">'+esc(gdTok?(e+(gdNote?' · '+gdNote:'')):(gdLS('gdOn')?t('gdRe'):t('gdIn')))}
+function gdNoteTxt(){ // texto del estado: se genera al dibujar para seguir el idioma activo
+  if(!gdNote)return '';
+  if(gdNote.err)return '⚠️';
+  return '✓ '+t('gdSaved')+(gdNote.ts?' '+new Date(gdNote.ts).toLocaleTimeString(LANG,{hour:'2-digit',minute:'2-digit'}):'');
+}
+function gdUI(){const e=gdLS('gdEmail')||'';const nt=gdNoteTxt();$('#gdBtn').innerHTML='<img src="'+GLOGO+'" alt="" style="width:18px;height:18px;vertical-align:-4px;margin-right:8px">'+esc(gdTok?(e+(nt?' · '+nt:'')):(gdLS('gdOn')?t('gdRe'):t('gdIn')))}
 function gdLoad(){return window.google&&google.accounts?Promise.resolve():new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
 function gdAuth(silent){return gdLoad().then(()=>new Promise((ok,no)=>{
   google.accounts.oauth2.initTokenClient({client_id:GD_CLIENT,scope:GD_SCOPE,hint:gdLS('gdEmail')||undefined,callback:r=>{if(r.error)return no(r);gdTok=r.access_token;gdSaveTok(+r.expires_in);ok()},error_callback:no}).requestAccessToken({prompt:silent?'':'select_account'});
@@ -1678,8 +1683,8 @@ async function gdUpload(){
     else{const b='mizu'+Date.now(),meta=JSON.stringify({name:GD_FILE,parents:['appDataFolder']});
       const r=await(await gdFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+b},
         body:'--'+b+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+meta+'\r\n--'+b+'\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--'+b+'--'})).json();gdId=r.id}
-    gdLS('gdAt',String(d.savedAt));gdNote='✓ '+t('gdSaved')+' '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});gdUI();return true
-  }catch(e){gdNote='⚠️';gdUI();return false}
+    gdLS('gdAt',String(d.savedAt));gdNote={ok:1,ts:Date.now()};gdUI();return true
+  }catch(e){gdNote={err:1};gdUI();return false}
 }
 function gdQueue(){if(!gdTok||gdSkip||!gdReady)return;clearTimeout(gdTimer);gdTimer=setTimeout(gdUpload,3000)}
 function applyRemote(d){
@@ -1691,7 +1696,7 @@ function applyRemote(d){
 }
 async function gdSync(){
   const r=await gdDownload(),at=+gdLS('gdAt')||0,hasLocal=S.chats.some(c=>(c.messages||[]).length);
-  if(r&&r.chats&&r.savedAt>at&&(at||!hasLocal||confirm(t('gdAsk')))){gdSkip=true;applyRemote(r);gdSkip=false;gdLS('gdAt',String(r.savedAt));gdNote='✓ '+t('gdSaved');gdUI()}
+  if(r&&r.chats&&r.savedAt>at&&(at||!hasLocal||confirm(t('gdAsk')))){gdSkip=true;applyRemote(r);gdSkip=false;gdLS('gdAt',String(r.savedAt));gdNote={ok:1};gdUI()}
   else await gdUpload();
   gdReady=true;
   if(pendingImport){pendingImport=false;runImport()}
