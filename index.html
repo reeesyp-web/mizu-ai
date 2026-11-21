@@ -1206,8 +1206,9 @@ function renderSide(){
     const ch=c.charId&&getChar(c.charId);
     const d=document.createElement('div');d.className='chat-item'+(c.id===S.activeId?' on':'');
     d.innerHTML=`<span class="num">${i+1}</span>
-      <span class="ci-title">${c.group?'<span class="mini">👥</span> ':ch?`<span class="mini">${avInner(ch.img,ch.emoji)}</span> `:''}${esc(dispTitle(c))}<small>${t('msgs',{n:c.messages.length})} · ${ago(c.updated)}</small></span>
+      <span class="ci-title">${c.pin?'<span class="mini">📌</span> ':''}${c.group?'<span class="mini">👥</span> ':ch?`<span class="mini">${avInner(ch.img,ch.emoji)}</span> `:''}${esc(dispTitle(c))}<small>${t('msgs',{n:c.messages.length})} · ${ago(c.updated)}</small></span>
       <span class="ci-actions">
+        <button class="icon-btn" data-a="pin" title="${c.pin?'Desfijar / Unpin':'Fijar / Pin'}">${c.pin?'📍':'📌'}</button>
         <button class="icon-btn" data-a="up" title="${t('up')}">↑</button>
         <button class="icon-btn" data-a="down" title="${t('down')}">↓</button>
         <button class="icon-btn" data-a="ren" title="${t('ren')}">✎</button>
@@ -1216,6 +1217,7 @@ function renderSide(){
     d.onclick=e=>{
       const a=e.target.closest('[data-a]')?.dataset.a;
       if(a==='up'||a==='down'){const j=a==='up'?i-1:i+1;if(j>=0&&j<S.chats.length){[S.chats[i],S.chats[j]]=[S.chats[j],S.chats[i]];renderAll()}return}
+      if(a==='pin'){c.pin=!c.pin;if(c.pin&&i>0){S.chats.splice(i,1);S.chats.unshift(c)}renderAll();return}
       if(a==='dup'){const k=JSON.parse(JSON.stringify(c));k.id=uid();k.title=(c.title||t('untitled'))+t('dupSuffix');k.updated=Date.now();(k.messages||[]).forEach(m=>{m.id=uid()});S.chats.splice(i+1,0,k);S.activeId=k.id;editing=null;setView('chat');renderAll();toast(t('dupDone'));return}
       if(a==='ren'){const n=prompt(t('renPrompt'),dispTitle(c));if(n&&n.trim()){c.title=n.trim();renderAll()}return}
       if(a==='del'){if(confirm(t('delChat'))){S.chats=S.chats.filter(x=>x.id!==c.id);if(!S.chats.length)newChat(null,true);if(!getChat(S.activeId))S.activeId=S.chats[0].id;renderAll()}return}
