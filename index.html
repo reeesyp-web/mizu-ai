@@ -281,6 +281,22 @@ aside{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:tou
 aside>*{flex-shrink:0}
 aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 .pinTag{float:right;font-size:12px;margin:0 0 2px 8px;opacity:.85}
+@media(max-width:800px){
+#charGrid.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#charGrid .card{padding:0;gap:0;border-radius:18px;overflow:hidden;cursor:pointer}
+#charGrid .card:hover{transform:none}
+#charGrid .card-top{flex-direction:column;align-items:stretch;gap:0}
+#charGrid .cav{width:100%;height:auto;aspect-ratio:4/3;border-radius:0;font-size:56px}
+#charGrid .card-top>div:last-child{padding:10px 12px 0;min-width:0}
+#charGrid .card h3{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#charGrid .card .tag{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12px}
+#charGrid .card .desc{font-size:12.5px;-webkit-line-clamp:2;padding:6px 12px 0;flex:none}
+#charGrid .chips{display:none}
+#charGrid .card-foot{padding:10px 10px 10px;gap:4px}
+#charGrid .card-foot [data-a=chat]{display:none}
+#charGrid .card-foot .btn{flex:1 1 0!important;padding:6px 0;font-size:14px;min-width:0}
+#charGrid .new-card{display:none}
+}
 </style>
 </head>
 <body>
@@ -1497,7 +1513,7 @@ function renderChars(){
       <button class="btn ghost small" data-a="del" style="flex:0 0 auto">✕</button></div>`;
     d.onclick=e=>{
       const a=e.target.closest('[data-a]')?.dataset.a;
-      if(a==='chat'){newChat(c.id);setView('chat');renderAll();$('#input').focus()}
+      if(a==='chat'||(!a&&window.matchMedia('(max-width:800px)').matches)){newChat(c.id);setView('chat');renderAll();$('#input').focus()}
       else if(a==='edit')openChar(c.id);
       else if(a==='png')exportPNG(c).catch(()=>toast(t('invalid')));
       else if(a==='json')dl(JSON.stringify(cardOf(c),null,2),fname(c)+'.json','application/json');
