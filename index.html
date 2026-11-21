@@ -308,6 +308,7 @@ body.selmode #selBar{display:flex}
           <button type="button" class="tg" id="attBtn">📎 <span data-i18n="tAttach"></span></button>
           <input type="file" id="fileIn" multiple hidden accept="image/*,.docx,.txt,.md,.csv,.json,.html,.xml,.js,.py,.log">
         </div>
+        <div class="tools" id="grpBar" style="display:none"></div>
         <div class="chips" id="chips"></div>
         <div class="box">
           <textarea id="input" rows="1" data-i18n-ph="inputPh"></textarea>
@@ -328,7 +329,7 @@ body.selmode #selBar{display:flex}
       <div class="chars-wrap"><div class="chars-in">
         <div class="chars-head">
           <div><h1 data-i18n="charsH"></h1><p data-i18n="charsSub"></p></div>
-          <button class="btn yellow" id="createChar" data-i18n="createChar"></button>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" id="impCard" data-i18n="impCard"></button><button class="btn ghost" id="newGroup" data-i18n="grpNew"></button><button class="btn yellow" id="createChar" data-i18n="createChar"></button><input type="file" id="cardIn" accept=".png,.json,image/png,application/json" multiple hidden></div>
         </div>
         <div class="grid" id="charGrid"></div>
       </div></div>
@@ -460,7 +461,17 @@ body.selmode #selBar{display:flex}
   <div class="f"><label data-i18n="loreScope"></label><select class="field" id="loreScope"></select></div>
   <div id="loreList"></div>
   <button class="btn ghost small" id="loreAdd" type="button" data-i18n="loreAdd"></button>
+  <button class="btn ghost small" id="loreImp" type="button" data-i18n="loreImp"></button>
+  <button class="btn ghost small" id="loreExp" type="button" data-i18n="loreExp"></button>
+  <input type="file" id="loreFile" accept=".json,application/json" hidden>
   <div class="modal-foot"><button class="btn ghost" data-close data-i18n="close"></button></div>
+</div></div>
+
+<div class="modal-bg" id="grpModal"><div class="modal">
+  <h2 data-i18n="grpTitle"></h2>
+  <div class="f"><label data-i18n="grpName"></label><input class="field" id="gName" maxlength="60"></div>
+  <div class="f"><label data-i18n="grpPick"></label><div id="gList"></div></div>
+  <div class="modal-foot"><button class="btn ghost" data-close data-i18n="cancel"></button><button class="btn primary" id="gCreate" data-i18n="grpCreate"></button></div>
 </div></div>
 
 <div class="toast" id="toast"></div>
@@ -894,9 +905,10 @@ function cur(){return getChat(S.activeId)}
 function getChar(id){return S.chars.find(c=>c.id===id)}
 function toast(t,ms){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),ms||1800)}
 
-function newChat(charId,silent){
+function newChat(charId,silent,group){
   const ch={id:uid(),title:t('newChatTitle'),charId:charId||null,messages:[],updated:Date.now()};
-  if(charId){const c=getChar(charId)||S.chars.find(x=>x.id===charId);if(c){ch.title=t('chatWith')+c.name;if(c.greet)ch.messages.push({id:uid(),role:'assistant',content:c.greet})}}
+  if(group){ch.group=group.ids;ch.title=group.name;ch.charId=null;group.ids.forEach(id=>{const c=getChar(id),m=c&&greetMsg(c);if(m){m.cid=id;ch.messages.push(m)}})}
+  else if(charId){const c=getChar(charId)||S.chars.find(x=>x.id===charId);if(c){ch.title=t('chatWith')+c.name;const m=greetMsg(c);if(m)ch.messages.push(m)}}
   S.chats.unshift(ch);S.activeId=ch.id;
   if(!silent){save();renderAll()}
   return ch;
@@ -933,7 +945,7 @@ function renderSide(){
     const ch=c.charId&&getChar(c.charId);
     const d=document.createElement('div');d.className='chat-item'+(c.id===S.activeId?' on':'');
     d.innerHTML=`<span class="num">${i+1}</span>
-      <span class="ci-title">${ch?`<span class="mini">${avInner(ch.img,ch.emoji)}</span> `:''}${esc(dispTitle(c))}<small>${t('msgs',{n:c.messages.length})} · ${ago(c.updated)}</small></span>
+      <span class="ci-title">${c.group?'<span class="mini">👥</span> ':ch?`<span class="mini">${avInner(ch.img,ch.emoji)}</span> `:''}${esc(dispTitle(c))}<small>${t('msgs',{n:c.messages.length})} · ${ago(c.updated)}</small></span>
       <span class="ci-actions">
         <button class="icon-btn" data-a="up" title="${t('up')}">↑</button>
         <button class="icon-btn" data-a="down" title="${t('down')}">↓</button>
@@ -955,7 +967,7 @@ function ago(ts){const m=Math.round((Date.now()-ts)/60000);if(m<1)return t('now'
 
 function avatarFor(m,chat){
   if(m.role==='user')return avInner(S.profile.img,'🙂');
-  const ch=chat.charId&&getChar(chat.charId);return ch?avInner(ch.img,ch.emoji):'🤖';
+  const ch=m.cid?getChar(m.cid):chat.charId&&getChar(chat.charId);return ch?avInner(ch.img,ch.emoji):'🤖';
 }
 function applyBg(){
   const m=$('#messages'),b=safeImg(S.profile.bg);
@@ -964,12 +976,12 @@ function applyBg(){
   m.style.backgroundSize='cover';m.style.backgroundPosition='center';
 }
 function renderChat(){
-  applyBg();
+  applyBg();grpBar();
   const chat=cur();
   $('#titleInput').value=dispTitle(chat);
   const ch=chat.charId&&getChar(chat.charId);
   const b=$('#charBadge');
-  if(ch){b.style.display='';b.innerHTML=`<span class="mini">${avInner(ch.img,ch.emoji)}</span> ${esc(ch.name)}`}else b.style.display='none';
+  if(chat.group){b.style.display='';b.innerHTML='👥 '+esc(chat.group.map(i=>(getChar(i)||{}).name).filter(Boolean).join(', '))}else if(ch){b.style.display='';b.innerHTML=`<span class="mini">${avInner(ch.img,ch.emoji)}</span> ${esc(ch.name)}`}else b.style.display='none';
   const w=$('#msgWrap');w.innerHTML='';
   if(!chat.messages.length){
     w.innerHTML=`<div class="empty"><div class="big">☁️</div><h2>${t('emptyH')}</h2><p>${t('emptyP')}</p></div>`;
@@ -1003,7 +1015,7 @@ function msgEl(m,i,chat){
         <button class="act" data-x="up">↑</button><button class="act" data-x="down">↓</button>
         <button class="act del" data-x="del">${t('delMsg')}</button></div>`}`;
   }
-  el.innerHTML=`<div class="av">${avatarFor(m,chat)}</div><div class="body">${inner}</div>`;
+  el.innerHTML=`<div class="av">${avatarFor(m,chat)}</div><div class="body">${chat.group&&m.role!=='user'&&m.cid?`<div class="tag" style="margin:0 0 2px 4px">${esc((getChar(m.cid)||{}).name||'')}</div>`:''}${inner}</div>`;
   if(selMode){const on=selSet.has(m.id);el.classList.add('selmode');if(on)el.classList.add('picked');
     el.insertAdjacentHTML('afterbegin',`<button type="button" class="selbox ${on?'on':''}" aria-label="select">${on?'✓':''}</button>`);
     el.onclick=e=>{e.preventDefault();toggleSel(m.id)};return el}
@@ -1035,12 +1047,6 @@ function msgEl(m,i,chat){
 function userCtx(){
   const p=S.profile,n=(p.name||'').trim(),b=(p.bio||'').trim();
   return (n?t('rpUserName',{n}):'')+(b?t('rpUserBio',{b}):'');
-}
-function systemPrompt(chat){
-  const ch=chat.charId&&getChar(chat.charId),u=userCtx();
-  if(!ch)return S.settings.sys+(u?'\n\n'+u:'');
-  return t('rpHead',{n:ch.name,tag:ch.tagline?', '+ch.tagline:''})+t('rpPers',{d:ch.desc})+(ch.scene?t('rpScene',{s:ch.scene}):'')+
-   (ch.example?t('rpEx',{e:ch.example}):'')+(u?u:'')+t('rpRules');
 }
 function setBusy(b){busy=b;const s=$('#sendAI');s.textContent=b?t('stop'):t('sendAI');s.title=t('sendAIT');s.classList.toggle('stop',b)}
 /* ---------- Formatos de API: OpenAI / Anthropic / Gemini ---------- */
@@ -1088,13 +1094,13 @@ function feedChunk(fmt,j,ai){
     ai.content+=dl.content||'';ai.think+=dl.reasoning_content||dl.reasoning||'';
   }
 }
-async function ask(chat,reuse){
+async function ask(chat,reuse,spk){
   if(busy)return;
   let ai;
   if(reuse){ // regenerar: guarda la respuesta actual y añade una nueva alternativa
     ai=reuse;if(!ai.alts)ai.alts=ai.error?[]:[ai.content];
     ai.alts.push('');ai.altIdx=ai.alts.length-1;ai.content='';ai.error=false;ai.pending=true;
-  }else{ai={id:uid(),role:'assistant',content:'',pending:true};chat.messages.push(ai)}
+  }else{ai={id:uid(),role:'assistant',content:'',pending:true,...(chat.group?{cid:spk||pickSpeaker(chat)}:{})};chat.messages.push(ai)}
   ai.think='';ai.sources=null;
   const sync=()=>{if(ai.alts)ai.alts[ai.altIdx]=ai.content};
   const revert=()=>{ // si falla, vuelve a la respuesta anterior
@@ -1109,25 +1115,26 @@ async function ask(chat,reuse){
     else{
       abortCtl=new AbortController();
       const hasImg=chat.messages.some(m=>m!==ai&&!m.error&&(m.files||[]).some(f=>f.k==='img'));
-      let history=chat.messages.filter(m=>m!==ai&&!m.error).map(m=>{
+      const srcMsgs=chat.group?chat.messages.map(m=>m===ai?m:grpView(m,ai)):chat.messages;
+      let history=srcMsgs.filter(m=>m!==ai&&!m.error).map(m=>{
         const fs=m.files||[];if(!fs.length)return{role:m.role,content:m.content};
         const body=(m.content?m.content+'\n\n':'')+fs.filter(f=>f.k==='txt').map(f=>`[${t('fileLbl')}: ${f.name}]\n${f.text}`).join('\n\n');
         const imgs=fs.filter(f=>f.k==='img');
         return imgs.length?{role:m.role,content:[{type:'text',text:body||'.'},...imgs.map(f=>({type:'image_url',image_url:{url:f.data}}))]}:{role:m.role,content:body};
       });
-      let hist=chat.messages.filter(m=>m!==ai&&!m.error).map(m=>{
+      let hist=srcMsgs.filter(m=>m!==ai&&!m.error).map(m=>{
         const fs=m.files||[];
         const text=((m.content?m.content+'\n\n':'')+fs.filter(f=>f.k==='txt').map(f=>`[${t('fileLbl')}: ${f.name}]\n${f.text}`).join('\n\n')).trim();
         return{role:m.role==='user'?'user':'assistant',text,imgs:fs.filter(f=>f.k==='img').map(f=>f.data)};
       });
-      const ctxN=+(chat.charId?(st.ctxChar??'30'):(st.ctxMax??'20'));
+      const ctxN=+((chat.charId||chat.group)?(st.ctxChar??'30'):(st.ctxMax??'20'));
       const cut=a=>{if(!ctxN||a.length<=ctxN)return a;let r=a.slice(-ctxN);while(r.length>1&&r[0].role!=='user')r=r.slice(1);return r};
       history=cut(history);hist=cut(hist);
       let model=st.model,apiUrl=st.url,apiKey=st.key,fmt=st.fmt||'openai';
       if(hasImg&&st.vision)model=st.vision;
       else if(useThink){if(st.turl)fmt='openai';apiUrl=st.turl||st.url;apiKey=st.tkey||st.key;model=st.think||(/deepseek/i.test(apiUrl)?'deepseek-flash':st.model)}
-      let sys=systemPrompt(chat)+loreFor(chat)+memFor(chat);
-      const capN=+(chat.charId?(st.maxChar??'500'):(st.maxGen??'0')),cap=useThink?0:(capN||0);
+      let sys=systemPrompt(chat,ai.cid)+loreFor(chat)+memFor(chat);
+      const capN=+((chat.charId||chat.group)?(st.maxChar??'500'):(st.maxGen??'0')),cap=useThink?0:(capN||0);
       if(cap)sys+='\n\nLength rule: keep every reply under about '+Math.round(cap*0.55)+' words and always finish your last sentence.';
       if(useSearch){
         const q=([...chat.messages].reverse().find(m=>m.role==='user')||{content:''}).content.trim();
@@ -1162,6 +1169,7 @@ async function ask(chat,reuse){
           feedChunk(fmt,j,ai);upd();
         }
       }
+      if(chat.group&&ai.cid){const nm=(getChar(ai.cid)||{}).name;if(nm)ai.content=ai.content.replace(new RegExp('^\\s*\\**'+nm.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\**\\s*:\\s*','i'),'')}
       if(!ai.content)ai.content=t('emptyResp');
     }
   }catch(e){
@@ -1171,7 +1179,7 @@ async function ask(chat,reuse){
     else if(!ai.content){if(!revert())chat.messages=chat.messages.filter(m=>m!==ai)}
   }
   sync();delete ai.pending;abortCtl=null;setBusy(false);chat.updated=Date.now();
-  if(chat.messages.length<=3&&isDefaultTitle(chat.title)&&!chat.charId){
+  if(chat.messages.length<=3&&isDefaultTitle(chat.title)&&!chat.charId&&!chat.group){
     const f=chat.messages.find(m=>m.role==='user');if(f)chat.title=f.content.slice(0,36);
   }
   renderAll();
@@ -1180,7 +1188,7 @@ async function ask(chat,reuse){
 function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
 async function demo(chat,ai,upd){
   const last=[...chat.messages].reverse().find(m=>m.role==='user');
-  const ch=chat.charId&&getChar(chat.charId);
+  const ch=ai.cid?getChar(ai.cid):(chat.charId&&getChar(chat.charId));
   const u=last?last.content:'';
   const txt=!u?(ch?t('demoInitCh',{n:ch.name}):t('demoInit')):(ch?t('demoCh',{n:ch.name,u:u.slice(0,80)}):t('demoGen',{u:u.slice(0,100)}));
   for(let i=0;i<txt.length;i+=3){
@@ -1201,10 +1209,10 @@ function sendUser(){
 // Botón IA: sin texto -> la IA genera una respuesta (aunque el usuario no haya escrito nada nuevo).
 //           con texto -> añade ese texto como mensaje de la IA, escrito a mano.
 function sendAI(){
-  if(busy){abortCtl&&abortCtl.abort();if(!abortCtl)setBusy(false);return}
+  if(busy){grpStop=true;abortCtl&&abortCtl.abort();if(!abortCtl)setBusy(false);return}
   const v=$('#input').value.trim();const chat=cur();
   if(v){
-    chat.messages.push({id:uid(),role:'assistant',content:v});chat.updated=Date.now();
+    chat.messages.push({id:uid(),role:'assistant',content:v,...(chat.group?{cid:pickSpeaker(chat)}:{})});chat.updated=Date.now();
     $('#input').value='';autosize();renderAll();return;
   }
   ask(chat);
@@ -1283,12 +1291,16 @@ function renderChars(){
       <div class="desc">${esc(c.desc||'')}</div>
       <div class="chips">${(c.tags||[]).map(t=>`<span class="chip">#${esc(t)}</span>`).join('')}</div>
       <div class="card-foot"><button class="btn primary small" data-a="chat">${t('chatBtn')}</button>
+      <button class="btn ghost small" data-a="png" style="flex:0 0 auto" title="${t('expPng')}">🖼️</button>
+      <button class="btn ghost small" data-a="json" style="flex:0 0 auto" title="${t('expJson')}">{ }</button>
       <button class="btn ghost small" data-a="edit" style="flex:0 0 auto">✎</button>
       <button class="btn ghost small" data-a="del" style="flex:0 0 auto">✕</button></div>`;
     d.onclick=e=>{
       const a=e.target.closest('[data-a]')?.dataset.a;
       if(a==='chat'){newChat(c.id);setView('chat');renderAll();$('#input').focus()}
       else if(a==='edit')openChar(c.id);
+      else if(a==='png')exportPNG(c).catch(()=>toast(t('invalid')));
+      else if(a==='json')dl(JSON.stringify(cardOf(c),null,2),fname(c)+'.json','application/json');
       else if(a==='del'&&confirm(t('delChar',{n:c.name}))){S.chars=S.chars.filter(x=>x.id!==c.id);renderAll()}
     };
     g.appendChild(d);
@@ -1511,7 +1523,7 @@ async function aiOnce(sys,user){ // una llamada simple a la IA configurada, sin 
 async function maybeSummarize(chat,force){ // resume lo que ya salió de la ventana de mensajes
   const st=S.settings;if(memBusy||!st.key)return 'skip';
   if(!force&&(st.memOn??'1')!=='1')return 'skip';
-  const ctxN=+(chat.charId?(st.ctxChar??'30'):(st.ctxMax??'20'));if(!ctxN)return 'skip';
+  const ctxN=+((chat.charId||chat.group)?(st.ctxChar??'30'):(st.ctxMax??'20'));if(!ctxN)return 'skip';
   const msgs=chat.messages.filter(m=>!m.error&&!m.pending&&(m.content||'').trim());
   const old=msgs.slice(0,Math.max(0,msgs.length-ctxN));
   let from=0;
@@ -1522,7 +1534,7 @@ async function maybeSummarize(chat,force){ // resume lo que ya salió de la vent
   try{
     const ch=chat.charId&&getChar(chat.charId),me=(S.profile&&S.profile.name)||'User',ai=ch?ch.name:'AI';
     const txt=await aiOnce('You maintain the long-term memory of an ongoing roleplay or chat. Update the running summary with the new messages. Keep names, relationships, places, key events, promises, decisions and the current situation. Write in the same language as the conversation, in third person, at most about 250 words. Output ONLY the updated summary.',
-      '[Current summary]\n'+(chat.mem||'(none)')+'\n\n[New messages]\n'+fresh.map(m=>(m.role==='user'?me:ai)+': '+m.content.slice(0,1500)).join('\n'));
+      '[Current summary]\n'+(chat.mem||'(none)')+'\n\n[New messages]\n'+fresh.map(m=>(m.role==='user'?me:((m.cid&&getChar(m.cid))?getChar(m.cid).name:ai))+': '+m.content.slice(0,1500)).join('\n'));
     if(!txt)return 'fail';
     chat.mem=txt;chat.memId=fresh[fresh.length-1].id;save();return 'ok';
   }catch(e){return 'fail'}finally{memBusy=false}
@@ -1550,15 +1562,15 @@ function renderLore(){
       <button type="button" class="btn ghost small" data-ldel="${i}">🗑</button></div></div>`).join(''):'<p style="color:var(--muted)">'+esc(t('loreEmpty'))+'</p>';
 }
 function loreFor(chat){ // entradas activas: palabras clave en los últimos 8 mensajes, o "siempre activa"
-  const ch=chat.charId&&getChar(chat.charId);
-  const all=[...(S.lore||[]),...((ch&&ch.lore)||[])].filter(e=>!e.off&&(e.content||'').trim());
+  const ms=chat.group?chat.group.map(getChar).filter(Boolean):[chat.charId&&getChar(chat.charId)].filter(Boolean);
+  const all=[...(S.lore||[]),...ms.flatMap(c=>c.lore||[])].filter(e=>!e.off&&(e.content||'').trim());
   if(!all.length)return '';
   const scan=chat.messages.filter(m=>!m.error&&!m.pending).slice(-8).map(m=>m.content||'').join('\n').toLowerCase();
   const out=[];let n=0;
   for(const e of all){
     const ks=(e.keys||'').split(',').map(x=>x.trim().toLowerCase()).filter(Boolean);
     if(!(e.always||ks.some(k=>scan.includes(k))))continue;
-    const c=e.content.trim();if(n+c.length>4000)break;n+=c.length;out.push('- '+c);
+    const c=mac(e.content.trim(),ms[0]);if(n+c.length>4000)break;n+=c.length;out.push('- '+c);
   }
   return out.length?'\n\n[World info / Lorebook — use when relevant]\n'+out.join('\n'):'';
 }
@@ -1617,7 +1629,7 @@ function enterSel(){selMode=true;selSet=new Set();document.body.classList.add('s
 function exitSel(){selMode=false;selSet=new Set();document.body.classList.remove('selmode');$('#selMenu').style.display='none';renderChat()}
 function toggleSel(id){selSet.has(id)?selSet.delete(id):selSet.add(id);selUI();keepScroll(renderChat)}
 function selTxt(m){return(m.content||'').trim()}
-function selLabel(m,chat){if(m.role==='user')return t('roleUser').replace(/^[^:：]*[:：]\s*/,'');const ch=chat.charId&&getChar(chat.charId);return ch?ch.name:t('roleAI').replace(/^[^:：]*[:：]\s*/,'')}
+function selLabel(m,chat){if(m.role==='user')return t('roleUser').replace(/^[^:：]*[:：]\s*/,'');const ch=m.cid?getChar(m.cid):chat.charId&&getChar(chat.charId);return ch?ch.name:t('roleAI').replace(/^[^:：]*[:：]\s*/,'')}
 function cssColor(v){const e=document.createElement('i');e.style.cssText='position:absolute;visibility:hidden;background:'+v;document.body.appendChild(e);const c=getComputedStyle(e).backgroundColor;e.remove();return c}
 function stripMd(x){return x.replace(/```\w*\n?/g,'').replace(/^#{1,6}\s+/gm,'').replace(/\*\*(.+?)\*\*/g,'$1').replace(/__(.+?)__/g,'$1').replace(/`([^`]+)`/g,'$1')}
 function wrapLines(ctx,text,maxW){
@@ -1746,7 +1758,7 @@ $('#newChat').onclick=()=>{newChat(null);setView('chat');closeMenu();$('#input')
 $('#createChar').onclick=()=>openChar();
 $('#search').oninput=renderSide;
 $('#titleInput').oninput=e=>{cur().title=e.target.value||t('untitled');renderSide();save()};
-$('#clearChat').onclick=()=>{if(confirm(t('clearConfirm'))){const c=cur();c.messages=[];const ch=c.charId&&getChar(c.charId);if(ch&&ch.greet)c.messages.push({id:uid(),role:'assistant',content:ch.greet});renderAll()}};
+$('#clearChat').onclick=()=>{if(confirm(t('clearConfirm'))){const c=cur();c.messages=[];(c.group?c.group:[c.charId]).map(getChar).filter(Boolean).forEach(ch=>{const m=greetMsg(ch);if(m){if(c.group)m.cid=ch.id;c.messages.push(m)}});renderAll()}};
 $('#input').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();sendUser()}});
 $('#input').addEventListener('input',autosize);
 $('#langSel').onchange=e=>{
@@ -1755,6 +1767,162 @@ $('#langSel').onchange=e=>{
   S.chars.forEach(c=>{if(c.bk&&DEF[old]&&DEF[LANG][c.bk]&&sameChar(c,DEF[old][c.bk]))Object.assign(c,fromDef(c.bk,LANG))});
   applyStatic();renderAll();
 };
+/* ================= Tarjetas PNG/JSON · Lorebook .json · Chats grupales ================= */
+Object.assign(T.es,{impCard:'📥 Importar tarjeta',expPng:'Exportar como tarjeta PNG',expJson:'Exportar como JSON',cardOk:'Tarjetas importadas: {n}',cardBad:'No es una tarjeta válida: {f}',cardLore:'Ese archivo es un lorebook: impórtalo desde 📚',
+ loreImp:'⬆️ Importar .json',loreExp:'⬇️ Exportar .json',loreImpOk:'Entradas importadas: {n}',grpNew:'👥 Nuevo grupo',grpTitle:'👥 Nuevo chat grupal',grpName:'Nombre del grupo (opcional)',grpPick:'Elige al menos 2 personajes',grpCreate:'Crear grupo',grpMin:'Elige al menos 2 personajes',grpAuto:'🎲 Auto',grpAll:'👥 Todos',
+ grpRule:'Esto es un chat grupal. Personajes presentes: {l}. Tú eres SOLO {n}: escribe únicamente el turno de {n}, sin hablar ni actuar por el usuario ni por los demás, y sin empezar con tu nombre. En el historial cada mensaje ajeno va precedido por "Nombre: ". Los demás personajes: {o}\n'});
+Object.assign(T.en,{impCard:'📥 Import card',expPng:'Export as PNG card',expJson:'Export as JSON',cardOk:'Cards imported: {n}',cardBad:'Not a valid card: {f}',cardLore:'That file is a lorebook: import it from 📚',
+ loreImp:'⬆️ Import .json',loreExp:'⬇️ Export .json',loreImpOk:'Entries imported: {n}',grpNew:'👥 New group',grpTitle:'👥 New group chat',grpName:'Group name (optional)',grpPick:'Pick at least 2 characters',grpCreate:'Create group',grpMin:'Pick at least 2 characters',grpAuto:'🎲 Auto',grpAll:'👥 Everyone',
+ grpRule:'This is a group chat. Characters present: {l}. You are ONLY {n}: write only {n}\'s turn, never speak or act for the user or the others, and do not start with your name. In the history every message from someone else is prefixed with "Name: ". The other characters: {o}\n'});
+
+/* ---------- Macros de SillyTavern ---------- */
+const mac=(s,ch)=>String(s||'').replace(/\{\{char\}\}|<BOT>/gi,ch?ch.name:'').replace(/\{\{user\}\}|<USER>/gi,((S.profile&&S.profile.name)||'').trim()||'User');
+function greetMsg(c){
+  const a=[c.greet,...(c.altGreets||[])].filter(Boolean).map(x=>mac(x,c));if(!a.length)return null;
+  const m={id:uid(),role:'assistant',content:a[0]};if(a.length>1){m.alts=a;m.altIdx=0}return m;
+}
+const splitK=s=>String(s||'').split(',').map(x=>x.trim()).filter(Boolean);
+const fname=c=>(c.name||'character').replace(/[\\\/:*?"<>|\s]+/g,'_').slice(0,40)||'character';
+function dl(data,name,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+
+/* ---------- Lorebook: entrada / salida ---------- */
+function loreIn(o){ // acepta V2 (character_book), SillyTavern World Info y arrays simples
+  let es=o&&o.entries;if(!es)return [];if(!Array.isArray(es))es=Object.values(es);
+  return es.map(e=>{const k=e.keys||e.key||[];
+    return{id:uid(),keys:(Array.isArray(k)?k:String(k).split(',')).map(x=>String(x).trim()).filter(Boolean).join(', '),content:String(e.content||''),always:!!(e.constant||e.always),off:e.enabled===false||e.disable===true||e.off===true};
+  }).filter(e=>e.content.trim());
+}
+function loreOut(arr,name){ // formato World Info de SillyTavern
+  return{name,entries:Object.fromEntries(arr.map((e,i)=>[i,{uid:i,key:splitK(e.keys),keysecondary:[],comment:splitK(e.keys)[0]||'',content:e.content||'',constant:!!e.always,selective:false,disable:!!e.off,order:100,position:0}]))};
+}
+$('#loreImp').onclick=()=>$('#loreFile').click();
+$('#loreFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{const r=JSON.parse(await f.text()),es=loreIn((r.data&&r.data.character_book)||r.character_book||r);if(!es.length)throw 0;loreArr().push(...es);renderLore();save();toast(t('loreImpOk',{n:es.length}))}catch(_){toast(t('invalid'))}};
+$('#loreExp').onclick=()=>{const sc=$('#loreScope').value,c=sc==='_g'?null:getChar(sc);
+  dl(JSON.stringify(loreOut(loreArr(),c?c.name+' Lorebook':'Mizu Lorebook'),null,2),(c?fname(c)+'-':'')+'lorebook.json','application/json')};
+
+/* ---------- Tarjetas de personaje: leer ---------- */
+function pngMeta(buf){ // busca el chunk tEXt/iTXt con "ccv3" o "chara"
+  const b=new Uint8Array(buf),v=new DataView(buf);
+  if(b.length<8||v.getUint32(0)!==0x89504e47)throw new Error('png');
+  const f={},L=new TextDecoder('latin1');let o=8;
+  while(o+12<=b.length){
+    const n=v.getUint32(o),ty=String.fromCharCode(b[o+4],b[o+5],b[o+6],b[o+7]),d=o+8;
+    if(ty==='tEXt'||ty==='iTXt'){
+      const z=b.indexOf(0,d);
+      if(z>d&&z<d+n){const kw=L.decode(b.slice(d,z));
+        if(kw==='chara'||kw==='ccv3'){let s=z+1;
+          if(ty==='iTXt'){if(b[s]!==0)s=-1;else{s=b.indexOf(0,s+2)+1;s=b.indexOf(0,s)+1}}
+          if(s>0)f[kw]=L.decode(b.slice(s,d+n));}}
+    }
+    if(ty==='IEND')break;
+    o+=12+n;
+  }
+  return f.ccv3||f.chara||null;
+}
+const b64utf8=s=>new TextDecoder('utf-8').decode(Uint8Array.from(atob(s.replace(/\s/g,'')),c=>c.charCodeAt(0)));
+function cardToChar(raw){ // V1 / V2 / V3 -> personaje de Mizu
+  const d=(raw&&raw.data&&typeof raw.data==='object')?raw.data:raw;
+  if(!d||typeof d!=='object'||!d.name)throw new Error('card');
+  const s=x=>typeof x==='string'?x:'',arr=x=>Array.isArray(x)?x:[];
+  let desc=s(d.description).trim();const pe=s(d.personality).trim();if(pe)desc+=(desc?'\n\n':'')+'Personality: '+pe;
+  const c={name:s(d.name).slice(0,40),tagline:s(d.creator_notes).split('\n')[0].replace(/<[^>]*>/g,'').trim().slice(0,70),emoji:EMOJIS[0],color:COLORS[Math.floor(Math.random()*COLORS.length)],img:'',
+    desc:desc||s(d.name),greet:s(d.first_mes),scene:s(d.scenario),example:s(d.mes_example),tags:arr(d.tags).map(String).slice(0,12),
+    altGreets:arr(d.alternate_greetings).map(s).filter(Boolean),sysp:s(d.system_prompt),phi:s(d.post_history_instructions)};
+  if(d.character_book)c.lore=loreIn(d.character_book);
+  return c;
+}
+async function importCards(files){
+  let ok=0;
+  for(const f of files){
+    try{
+      let raw,img='';
+      if(/\.json$/i.test(f.name)||f.type==='application/json')raw=JSON.parse(await f.text());
+      else{const m=pngMeta(await f.arrayBuffer());if(!m)throw new Error('card');raw=JSON.parse(b64utf8(m));img=await readImg(f,320).catch(()=>'')}
+      if(raw&&raw.chats)throw new Error('backup');
+      if(raw&&raw.entries&&!raw.name&&!raw.data){toast(t('cardLore'),4000);continue}
+      const c=cardToChar(raw);if(img)c.img=img;
+      S.chars.unshift({id:uid(),...c});ok++;
+    }catch(err){toast(t('cardBad',{f:f.name}),4000)}
+  }
+  if(ok){renderAll();toast(t('cardOk',{n:ok}))}
+}
+$('#impCard').onclick=()=>$('#cardIn').click();
+$('#cardIn').onchange=e=>{const fs=[...e.target.files];e.target.value='';importCards(fs)};
+const vc=$('#view-chars');vc.addEventListener('dragover',e=>e.preventDefault());
+vc.addEventListener('drop',e=>{e.preventDefault();if(e.dataTransfer&&e.dataTransfer.files.length)importCards([...e.dataTransfer.files])});
+
+/* ---------- Tarjetas de personaje: exportar (V2) ---------- */
+function cardOf(c){
+  const lore=c.lore||[];
+  return{spec:'chara_card_v2',spec_version:'2.0',data:{name:c.name,description:c.desc||'',personality:'',scenario:c.scene||'',first_mes:c.greet||'',mes_example:c.example||'',creator_notes:c.tagline||'',
+    system_prompt:c.sysp||'',post_history_instructions:c.phi||'',alternate_greetings:c.altGreets||[],tags:c.tags||[],creator:'',character_version:'1',extensions:{},
+    ...(lore.length?{character_book:{name:c.name+' Lorebook',extensions:{},entries:lore.map((e,i)=>({id:i,keys:splitK(e.keys),secondary_keys:[],comment:'',content:e.content||'',enabled:!e.off,insertion_order:i,case_sensitive:false,constant:!!e.always,selective:false,position:'before_char',extensions:{}}))}}:{})}};
+}
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const crc32=u=>{let c=0xffffffff;for(let i=0;i<u.length;i++)c=CRC[(c^u[i])&255]^(c>>>8);return(c^0xffffffff)>>>0};
+async function exportPNG(c){
+  const cv=document.createElement('canvas'),x=cv.getContext('2d');cv.width=cv.height=512;
+  x.fillStyle=safeColor(c.color);x.fillRect(0,0,512,512);
+  if(safeImg(c.img)){const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=c.img});x.drawImage(im,0,0,512,512)}
+  else{x.font='300px system-ui,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(c.emoji||'🙂',256,280)}
+  const png=new Uint8Array(await(await new Promise(r=>cv.toBlob(r,'image/png'))).arrayBuffer());
+  const u8=new TextEncoder().encode(JSON.stringify(cardOf(c)));let bin='';for(let i=0;i<u8.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));
+  const data=new TextEncoder().encode('chara\0'+btoa(bin)),ch=new Uint8Array(12+data.length),dv=new DataView(ch.buffer);
+  dv.setUint32(0,data.length);ch.set([116,69,88,116],4);ch.set(data,8);dv.setUint32(8+data.length,crc32(ch.subarray(4,8+data.length)));
+  const at=png.length-12,out=new Uint8Array(png.length+ch.length); // el último chunk (IEND) mide 12 bytes
+  out.set(png.subarray(0,at));out.set(ch,at);out.set(png.subarray(at),at+ch.length);
+  dl(out,fname(c)+'.png','image/png');
+}
+
+/* ---------- Chats grupales ---------- */
+let grpStop=false;
+function pickSpeaker(chat){
+  const ids=chat.group.filter(getChar);if(!ids.length)return null;
+  const msgs=chat.messages.filter(m=>!m.error&&!m.pending),last=msgs[msgs.length-1]||{},txt=(last.content||'').toLowerCase();
+  const named=ids.filter(id=>id!==last.cid&&txt.includes(getChar(id).name.toLowerCase().split(' ')[0]));
+  if(named.length)return named[0];
+  const when=id=>{for(let i=msgs.length-1;i>=0;i--)if(msgs[i].cid===id)return i;return -1};
+  return ids.filter(id=>id!==last.cid||ids.length===1).sort((a,b)=>when(a)-when(b))[0];
+}
+function grpView(m,ai){ // en grupo, los mensajes ajenos llegan a la IA con "Nombre: texto"
+  if(m.role==='user')return{...m,content:(((S.profile.name||'').trim())||'User')+': '+(m.content||'')};
+  if(m.cid&&m.cid===ai.cid)return m;
+  return{...m,role:'user',content:((getChar(m.cid)||{}).name||'AI')+': '+(m.content||'')};
+}
+function systemPrompt(chat,spk){
+  const g=chat.group,ch=g?getChar(spk||g[0]):(chat.charId&&getChar(chat.charId)),u=userCtx();
+  if(!ch)return S.settings.sys+(u?'\n\n'+u:'');
+  const M=x=>mac(x,ch);
+  let s=t('rpHead',{n:ch.name,tag:ch.tagline?', '+ch.tagline:''})+(ch.sysp?M(ch.sysp)+'\n':'')+t('rpPers',{d:M(ch.desc)})+(ch.scene?t('rpScene',{s:M(ch.scene)}):'')+(ch.example?t('rpEx',{e:M(ch.example)}):'')+(u?u:'');
+  if(g){const ms=g.map(getChar).filter(Boolean);s+=t('grpRule',{l:ms.map(c=>c.name).join(', '),n:ch.name,o:ms.filter(c=>c!==ch).map(c=>c.name+': '+M(c.desc).slice(0,300)).join(' | ')})}
+  return s+t('rpRules')+(ch.phi?'\n'+M(ch.phi):'');
+}
+function grpBar(){
+  const bar=$('#grpBar'),c=cur();if(!bar)return;
+  if(!c||!c.group){bar.style.display='none';return}
+  bar.style.display='';
+  bar.innerHTML='<button type="button" class="tg" data-g="_a">'+t('grpAuto')+'</button>'+c.group.map(getChar).filter(Boolean).map(x=>`<button type="button" class="tg" data-g="${esc(x.id)}"><span class="mini">${avInner(x.img,x.emoji)}</span> ${esc(x.name)}</button>`).join('')+'<button type="button" class="tg" data-g="_all">'+t('grpAll')+'</button>';
+}
+$('#grpBar').onclick=async e=>{
+  const b=e.target.closest('[data-g]');if(!b||busy)return;
+  const chat=cur(),v=$('#input').value.trim(),g=b.dataset.g;
+  if(v||pend.length){chat.messages.push({id:uid(),role:'user',content:v,...(pend.length?{files:pend}:{})});pend=[];renderChips();$('#input').value='';autosize();chat.updated=Date.now()}
+  grpStop=false;
+  if(g==='_all'){for(const id of chat.group.filter(getChar)){if(grpStop)break;await ask(chat,null,id);const l=chat.messages[chat.messages.length-1];if(l&&l.error)break}}
+  else await ask(chat,null,g==='_a'?undefined:g);
+};
+$('#newGroup').onclick=()=>{
+  $('#gName').value='';
+  $('#gList').innerHTML=S.chars.map(c=>`<label style="display:flex;gap:8px;align-items:center;padding:4px 0;cursor:pointer"><input type="checkbox" value="${esc(c.id)}"> <span class="mini">${avInner(c.img,c.emoji)}</span> ${esc(c.name)}</label>`).join('');
+  $('#grpModal').classList.add('on');
+};
+$('#gCreate').onclick=()=>{
+  const ids=$$('#gList input:checked').map(i=>i.value);if(ids.length<2){toast(t('grpMin'));return}
+  const name=$('#gName').value.trim()||('👥 '+ids.map(i=>getChar(i).name).join(', ')).slice(0,60);
+  $('#grpModal').classList.remove('on');newChat(null,true,{ids,name});setView('chat');renderAll();closeMenu();
+};
+
 applyLook();
 applyStatic();
 renderAll();
