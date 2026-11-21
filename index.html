@@ -281,6 +281,81 @@ aside{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:tou
 aside>*{flex-shrink:0}
 aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 .pinTag{float:right;font-size:12px;margin:0 0 2px 8px;opacity:.85}
+@media(max-width:800px){
+#charGrid.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#charGrid .card{padding:0;gap:0;border-radius:18px;overflow:hidden;cursor:pointer}
+#charGrid .card:hover{transform:none}
+#charGrid .card-top{flex-direction:column;align-items:stretch;gap:0}
+#charGrid .cav{width:100%;height:auto;aspect-ratio:4/3;border-radius:0;font-size:56px}
+#charGrid .card-top>div:last-child{padding:10px 12px 0;min-width:0}
+#charGrid .card h3{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#charGrid .card .tag{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12px}
+#charGrid .card .desc{font-size:12.5px;-webkit-line-clamp:2;padding:6px 12px 0;flex:none}
+#charGrid .chips{display:none}
+#charGrid .card-foot{padding:10px 10px 10px;gap:4px}
+#charGrid .card-foot [data-a=chat]{display:none}
+#charGrid .card-foot .btn{flex:1 1 0!important;padding:6px 0;font-size:14px;min-width:0}
+#charGrid .new-card{display:none}
+}
+.lore-bg{background:rgba(42,58,75,.55)}
+.modal.lore{display:flex;flex-direction:column;padding:0;overflow:hidden;width:min(680px,100%);height:min(88vh,820px);max-height:88vh;background:var(--white);box-shadow:0 20px 60px rgba(42,58,75,.35)}
+.lore-head{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px 12px;border-bottom:1px solid var(--line);background:var(--white)}
+.lore-head h2{margin:0;font-size:18px;min-width:0}
+.lore-bar{flex:none;display:flex;flex-direction:column;gap:8px;padding:10px 16px 12px;background:var(--white);border-bottom:1px solid var(--line)}
+.lore-row{display:flex;gap:10px;align-items:flex-end}
+.lore-count{flex:none;font-size:12.5px;font-weight:700;color:var(--blue-700);background:var(--blue-100);padding:9px 11px;border-radius:10px;white-space:nowrap}
+.lore-bar .field{font-size:16px}
+.lore-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:12px 16px 32px;background:var(--white)}
+.lore-hint{margin:0 0 12px;color:var(--muted);font-size:13px;line-height:1.45}
+.lore-foot{flex:none;display:grid;grid-template-columns:repeat(4,auto);justify-content:end;gap:8px;padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--white)}
+.lore-foot .btn{white-space:nowrap;padding:9px 12px;font-size:13.5px}
+.le{border:1px solid var(--line);border-radius:14px;margin:0 0 8px;background:var(--white);overflow:hidden}
+.le.open{border-color:var(--blue-300);box-shadow:0 2px 10px rgba(74,144,201,.12)}
+.le.off .le-title{opacity:.5}
+.le-head{display:flex;align-items:center;gap:8px;padding:7px 8px 7px 12px;min-height:50px;cursor:pointer}
+.le-title{flex:1;min-width:0;font-size:14px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.le-title.dim{font-weight:400;font-style:italic;color:var(--muted)}
+.sw{position:relative;flex:none;width:42px;height:26px;display:inline-block}
+.sw input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:1}
+.sw span{position:absolute;inset:0;border-radius:99px;background:var(--line);border:1px solid var(--blue-300);transition:.15s}
+.sw span::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:.15s}
+.sw input:checked+span{background:var(--blue-600);border-color:var(--blue-600)}
+.sw input:checked+span::after{transform:translateX(16px)}
+.le-ic{flex:none;width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--white);font-size:15px;display:grid;place-items:center;padding:0;color:var(--ink)}
+.le-ic.pin{opacity:.45;filter:grayscale(1)}
+.le-ic.pin.on{opacity:1;filter:none;background:var(--yellow-100);border-color:var(--yellow-300)}
+.le-chev{display:inline-block;font-size:13px;transition:.15s}
+.le.open .le-chev{transform:rotate(180deg)}
+.le-form{display:flex;flex-direction:column;gap:6px;padding:10px 12px 12px;border-top:1px solid var(--line)}
+.le-form label{font-size:12.5px;font-weight:600}
+.le-form .field{font-size:16px}
+.le-form textarea.field{min-height:200px;line-height:1.5}
+.le-note{font-size:12px;color:var(--muted);line-height:1.4}
+.le-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:4px}
+@media(max-width:600px){
+.lore-bg{padding:0;align-items:stretch}
+.modal.lore{width:100%;height:100vh;height:100dvh;max-height:100vh;max-height:100dvh;border-radius:0;box-shadow:none}
+.lore-foot{grid-template-columns:1fr 1fr;justify-content:stretch}
+.lore-foot .btn{padding:11px 8px}
+}
+
+/* ---- Lorebook por libros ---- */
+[hidden]{display:none!important}
+.lore-bg{background:rgba(30,42,56,.96)}
+.lore-bk{display:flex;align-items:center;gap:8px;min-width:0}
+.lore-bk .btn{flex:none;white-space:nowrap}
+.lore-bt{flex:1;min-width:0;font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bk{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:8px 10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:14px;margin:0 0 10px;background:var(--white)}
+.bk.off .bk-cv,.bk.off .bk-main{opacity:.5}
+.bk-cv{width:56px;height:56px;border-radius:12px;border:1px solid var(--line);background:var(--blue-100);font-size:26px;display:grid;place-items:center;padding:0;overflow:hidden;cursor:pointer}
+.bk-cv img{width:100%;height:100%;object-fit:cover;display:block}
+.bk-main{min-width:0}
+.bk-name{width:100%;min-width:0;border:1px solid transparent;background:transparent;border-radius:8px;padding:4px 6px;margin-left:-6px;font:inherit;font-size:16px;font-weight:700;color:var(--ink)}
+.bk-name:focus{border-color:var(--blue-300);background:var(--white);outline:none}
+.bk-meta{font-size:12.5px;color:var(--muted)}
+.bk-act{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end}
+.bk-act .btn{white-space:nowrap}
+.bk-new{border-style:dashed;border-color:var(--blue-300)}
 </style>
 </head>
 <body>
@@ -565,16 +640,22 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 </div></div>
 
 <!-- Modal lorebook -->
-<div class="modal-bg" id="loreModal"><div class="modal">
-  <h2 data-i18n="loreTitle"></h2>
-  <p style="margin-top:-6px;color:var(--muted);font-size:13.5px" data-i18n="loreHint"></p>
-  <div class="f"><label data-i18n="loreScope"></label><select class="field" id="loreScope"></select></div>
-  <div id="loreList"></div>
-  <button class="btn ghost small" id="loreAdd" type="button" data-i18n="loreAdd"></button>
-  <button class="btn ghost small" id="loreImp" type="button" data-i18n="loreImp"></button>
-  <button class="btn ghost small" id="loreExp" type="button" data-i18n="loreExp"></button>
+<div class="modal-bg lore-bg" id="loreModal"><div class="modal lore">
+  <div class="lore-head"><h2 data-i18n="loreTitle"></h2><button type="button" class="btn ghost small" data-close data-i18n-title="close" aria-label="Close">✕</button></div>
+  <div class="lore-bar">
+    <div class="lore-row"><div class="f" style="flex:1;min-width:0;margin:0"><label data-i18n="loreScope"></label><select class="field" id="loreScope"></select></div><span class="lore-count" id="loreCount"></span></div>
+    <div class="lore-bk" id="loreBkBar" hidden><button type="button" class="btn ghost small" id="loreBack"></button><div class="lore-bt" id="loreBkTitle"></div><span class="lore-count" id="loreBkCount"></span></div>
+    <input class="field" id="loreSearch" type="search" data-i18n-ph="loreSearchPh" autocomplete="off" enterkeyhint="search" hidden>
+  </div>
+  <div class="lore-body"><p class="lore-hint" id="loreHintP"></p><div id="loreList"></div></div>
+  <div class="lore-foot">
+    <button class="btn primary small" id="loreAdd" type="button"></button>
+    <button class="btn ghost small" id="loreImp" type="button" data-i18n="loreImp"></button>
+    <button class="btn ghost small" id="loreExp" type="button" data-i18n="loreExp"></button>
+    <button class="btn ghost small" type="button" data-close data-i18n="close"></button>
+  </div>
   <input type="file" id="loreFile" accept=".json,application/json" hidden>
-  <div class="modal-foot"><button class="btn ghost" data-close data-i18n="close"></button></div>
+  <input type="file" id="loreCoverFile" accept="image/*" hidden>
 </div></div>
 
 <div class="modal-bg" id="grpModal"><div class="modal">
@@ -587,6 +668,16 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
 <div class="toast" id="toast"></div>
 
 <script>
+/* Diagnóstico: si algo falla en tu dispositivo, aparece una franja roja con el error (tócala para cerrarla) */
+(function(){
+  function show(msg){try{let d=document.getElementById('errBanner');
+    if(!d){d=document.createElement('div');d.id='errBanner';
+      d.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#7a1f1f;color:#fff;padding:10px 12px;border-radius:10px;font:12px/1.4 system-ui,sans-serif;white-space:pre-wrap;max-height:40vh;overflow:auto';
+      d.onclick=function(){d.remove()};document.body.appendChild(d)}
+    d.textContent='⚠️ Error (toca para cerrar):\n'+msg}catch(_){}}
+  window.addEventListener('error',function(e){show((e.message||'error')+(e.lineno?'\nlínea '+e.lineno+':'+e.colno:''))});
+  window.addEventListener('unhandledrejection',function(e){var r=e.reason;if(r&&r.name==='AbortError')return;show('Promesa: '+((r&&r.message)||r))});
+})();
 (()=>{
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
@@ -1013,6 +1104,11 @@ if(T.en)Object.assign(T.en,{"persLbl": "Persona (identity)", "persNew": "＋ New
 if(T.pt)Object.assign(T.pt,{"persLbl": "Persona (identidade)", "persNew": "＋ Nova", "persDel": "Excluir", "persUnnamed": "Sem nome", "persDefault": "Padrão (perfil)", "optBtn": "Persona e estilo", "optTitle": "🎭 Persona e estilo deste chat", "persChat": "Persona neste chat", "styleLbl": "Estilo de narração", "st_bal": "Equilibrado", "st_fast": "Chat rápido", "st_novel": "Romance / Slow-burn", "st_intense": "Intenso / Ação", "pinBtn": "Fixar", "unpinBtn": "Desafixar", "pinTip": "Mensagem fixada: sempre enviada à IA", "branchBtn": "Ramificar", "branched": "Novo chat criado a partir dessa mensagem", "expTxt": "Exportar história (.txt)", "expMd": "Exportar história (.md)", "expEmpty": "Não há mensagens para exportar", "persDelConfirm": "Excluir esta persona?", "persMin": "Deve restar pelo menos uma persona"});
 if(T.ru)Object.assign(T.ru,{"persLbl": "Персона (личность)", "persNew": "＋ Новая", "persDel": "Удалить", "persUnnamed": "Без имени", "persDefault": "По умолчанию (профиль)", "optBtn": "Персона и стиль", "optTitle": "🎭 Персона и стиль этого чата", "persChat": "Персона в этом чате", "styleLbl": "Стиль повествования", "st_bal": "Сбалансированный", "st_fast": "Быстрый чат", "st_novel": "Роман / Слоу-бёрн", "st_intense": "Напряжённый / Экшен", "pinBtn": "Закрепить", "unpinBtn": "Открепить", "pinTip": "Закреплённое сообщение всегда отправляется ИИ", "branchBtn": "Ветвить", "branched": "Новый чат создан из этого сообщения", "expTxt": "Экспорт истории (.txt)", "expMd": "Экспорт истории (.md)", "expEmpty": "Нет сообщений для экспорта", "persDelConfirm": "Удалить эту персону?", "persMin": "Должна остаться хотя бы одна персона"});
 if(T.fr)Object.assign(T.fr,{"persLbl": "Persona (identité)", "persNew": "＋ Nouvelle", "persDel": "Supprimer", "persUnnamed": "Sans nom", "persDefault": "Par défaut (profil)", "optBtn": "Persona et style", "optTitle": "🎭 Persona et style de ce chat", "persChat": "Persona dans ce chat", "styleLbl": "Style de narration", "st_bal": "Équilibré", "st_fast": "Chat rapide", "st_novel": "Roman / Slow-burn", "st_intense": "Intense / Action", "pinBtn": "Épingler", "unpinBtn": "Désépingler", "pinTip": "Message épinglé : toujours envoyé à l’IA", "branchBtn": "Ramifier", "branched": "Nouveau chat créé depuis ce message", "expTxt": "Exporter l’histoire (.txt)", "expMd": "Exporter l’histoire (.md)", "expEmpty": "Aucun message à exporter", "persDelConfirm": "Supprimer cette persona ?", "persMin": "Il doit rester au moins une persona"});
+if(T.es)Object.assign(T.es,{"loreW1": "entrada", "loreW2": "entradas", "loreW5": "entradas", "loreOf": " de ", "loreSearchPh": "Buscar por palabra clave o contenido…", "loreNoKeys": "(sin palabras clave)", "loreNoMatch": "Sin resultados", "loreEditT": "Expandir / editar", "loreDelConfirm": "¿Eliminar esta entrada?", "loreDel": "Eliminar", "loreVars": "Puedes usar {{char}} y {{user}}: se reemplazan por el nombre del personaje y del usuario al enviarse a la IA."});
+if(T.en)Object.assign(T.en,{"loreW1": "entry", "loreW2": "entries", "loreW5": "entries", "loreOf": " of ", "loreSearchPh": "Search by keyword or content…", "loreNoKeys": "(no keywords)", "loreNoMatch": "No results", "loreEditT": "Expand / edit", "loreDelConfirm": "Delete this entry?", "loreDel": "Delete", "loreVars": "You can use {{char}} and {{user}}: they are replaced with the character’s and the user’s names when sent to the AI."});
+if(T.pt)Object.assign(T.pt,{"loreW1": "entrada", "loreW2": "entradas", "loreW5": "entradas", "loreOf": " de ", "loreSearchPh": "Buscar por palavra-chave ou conteúdo…", "loreNoKeys": "(sem palavras-chave)", "loreNoMatch": "Sem resultados", "loreEditT": "Expandir / editar", "loreDelConfirm": "Excluir esta entrada?", "loreDel": "Excluir", "loreVars": "Você pode usar {{char}} e {{user}}: são substituídos pelo nome do personagem e do usuário ao enviar à IA."});
+if(T.ru)Object.assign(T.ru,{"loreW1": "запись", "loreW2": "записи", "loreW5": "записей", "loreOf": " из ", "loreSearchPh": "Поиск по ключевому слову или тексту…", "loreNoKeys": "(нет ключевых слов)", "loreNoMatch": "Ничего не найдено", "loreEditT": "Развернуть / изменить", "loreDelConfirm": "Удалить эту запись?", "loreDel": "Удалить", "loreVars": "Можно использовать {{char}} и {{user}}: они заменяются именем персонажа и пользователя при отправке ИИ."});
+if(T.fr)Object.assign(T.fr,{"loreW1": "entrée", "loreW2": "entrées", "loreW5": "entrées", "loreOf": " sur ", "loreSearchPh": "Rechercher par mot-clé ou contenu…", "loreNoKeys": "(aucun mot-clé)", "loreNoMatch": "Aucun résultat", "loreEditT": "Déplier / modifier", "loreDelConfirm": "Supprimer cette entrée ?", "loreDel": "Supprimer", "loreVars": "Vous pouvez utiliser {{char}} et {{user}} : ils sont remplacés par le nom du personnage et de l’utilisateur à l’envoi à l’IA."});
 function t(k,o){let v=(T[LANG]&&T[LANG][k])??T.en[k]??k;if(o)for(const x in o)v=v.split('{'+x+'}').join(o[x]);return v}
 const sameChar=(c,d)=>d&&c.name===d.name&&c.tagline===d.tagline&&c.desc===d.desc&&c.greet===d.greet&&c.scene===d.scene&&(c.tags||[]).join()===d.tags.join();
 const fromDef=(k,l)=>({...DEF[l][k],tags:[...DEF[l][k].tags]});
@@ -1047,7 +1143,16 @@ S.profile=Object.assign({img:'',bg:'',hue:207,tone:'soft',sm:1,mode:'light'},S.p
 LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;
 (S.chars||[]).forEach(c=>{if(!c.bk)for(const k in DEF.es)if(sameChar(c,DEF.es[k]))c.bk=k});
 if(S.chars&&!S.seed8){Object.keys(DEF.es).forEach(k=>{if(!S.chars.some(c=>c.bk===k))S.chars.push({id:uid(),bk:k,...fromDef(k,DEF[S.lang]?S.lang:LANG)})});S.seed8=1}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}gdQueue()};
+let _saveWarn=0;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){
+  // Almacenamiento lleno o bloqueado: avisar (máx. una vez cada 15 s) en vez de perder datos en silencio
+  if(Date.now()-_saveWarn>15000){_saveWarn=Date.now();try{toast(t('saveFail'),7000)}catch(_){}}
+}gdQueue()};
+Object.assign(T.es,{saveFail:'⚠️ No se pudo guardar: el almacenamiento del navegador está lleno. Exporta tus datos o quita imágenes grandes.'});
+Object.assign(T.en,{saveFail:'⚠️ Could not save: browser storage is full. Export your data or remove large images.'});
+Object.assign(T.pt,{saveFail:'⚠️ Não foi possível salvar: o armazenamento do navegador está cheio. Exporte seus dados ou remova imagens grandes.'});
+Object.assign(T.ru,{saveFail:'⚠️ Не удалось сохранить: хранилище браузера заполнено. Экспортируйте данные или удалите большие изображения.'});
+Object.assign(T.fr,{saveFail:'⚠️ Enregistrement impossible : le stockage du navigateur est plein. Exportez vos données ou supprimez les grandes images.'});
 if(!S.chats.length){newChat(null,true)}
 if(!S.activeId||!getChat(S.activeId))S.activeId=S.chats[0].id;
 
@@ -1323,7 +1428,7 @@ async function ask(chat,reuse,spk,cont){
       let model=st.model,apiUrl=st.url,apiKey=st.key,fmt=st.fmt||'openai';
       if(hasImg&&st.vision)model=st.vision;
       else if(useThink){if(st.turl)fmt='openai';apiUrl=st.turl||st.url;apiKey=st.tkey||st.key;model=st.think||(/deepseek/i.test(apiUrl)?'deepseek-flash':st.model)}
-      let sys=systemPrompt(chat,ai.cid)+loreFor(chat)+memFor(chat)+postFor()+styleFor(chat);
+      let sys=systemPrompt(chat,ai.cid)+loreFor(chat,ai.cid)+memFor(chat)+postFor()+styleFor(chat);
       const anT=(chat.an||'').trim(),anD=+(chat.anDepth==null?3:chat.anDepth),anTag="\n\n[Author's Note: "+anT+"]";
       if(anT){if(anD<=0||!history.length)sys+=anTag;else injectNote(history,hist,anD,anTag)}
       const capN=+((chat.charId||chat.group)?(st.maxChar??'500'):(st.maxGen??'0')),cap=useThink?0:(capN||0);
@@ -1334,7 +1439,7 @@ async function ask(chat,reuse,spk,cont){
         else if(q){
           try{
             const hd=(st.shead||'Authorization: Bearer {key}').split(':');
-            const sr=await fetch(st.surl,{method:'POST',headers:{'Content-Type':'application/json',[hd[0].trim()]:hd.slice(1).join(':').trim().replace('{key}',st.skey)},
+            const sr=await fetch(st.surl,{method:'POST',headers:{'Content-Type':'application/json',[hd[0].trim()]:hd.slice(1).join(':').trim().replace('{key}',()=>st.skey)},
               body:(st.sbody||'{"query":"{q}","max_results":5}').replace('{q}',()=>JSON.stringify(q.slice(0,380)).slice(1,-1))});
             if(!sr.ok)throw new Error('HTTP '+sr.status);
             const rs=findResults(await sr.json());
@@ -1497,7 +1602,7 @@ function renderChars(){
       <button class="btn ghost small" data-a="del" style="flex:0 0 auto">✕</button></div>`;
     d.onclick=e=>{
       const a=e.target.closest('[data-a]')?.dataset.a;
-      if(a==='chat'){newChat(c.id);setView('chat');renderAll();$('#input').focus()}
+      if(a==='chat'||(!a&&window.matchMedia('(max-width:800px)').matches)){newChat(c.id);setView('chat');renderAll();$('#input').focus()}
       else if(a==='edit')openChar(c.id);
       else if(a==='png')exportPNG(c).catch(()=>toast(t('invalid')));
       else if(a==='json')dl(JSON.stringify(cardOf(c),null,2),fname(c)+'.json','application/json');
@@ -1689,7 +1794,7 @@ $('#importBtn').onclick=()=>$('#importFile').click();
 $('#importFile').onchange=e=>{
   const f=e.target.files[0];if(!f)return;
   f.text().then(txt=>{try{const d=JSON.parse(txt);if(!d.chats)throw 0;const k=S.settings.key;S=d;S.settings=Object.assign(defaultState().settings,d.settings||{},{key:k});S.profile=Object.assign({img:'',bg:'',hue:207,tone:'soft',sm:1,mode:'light'},d.profile||{});
-    if(!S.chars)S.chars=defaultChars();if(!S.chats.length)newChat(null,true);S.activeId=S.chats[0].id;LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;applyLook();applyStatic();renderAll();toast(t('imported'))}catch(_){toast(t('invalid'))}});
+    if(!S.chars)S.chars=defaultChars();if(!S.seed8){const L0=DEF[S.lang]?S.lang:LANG;Object.keys(DEF.es).forEach(k=>{if(!S.chars.some(c=>c.bk===k))S.chars.push({id:uid(),bk:k,...fromDef(k,L0)})});S.seed8=1}if(!S.chats.length)newChat(null,true);S.activeId=S.chats[0].id;LANG=T[S.lang]?S.lang:LANG;S.lang=LANG;applyLook();applyStatic();renderAll();toast(t('imported'))}catch(_){toast(t('invalid'))}});
   e.target.value='';
 };
 
@@ -1821,40 +1926,155 @@ $('#memNow').onclick=async()=>{
 };
 /* ---------- Lorebook ---------- */
 function loreArr(){const sc=$('#loreScope').value;if(sc==='_g'){S.lore=S.lore||[];return S.lore}const c=getChar(sc);c.lore=c.lore||[];return c.lore}
-function renderLore(){
-  const arr=loreArr();
-  $('#loreList').innerHTML=arr.length?arr.map((e,i)=>`<div style="border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0">
+let loreQ='',loreTm=0;const loreOpen=new Set();
+function loreWord(n){let k='loreW5';if(LANG==='ru'){const a=n%10,b=n%100;k=(a===1&&b!==11)?'loreW1':(a>=2&&a<=4&&(b<10||b>=20))?'loreW2':'loreW5'}else if(LANG==='fr')k=n<2?'loreW1':'loreW5';else k=n===1?'loreW1':'loreW5';return t(k)}
+function loreSum(e){const k=(e.keys||'').trim();if(k)return{t:k,dim:false};const c=(e.content||'').replace(/\s+/g,' ').trim();return c?{t:c.slice(0,90)+(c.length>90?'…':''),dim:true}:{t:t('loreNoKeys'),dim:true}}
+function loreEntry(e,i){
+  const open=loreOpen.has(e.id),sm=loreSum(e);
+  return `<div class="le${open?' open':''}${e.off?' off':''}" data-i="${i}">
+  <div class="le-head" data-lt="${i}">
+    <div class="le-title${sm.dim?' dim':''}">${esc(sm.t)}</div>
+    <label class="sw" title="${esc(t('loreOn'))}"><input type="checkbox" data-lf="on" data-i="${i}" aria-label="${esc(t('loreOn'))}" ${e.off?'':'checked'}><span></span></label>
+    <button type="button" class="le-ic pin${e.always?' on':''}" data-lpin="${i}" title="${esc(t('loreAlways'))}" aria-label="${esc(t('loreAlways'))}">📌</button>
+    <button type="button" class="le-ic" data-lt="${i}" title="${esc(t('loreEditT'))}" aria-label="${esc(t('loreEditT'))}"><span class="le-chev">▾</span></button>
+  </div>${open?`
+  <div class="le-form">
+    <label>${esc(t('loreKeys'))}</label>
     <input class="field" data-lf="keys" data-i="${i}" value="${esc(e.keys||'')}" placeholder="${esc(t('loreKeys'))}">
-    <textarea class="field" data-lf="content" data-i="${i}" rows="3" placeholder="${esc(t('loreContent'))}" style="margin-top:6px">${esc(e.content||'')}</textarea>
-    <div style="display:flex;gap:14px;align-items:center;margin-top:6px;flex-wrap:wrap">
-      <label style="cursor:pointer"><input type="checkbox" data-lf="on" data-i="${i}" ${e.off?'':'checked'}> ${esc(t('loreOn'))}</label>
-      <label style="cursor:pointer"><input type="checkbox" data-lf="always" data-i="${i}" ${e.always?'checked':''}> ${esc(t('loreAlways'))}</label>
-      <button type="button" class="btn ghost small" data-ldel="${i}">🗑</button></div></div>`).join(''):'<p style="color:var(--muted)">'+esc(t('loreEmpty'))+'</p>';
+    <label>${esc(t('loreContent'))}</label>
+    <textarea class="field" data-lf="content" data-i="${i}" rows="8" placeholder="${esc(t('loreContent'))}">${esc(e.content||'')}</textarea>
+    <div class="le-note">${esc(t('loreVars'))}</div>
+    <div class="le-actions"><button type="button" class="btn ghost small" data-ldel="${i}">🗑 ${esc(t('loreDel'))}</button></div>
+  </div>`:''}
+</div>`}
+/* ---------- Lorebook por Libros: estantería + explorador paginado ---------- */
+const bkOn=(o,e)=>{const b=((o&&o.books)||[]).find(x=>x.id===(e.bk||'gen'));return !(b&&b.off)}; // interruptor maestro del libro
+const bkName=b=>b.name||(b.id==='gen'?t('loreGen'):t('loreNewDef'));
+const bkOwner=()=>{const sc=$('#loreScope').value;return sc==='_g'?S:getChar(sc)};
+function bkList(o){o=o||bkOwner();if(!o)return [];o.books=o.books||[];
+  if(!o.books.some(b=>b.id==='gen'))o.books.unshift({id:'gen',name:'',img:'',off:false}); // "Entradas generales": no se borra, solo se vacía
+  o.lore=o.lore||[];o.lore.forEach(e=>{if(!e.id)e.id=uid();if(!e.bk||!o.books.some(b=>b.id===e.bk))e.bk='gen'}); // entradas antiguas -> libro general
+  return o.books}
+function bookWord(n){let k='loreB5';if(LANG==='ru'){const a=n%10,b=n%100;k=(a===1&&b!==11)?'loreB1':(a>=2&&a<=4&&(b<10||b>=20))?'loreB2':'loreB5'}else if(LANG==='fr')k=n<2?'loreB1':'loreB5';else k=n===1?'loreB1':'loreB5';return t(k)}
+const LORE_PAGE=30;let coverTarget=null,loreBook=null,loreShown=LORE_PAGE,loreNewOpen=false,loreNewName='',loreNewImg='';
+function bkCard(b,o){
+  const n=o.lore.filter(e=>e.bk===b.id).length,id=esc(b.id),def=b.id==='gen';
+  return `<div class="bk${b.off?' off':''}">
+  <button type="button" class="bk-cv" data-bcv="${id}" title="${esc(t('loreCover'))}" aria-label="${esc(t('loreCover'))}">${safeImg(b.img)?`<img src="${esc(b.img)}" alt="">`:'📖'}</button>
+  <div class="bk-main"><input class="bk-name" data-bn="${id}" value="${esc(bkName(b))}" maxlength="60" placeholder="${esc(t('loreBookName'))}" aria-label="${esc(t('loreBookName'))}"><div class="bk-meta">${n} ${esc(loreWord(n))}</div></div>
+  <label class="sw" title="${esc(t('loreBookOn'))}"><input type="checkbox" data-bon="${id}" aria-label="${esc(t('loreBookOn'))}" ${b.off?'':'checked'}><span></span></label>
+  <div class="bk-act"><button type="button" class="btn ghost small" data-bdel="${id}" title="${esc(t(def?'loreBookClearT':'loreBookDelT'))}" aria-label="${esc(t(def?'loreBookClearT':'loreBookDelT'))}">${def?'🧹':'🗑'}</button><button type="button" class="btn primary small" data-bopen="${id}">${esc(t('loreOpen'))} ▸</button></div>
+</div>`}
+const newBookForm=()=>`<div class="bk bk-new">
+  <button type="button" class="bk-cv" id="loreNewCv" title="${esc(t('loreCover'))}" aria-label="${esc(t('loreCover'))}">${safeImg(loreNewImg)?`<img src="${esc(loreNewImg)}" alt="">`:'📖'}</button>
+  <div class="bk-main" style="grid-column:2/-1"><input class="bk-name" id="loreNewName" value="${esc(loreNewName)}" maxlength="60" placeholder="${esc(t('loreBookName'))}" style="border-color:var(--line)"></div>
+  <div class="bk-act"><button type="button" class="btn ghost small" id="loreNewCancel">${esc(t('cancel'))}</button><button type="button" class="btn primary small" id="loreNewOk">${esc(t('loreCreate'))}</button></div>
+</div>`;
+function renderLore(){
+  const o=bkOwner();if(!o)return;const bs=bkList(o),arr=o.lore;
+  if(loreBook&&!bs.some(b=>b.id===loreBook))loreBook=null;
+  const shelf=!loreBook;
+  $('#loreBkBar').hidden=shelf;$('#loreSearch').hidden=shelf;$('#loreExp').hidden=shelf;
+  $('#loreHintP').textContent=t(shelf?'loreShelfHint':'loreHint');
+  $('#loreAdd').textContent=t(shelf?'loreNewBook':'loreAdd');
+  $('#loreCount').textContent=bs.length+' '+bookWord(bs.length);
+  if(shelf){$('#loreList').innerHTML=(loreNewOpen?newBookForm():'')+bs.map(b=>bkCard(b,o)).join('');return}
+  const b=bs.find(x=>x.id===loreBook),all=[];arr.forEach((e,i)=>{if(e.bk===b.id)all.push([e,i])});
+  const q=loreQ,hit=q?all.filter(([e])=>(e.keys||'').toLowerCase().includes(q)||(e.content||'').toLowerCase().includes(q)):all;
+  $('#loreBkTitle').textContent=bkName(b);
+  $('#loreBkCount').textContent=q?hit.length+t('loreOf')+all.length+' '+loreWord(all.length):all.length+' '+loreWord(all.length);
+  const part=hit.slice(0,loreShown);
+  $('#loreList').innerHTML=part.length
+    ?part.map(([e,i])=>loreEntry(e,i)).join('')+(hit.length>part.length?`<button type="button" class="btn ghost" id="loreMore" style="width:100%;margin-top:6px">${esc(t('loreMore'))} (${hit.length-part.length})</button>`:'')
+    :'<p style="color:var(--muted);text-align:center;margin:24px 0">'+esc(all.length?t('loreNoMatch'):t('loreEmpty'))+'</p>';
 }
-function loreFor(chat){ // entradas activas: palabras clave en los últimos 8 mensajes, o "siempre activa"
+function loreFor(chat,spk){ // solo entradas activas de libros encendidos: palabras clave en los últimos 8 mensajes, o "siempre activa"
   const ms=chat.group?chat.group.map(getChar).filter(Boolean):[chat.charId&&getChar(chat.charId)].filter(Boolean);
-  const all=[...(S.lore||[]),...ms.flatMap(c=>c.lore||[])].filter(e=>!e.off&&(e.content||'').trim());
+  const sp=(spk&&getChar(spk))||ms[0],me=((persOf(chat).name)||'').trim()||'User';
+  const sub=(x,ch)=>String(x||'').replace(/\{\{\s*char\s*\}\}|<BOT>/gi,ch?ch.name:t('roleAI')).replace(/\{\{\s*user\s*\}\}|<USER>/gi,me);
+  const all=[...(S.lore||[]).map(e=>({e,o:sp,b:S})),...ms.flatMap(c=>(c.lore||[]).map(e=>({e,o:c,b:c})))].filter(x=>!x.e.off&&(x.e.content||'').trim()&&bkOn(x.b,x.e));
   if(!all.length)return '';
   const scan=chat.messages.filter(m=>!m.error&&!m.pending).slice(-8).map(m=>m.content||'').join('\n').toLowerCase();
   const out=[];let n=0;
-  for(const e of all){
-    const ks=(e.keys||'').split(',').map(x=>x.trim().toLowerCase()).filter(Boolean);
+  for(const {e,o} of all){
+    const ks=sub(e.keys,o).split(',').map(x=>x.trim().toLowerCase()).filter(Boolean);
     if(!(e.always||ks.some(k=>scan.includes(k))))continue;
-    const c=mac(e.content.trim(),ms[0]);if(n+c.length>4000)break;n+=c.length;out.push('- '+c);
+    const c=sub(e.content.trim(),o);if(n+c.length>4000)break;n+=c.length;out.push('- '+c);
   }
   return out.length?'\n\n[World info / Lorebook — use when relevant]\n'+out.join('\n'):'';
 }
+const loreReset=()=>{loreBook=null;loreNewOpen=false;loreQ='';$('#loreSearch').value='';loreShown=LORE_PAGE;loreOpen.clear()};
+const loreTop=()=>{$('#loreModal .lore-body').scrollTop=0};
 $('#loreBtn').onclick=()=>{
   const c0=cur(),sel=$('#loreScope');
   sel.innerHTML='<option value="_g">'+esc(t('loreGlobal'))+'</option>'+S.chars.map(c=>'<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>').join('');
   sel.value=(c0&&c0.charId&&getChar(c0.charId))?c0.charId:'_g';
-  renderLore();$('#loreModal').classList.add('on');
+  loreReset();renderLore();$('#loreModal').classList.add('on');loreTop();
 };
-$('#loreScope').onchange=renderLore;
-$('#loreAdd').onclick=()=>{loreArr().push({id:uid(),keys:'',content:'',always:false,off:false});renderLore();save()};
-$('#loreList').addEventListener('input',e=>{const f=e.target.dataset.lf;if(!f||f==='on'||f==='always')return;loreArr()[+e.target.dataset.i][f]=e.target.value;save()});
-$('#loreList').addEventListener('change',e=>{const f=e.target.dataset.lf;if(f!=='on'&&f!=='always')return;const o=loreArr()[+e.target.dataset.i];if(f==='on')o.off=!e.target.checked;else o.always=e.target.checked;save()});
-$('#loreList').addEventListener('click',e=>{const b=e.target.closest('[data-ldel]');if(!b)return;loreArr().splice(+b.dataset.ldel,1);renderLore();save()});
+$('#loreScope').onchange=()=>{loreReset();renderLore();loreTop()};
+$('#loreBack').onclick=()=>{loreReset();renderLore();loreTop()};
+$('#loreSearch').addEventListener('input',e=>{clearTimeout(loreTm);const v=e.target.value.trim().toLowerCase();loreTm=setTimeout(()=>{loreQ=v;loreShown=LORE_PAGE;renderLore()},120)});
+$('#loreAdd').onclick=()=>{
+  if(!loreBook){loreNewOpen=true;loreNewName='';loreNewImg='';renderLore();loreTop();const n=$('#loreNewName');if(n)n.focus();return}
+  const e={id:uid(),keys:'',content:'',always:false,off:false,bk:loreBook};loreArr().unshift(e); // la nueva entrada aparece arriba
+  loreQ='';$('#loreSearch').value='';loreOpen.add(e.id);renderLore();save();loreTop();
+  const k=$('#loreList').querySelector('[data-lf=keys]');if(k)k.focus({preventScroll:true});
+};
+$('#loreList').addEventListener('input',e=>{
+  const t0=e.target;
+  if(t0.id==='loreNewName'){loreNewName=t0.value;return}
+  if(t0.dataset.bn){const b=bkList().find(x=>x.id===t0.dataset.bn);if(b){const v=t0.value;b.name=(b.id==='gen'&&(!v.trim()||v.trim()===t('loreGen')))?'':v;save()}return}
+  const f=t0.dataset.lf;if(!f||f==='on')return;
+  const o=loreArr()[+t0.dataset.i];if(!o)return;o[f]=t0.value;save();
+  const el=t0.closest('.le'),ti=el&&el.querySelector('.le-title');
+  if(ti){const sm=loreSum(o);ti.textContent=sm.t;ti.classList.toggle('dim',sm.dim)}
+});
+$('#loreList').addEventListener('change',e=>{
+  const t0=e.target;
+  if(t0.dataset.bon){const b=bkList().find(x=>x.id===t0.dataset.bon);if(b){b.off=!t0.checked;const c=t0.closest('.bk');if(c)c.classList.toggle('off',b.off);save()}return}
+  if(t0.dataset.lf!=='on')return;
+  const o=loreArr()[+t0.dataset.i];if(!o)return;o.off=!t0.checked;save();
+  const el=t0.closest('.le');if(el)el.classList.toggle('off',o.off);
+});
+$('#loreCoverFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{const d=await readImg(f,120); // miniatura ligera 120x120 (JPEG)
+    if(coverTarget==='_new'){loreNewImg=d;renderLore()}
+    else{const b=bkList().find(x=>x.id===coverTarget);if(b){b.img=d;renderLore();save()}}
+  }catch(_){toast(t('invalid'))}};
+$('#loreList').addEventListener('click',e=>{
+  const o=bkOwner(),arr=loreArr(),g=s=>e.target.closest(s);
+  let x;
+  if(x=g('[data-bopen]')){loreBook=x.dataset.bopen;loreQ='';$('#loreSearch').value='';loreShown=LORE_PAGE;loreOpen.clear();renderLore();loreTop();return}
+  if(x=g('[data-bcv]')){coverTarget=x.dataset.bcv;$('#loreCoverFile').click();return}
+  if(g('#loreNewCv')){coverTarget='_new';$('#loreCoverFile').click();return}
+  if(g('#loreNewCancel')){loreNewOpen=false;renderLore();return}
+  if(g('#loreNewOk')){bkList(o);o.books.push({id:uid(),name:(loreNewName||'').trim()||t('loreNewDef'),img:loreNewImg,off:false});loreNewOpen=false;loreNewName='';loreNewImg='';renderLore();save();return}
+  if(x=g('[data-bdel]')){const id=x.dataset.bdel,b=bkList(o).find(k=>k.id===id);if(!b)return;
+    if(id==='gen'){if(!confirm(t('loreGenClear')))return;o.lore=o.lore.filter(k=>k.bk!=='gen')}
+    else{if(!confirm(t('loreBDelConfirm',{n:bkName(b)})))return;o.lore=o.lore.filter(k=>k.bk!==id);o.books=o.books.filter(k=>k.id!==id)}
+    renderLore();save();return}
+  if(g('#loreMore')){loreShown+=LORE_PAGE;renderLore();return}
+  if(x=g('[data-ldel]')){const i=+x.dataset.ldel;if(!confirm(t('loreDelConfirm')))return;loreOpen.delete((arr[i]||{}).id);arr.splice(i,1);renderLore();save();return}
+  if(x=g('[data-lpin]')){const en=arr[+x.dataset.lpin];en.always=!en.always;x.classList.toggle('on',en.always);save();return}
+  if(g('.sw,.le-form,.bk-name'))return;
+  if(x=g('[data-lt]')){const i=+x.dataset.lt,en=arr[i],el=x.closest('.le');if(!en||!el)return;
+    if(loreOpen.has(en.id))loreOpen.delete(en.id);else loreOpen.add(en.id);
+    el.outerHTML=loreEntry(en,i);
+    if(loreOpen.has(en.id)){const n=$('#loreList').querySelector('.le[data-i="'+i+'"]');if(n)n.scrollIntoView({block:'nearest',behavior:'smooth'})}}
+});
+
+/* ---------- Macros de SillyTavern ---------- */
+const mac=(s,ch)=>String(s||'').replace(/\{\{char\}\}|<BOT>/gi,ch?ch.name:'').replace(/\{\{user\}\}|<USER>/gi,((S.profile&&S.profile.name)||'').trim()||'User');
+function greetMsg(c){
+  const a=[c.greet,...(c.altGreets||[])].filter(Boolean).map(x=>mac(x,c));if(!a.length)return null;
+  const m={id:uid(),role:'assistant',content:a[0]};if(a.length>1){m.alts=a;m.altIdx=0}return m;
+}
+const splitK=s=>String(s||'').split(',').map(x=>x.trim()).filter(Boolean);
+const fname=c=>(c.name||'character').replace(/[\\\/:*?"<>|\s]+/g,'_').slice(0,40)||'character';
+function dl(data,name,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+
+
+/* ---------- Bloque de la app restaurado (pestañas, menú, Google, selección, idioma…) ---------- */
 const LEGAL=/^https?:$/.test(location.protocol)?'':'https://reeesyp-web.github.io/mizu-ai/';
 const legalUrl=p=>LEGAL+p+'#'+LANG;
 document.querySelectorAll('.legalA').forEach(a=>{a.href=LEGAL+a.dataset.p;a.addEventListener('click',()=>{a.href=legalUrl(a.dataset.p)})});
@@ -2037,23 +2257,6 @@ $('#langSel').onchange=e=>{
   S.chars.forEach(c=>{if(c.bk&&DEF[old]&&DEF[LANG][c.bk]&&sameChar(c,DEF[old][c.bk]))Object.assign(c,fromDef(c.bk,LANG))});
   applyStatic();renderAll();
 };
-/* ================= Tarjetas PNG/JSON · Lorebook .json · Chats grupales ================= */
-Object.assign(T.es,{impCard:'📥 Importar tarjeta',expPng:'Exportar como tarjeta PNG',expJson:'Exportar como JSON',cardOk:'Tarjetas importadas: {n}',cardBad:'No es una tarjeta válida: {f}',cardLore:'Ese archivo es un lorebook: impórtalo desde 📚',
- loreImp:'⬆️ Importar .json',loreExp:'⬇️ Exportar .json',loreImpOk:'Entradas importadas: {n}',grpNew:'👥 Nuevo grupo',grpTitle:'👥 Nuevo chat grupal',grpName:'Nombre del grupo (opcional)',grpPick:'Elige al menos 2 personajes',grpCreate:'Crear grupo',grpMin:'Elige al menos 2 personajes',grpAuto:'🎲 Auto',grpAll:'👥 Todos',
- grpRule:'Esto es un chat grupal. Personajes presentes: {l}. Tú eres SOLO {n}: escribe únicamente el turno de {n}, sin hablar ni actuar por el usuario ni por los demás, y sin empezar con tu nombre. En el historial cada mensaje ajeno va precedido por "Nombre: ". Los demás personajes: {o}\n'});
-Object.assign(T.en,{impCard:'📥 Import card',expPng:'Export as PNG card',expJson:'Export as JSON',cardOk:'Cards imported: {n}',cardBad:'Not a valid card: {f}',cardLore:'That file is a lorebook: import it from 📚',
- loreImp:'⬆️ Import .json',loreExp:'⬇️ Export .json',loreImpOk:'Entries imported: {n}',grpNew:'👥 New group',grpTitle:'👥 New group chat',grpName:'Group name (optional)',grpPick:'Pick at least 2 characters',grpCreate:'Create group',grpMin:'Pick at least 2 characters',grpAuto:'🎲 Auto',grpAll:'👥 Everyone',
- grpRule:'This is a group chat. Characters present: {l}. You are ONLY {n}: write only {n}\'s turn, never speak or act for the user or the others, and do not start with your name. In the history every message from someone else is prefixed with "Name: ". The other characters: {o}\n'});
-
-/* ---------- Macros de SillyTavern ---------- */
-const mac=(s,ch)=>String(s||'').replace(/\{\{char\}\}|<BOT>/gi,ch?ch.name:'').replace(/\{\{user\}\}|<USER>/gi,((persOf(cur()).name)||'').trim()||'User');
-function greetMsg(c){
-  const a=[c.greet,...(c.altGreets||[])].filter(Boolean).map(x=>mac(x,c));if(!a.length)return null;
-  const m={id:uid(),role:'assistant',content:a[0]};if(a.length>1){m.alts=a;m.altIdx=0}return m;
-}
-const splitK=s=>String(s||'').split(',').map(x=>x.trim()).filter(Boolean);
-const fname=c=>(c.name||'character').replace(/[\\\/:*?"<>|\s]+/g,'_').slice(0,40)||'character';
-function dl(data,name,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
 
 /* ---------- Lorebook: entrada / salida ---------- */
 function loreIn(o){ // acepta V2 (character_book), SillyTavern World Info y arrays simples
@@ -2067,9 +2270,12 @@ function loreOut(arr,name){ // formato World Info de SillyTavern
 }
 $('#loreImp').onclick=()=>$('#loreFile').click();
 $('#loreFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
-  try{const r=JSON.parse(await f.text()),es=loreIn((r.data&&r.data.character_book)||r.character_book||r);if(!es.length)throw 0;loreArr().push(...es);renderLore();save();toast(t('loreImpOk',{n:es.length}))}catch(_){toast(t('invalid'))}};
-$('#loreExp').onclick=()=>{const sc=$('#loreScope').value,c=sc==='_g'?null:getChar(sc);
-  dl(JSON.stringify(loreOut(loreArr(),c?c.name+' Lorebook':'Mizu Lorebook'),null,2),(c?fname(c)+'-':'')+'lorebook.json','application/json')};
+  try{const r=JSON.parse(await f.text()),cb=(r.data&&r.data.character_book)||r.character_book||r,es=loreIn(cb);if(!es.length)throw 0;
+    const o=bkOwner();bkList(o);const id=uid(),nm=String(cb.name||r.name||f.name.replace(/\.json$/i,'')).trim().slice(0,60)||t('loreNewDef');
+    o.books.push({id,name:nm,img:'',off:false});es.forEach(x=>x.bk=id);o.lore.push(...es); // el .json importado queda como un libro propio
+    loreBook=null;loreNewOpen=false;renderLore();save();loreTop();toast(t('loreImpOk',{n:es.length}))}catch(_){toast(t('invalid'))}};
+$('#loreExp').onclick=()=>{const o=bkOwner(),b=bkList(o).find(x=>x.id===loreBook);if(!b)return;
+  dl(JSON.stringify(loreOut(o.lore.filter(e=>e.bk===b.id),bkName(b)),null,2),fname({name:bkName(b)})+'-lorebook.json','application/json')};
 
 /* ---------- Tarjetas de personaje: leer ---------- */
 function pngMeta(buf){ // busca el chunk tEXt/iTXt con "ccv3" o "chara"
@@ -2099,7 +2305,7 @@ function cardToChar(raw){ // V1 / V2 / V3 -> personaje de Mizu
   const c={name:s(d.name).slice(0,40),tagline:s(d.creator_notes).split('\n')[0].replace(/<[^>]*>/g,'').trim().slice(0,70),emoji:EMOJIS[0],color:COLORS[Math.floor(Math.random()*COLORS.length)],img:'',
     desc:desc||s(d.name),greet:s(d.first_mes),scene:s(d.scenario),example:s(d.mes_example),tags:arr(d.tags).map(String).slice(0,12),
     altGreets:arr(d.alternate_greetings).map(s).filter(Boolean),sysp:s(d.system_prompt),phi:s(d.post_history_instructions)};
-  if(d.character_book)c.lore=loreIn(d.character_book);
+  if(d.character_book){const es=loreIn(d.character_book);if(es.length){const id=uid();c.lore=es.map(x=>({...x,bk:id}));c.books=[{id:'gen',name:'',img:'',off:false},{id,name:String(d.character_book.name||(c.name+' Lorebook')).slice(0,60),img:'',off:false}]}}
   return c;
 }
 async function importCards(files){
@@ -2127,7 +2333,7 @@ function cardOf(c){
   const lore=c.lore||[];
   return{spec:'chara_card_v2',spec_version:'2.0',data:{name:c.name,description:c.desc||'',personality:'',scenario:c.scene||'',first_mes:c.greet||'',mes_example:c.example||'',creator_notes:c.tagline||'',
     system_prompt:c.sysp||'',post_history_instructions:c.phi||'',alternate_greetings:c.altGreets||[],tags:c.tags||[],creator:'',character_version:'1',extensions:{},
-    ...(lore.length?{character_book:{name:c.name+' Lorebook',extensions:{},entries:lore.map((e,i)=>({id:i,keys:splitK(e.keys),secondary_keys:[],comment:'',content:e.content||'',enabled:!e.off,insertion_order:i,case_sensitive:false,constant:!!e.always,selective:false,position:'before_char',extensions:{}}))}}:{})}};
+    ...(lore.length?{character_book:{name:c.name+' Lorebook',extensions:{},entries:lore.map((e,i)=>({id:i,keys:splitK(e.keys),secondary_keys:[],comment:'',content:e.content||'',enabled:!e.off&&bkOn(c,e),insertion_order:i,case_sensitive:false,constant:!!e.always,selective:false,position:'before_char',extensions:{}}))}}:{})}};
 }
 const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
 const crc32=u=>{let c=0xffffffff;for(let i=0;i<u.length;i++)c=CRC[(c^u[i])&255]^(c>>>8);return(c^0xffffffff)>>>0};
@@ -2198,7 +2404,7 @@ Object.assign(T.es,{voiceT:'🔊 Voz del personaje',voiceAuto:'Automática (idio
 Object.assign(T.en,{voiceT:'🔊 Character voice',voiceAuto:'Auto (match app language)',voiceTest:'▶ Test',voicePitch:'Pitch',voiceRate:'Speed',listen:'🔊 Listen',stopV:'⏹ Stop',autoRead:'Read replies',voiceNo:'Your browser does not support speech',voiceTestTxt:'Hello! I am {n}, ready to start our story.'});
 const hasTTS='speechSynthesis' in window;
 let speakId=null,speakTok=0;
-const speakClean=x=>x.replace(/```[\s\S]*?```/g,' ').replace(/_\(Demo mode\)_/gi,'').replace(/\*[^*]+\*/g,' ').replace(/[*_`#>]/g,'').replace(/\s+/g,' ').trim();
+const speakClean=x=>x.replace(/```[\s\S]*?```/g,' ').replace(/_\(Demo mode\)_/gi,'').replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*[^*]+\*/g,' ').replace(/[*_`#>]/g,'').replace(/\s+/g,' ').trim();
 const vLang=v=>v.lang.toLowerCase().replace('_','-').split('-')[0];
 const gOf=v=>{const n=v.name+' '+v.voiceURI;return /\b(female|woman|mujer|femme|feminin\w*|femenin\w*)\b|monica|mónica|paulina|helena|sabina|lucia|lucía|laura|marisol|samantha|victoria|karen|susan|zira|hazel|amelie|amélie|julie|denise|inês|francisca|luciana|joana|milena|irina|svetlana|katya|tatyana|alena/i.test(n)?'f':/\b(male|man|hombre|homme|masculin\w*)\b|jorge|diego|juan|carlos|pablo|miguel|daniel|david|george|richard|thomas|claude|henri|antonio|felipe|ricardo|yuri|pavel|maxim|dmitri|luca\b/i.test(n)?'m':''};
 function pickVoice(c){const vs=speechSynthesis.getVoices(),mine=vs.filter(v=>vLang(v)===LANG);
@@ -2342,6 +2548,23 @@ function exportStory(md){const chat=cur(),ch=chat.charId&&getChar(chat.charId),m
   dl(out.trim()+'\n',f+(md?'.md':'.txt'),md?'text/markdown':'text/plain')}
 $('#expTxt').onclick=()=>exportStory(false);
 $('#expMd').onclick=()=>exportStory(true);
+
+
+/* ---------- Textos es/en de tarjetas, Lorebook .json y chats grupales ---------- */
+Object.assign(T.es,{impCard:'📥 Importar tarjeta',expPng:'Exportar como tarjeta PNG',expJson:'Exportar como JSON',cardOk:'Tarjetas importadas: {n}',cardBad:'No es una tarjeta válida: {f}',cardLore:'Ese archivo es un lorebook: impórtalo desde 📚',
+ loreImp:'⬆️ Importar .json',loreExp:'⬇️ Exportar .json',loreImpOk:'Entradas importadas: {n}',grpNew:'👥 Nuevo grupo',grpTitle:'👥 Nuevo chat grupal',grpName:'Nombre del grupo (opcional)',grpPick:'Elige al menos 2 personajes',grpCreate:'Crear grupo',grpMin:'Elige al menos 2 personajes',grpAuto:'🎲 Auto',grpAll:'👥 Todos',
+ grpRule:'Esto es un chat grupal. Personajes presentes: {l}. Tú eres SOLO {n}: escribe únicamente el turno de {n}, sin hablar ni actuar por el usuario ni por los demás, y sin empezar con tu nombre. En el historial cada mensaje ajeno va precedido por "Nombre: ". Los demás personajes: {o}\n'});
+Object.assign(T.en,{impCard:'📥 Import card',expPng:'Export as PNG card',expJson:'Export as JSON',cardOk:'Cards imported: {n}',cardBad:'Not a valid card: {f}',cardLore:'That file is a lorebook: import it from 📚',
+ loreImp:'⬆️ Import .json',loreExp:'⬇️ Export .json',loreImpOk:'Entries imported: {n}',grpNew:'👥 New group',grpTitle:'👥 New group chat',grpName:'Group name (optional)',grpPick:'Pick at least 2 characters',grpCreate:'Create group',grpMin:'Pick at least 2 characters',grpAuto:'🎲 Auto',grpAll:'👥 Everyone',
+ grpRule:'This is a group chat. Characters present: {l}. You are ONLY {n}: write only {n}\'s turn, never speak or act for the user or the others, and do not start with your name. In the history every message from someone else is prefixed with "Name: ". The other characters: {o}\n'});
+
+const LB={
+es:{loreGen:'Entradas generales',loreNewBook:'＋ Nuevo libro',loreBack:'← Volver a libros',loreOpen:'Abrir',loreBookName:'Nombre del libro',loreCover:'Cambiar portada',loreCreate:'Crear libro',loreBDelConfirm:'¿Eliminar el libro «{n}» y todas sus entradas?',loreGenClear:'¿Vaciar «Entradas generales»? Se borrarán todas sus entradas (el libro se conserva).',loreMore:'Cargar más',loreBookOn:'Libro activo',loreShelfHint:'Cada libro agrupa entradas. Si apagas el interruptor de un libro, ninguna de sus entradas se envía a la IA.',loreNewDef:'Libro nuevo',loreBookDelT:'Eliminar libro',loreBookClearT:'Vaciar libro',loreB1:'libro',loreB2:'libros',loreB5:'libros'},
+en:{loreGen:'General entries',loreNewBook:'＋ New book',loreBack:'← Back to books',loreOpen:'Open',loreBookName:'Book name',loreCover:'Change cover',loreCreate:'Create book',loreBDelConfirm:'Delete the book "{n}" and all its entries?',loreGenClear:'Empty "General entries"? All its entries will be deleted (the book stays).',loreMore:'Load more',loreBookOn:'Book enabled',loreShelfHint:'Each book groups entries. If you turn a book off, none of its entries are sent to the AI.',loreNewDef:'New book',loreBookDelT:'Delete book',loreBookClearT:'Empty book',loreB1:'book',loreB2:'books',loreB5:'books'},
+pt:{loreGen:'Entradas gerais',loreNewBook:'＋ Novo livro',loreBack:'← Voltar aos livros',loreOpen:'Abrir',loreBookName:'Nome do livro',loreCover:'Alterar capa',loreCreate:'Criar livro',loreBDelConfirm:'Excluir o livro "{n}" e todas as suas entradas?',loreGenClear:'Esvaziar "Entradas gerais"? Todas as entradas serão excluídas (o livro permanece).',loreMore:'Carregar mais',loreBookOn:'Livro ativo',loreShelfHint:'Cada livro agrupa entradas. Se você desligar um livro, nenhuma das suas entradas é enviada à IA.',loreNewDef:'Novo livro',loreBookDelT:'Excluir livro',loreBookClearT:'Esvaziar livro',loreB1:'livro',loreB2:'livros',loreB5:'livros'},
+ru:{loreGen:'Общие записи',loreNewBook:'＋ Новая книга',loreBack:'← Назад к книгам',loreOpen:'Открыть',loreBookName:'Название книги',loreCover:'Сменить обложку',loreCreate:'Создать книгу',loreBDelConfirm:'Удалить книгу «{n}» и все её записи?',loreGenClear:'Очистить «Общие записи»? Все записи будут удалены (книга останется).',loreMore:'Показать ещё',loreBookOn:'Книга включена',loreShelfHint:'Каждая книга объединяет записи. Если выключить книгу, ни одна её запись не отправляется ИИ.',loreNewDef:'Новая книга',loreBookDelT:'Удалить книгу',loreBookClearT:'Очистить книгу',loreB1:'книга',loreB2:'книги',loreB5:'книг'},
+fr:{loreGen:'Entrées générales',loreNewBook:'＋ Nouveau livre',loreBack:'← Retour aux livres',loreOpen:'Ouvrir',loreBookName:'Nom du livre',loreCover:'Changer la couverture',loreCreate:'Créer le livre',loreBDelConfirm:'Supprimer le livre « {n} » et toutes ses entrées ?',loreGenClear:'Vider « Entrées générales » ? Toutes ses entrées seront supprimées (le livre reste).',loreMore:'Charger plus',loreBookOn:'Livre activé',loreShelfHint:'Chaque livre regroupe des entrées. Si vous désactivez un livre, aucune de ses entrées n’est envoyée à l’IA.',loreNewDef:'Nouveau livre',loreBookDelT:'Supprimer le livre',loreBookClearT:'Vider le livre',loreB1:'livre',loreB2:'livres',loreB5:'livres'}};
+for(const k in LB)Object.assign(T[k],LB[k]);
 
 applyLook();
 applyStatic();
