@@ -67,8 +67,9 @@ main{flex:1;min-width:0;display:flex;flex-direction:column;background:linear-gra
 .view.on{display:flex}
 .messages{flex:1;overflow:auto;padding:22px 0}
 #view-chat{position:relative}
-#toBottom{position:absolute;left:50%;bottom:150px;transform:translateX(-50%) translateY(8px);width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--white);color:var(--ink);font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.14);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:6;padding:0}
-#toBottom.on{opacity:1;pointer-events:auto;transform:translateX(-50%)}
+#toBottom{position:absolute;right:16px;bottom:150px;transform:translateY(6px);width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--white);color:var(--ink);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.10);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:6;padding:0}
+#toBottom svg{width:18px;height:18px;display:block}
+#toBottom.on{opacity:1;pointer-events:auto;transform:none}
 .wrap{max-width:820px;margin:0 auto;padding:0 18px}
 .empty{text-align:center;color:var(--muted);margin:12vh auto 0;max-width:420px}
 .messages[style*="background-image"] .empty{background:rgba(255,255,255,.85);border-radius:20px;padding:18px}
@@ -473,7 +474,7 @@ aside>.chats{flex:1 0 220px;min-height:220px;touch-action:pan-y}
           <button type="button" class="selAct" id="selExp"><span class="ic">📦</span><span data-i18n="expChatShort"></span></button>
           <button type="button" class="selAct" id="selMore"><span class="ic">⋯</span><span data-i18n="more"></span></button>
         </div></div>
-      <button type="button" id="toBottom" aria-label="↓">↓</button>
+      <button type="button" id="toBottom" aria-label="↓"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></button>
       <div class="composer" data-cs="0">
         <div class="cbar"><button type="button" id="cBar"></button></div>
         <div class="tools">
@@ -1788,7 +1789,7 @@ setFs(fs);$('#fsDown').onclick=()=>setFs(fs-2);$('#fsUp').onclick=()=>setFs(fs+2
 $('#sendUser').onclick=sendUser;$('#sendAI').onclick=sendAI;
 // Botón flotante "ir al último mensaje" (aparece si te alejas bastante del final)
 (()=>{const box=$('#messages'),btn=$('#toBottom'),comp=$('.composer');if(!box||!btn)return;
-  const upd=()=>{try{btn.style.bottom=((comp?comp.offsetHeight:120)+12)+'px';
+  const upd=()=>{try{btn.style.bottom=((comp?comp.offsetHeight:120)+8)+'px';
     const far=box.scrollHeight-box.scrollTop-box.clientHeight;btn.classList.toggle('on',far>Math.max(300,box.clientHeight*.5))}catch(_){}};
   box.addEventListener('scroll',upd,{passive:true});window.addEventListener('resize',upd);
   try{new ResizeObserver(upd).observe(comp);new MutationObserver(upd).observe($('#msgWrap'),{childList:true})}catch(_){}
